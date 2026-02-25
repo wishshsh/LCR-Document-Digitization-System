@@ -29,7 +29,7 @@ class CivilRegistryOCR:
         """
         # Set device
         if device == 'cuda' and not torch.cuda.is_available():
-            print("⚠ CUDA not available, using CPU")
+            print("WARNING: CUDA not available, using CPU")
             device = 'cpu'
         
         self.device = torch.device(device)
@@ -57,11 +57,11 @@ class CivilRegistryOCR:
         self.model = self.model.to(self.device)
         self.model.eval()
         
-        print(f"✓ Model loaded successfully")
-        print(f"  Val CER: {checkpoint.get('val_cer', 'N/A'):.2f}%")
+        print(f"Model loaded successfully") 
+        print(f"  Val CER: {checkpoint.get('val_cer', 0):.2f}%")
         print(f"  Device: {self.device}")
     
-    def preprocess_image(self, image_path, target_height=64, target_width=200):
+    def preprocess_image(self, image_path, target_height=64, target_width=400):
         """
         Preprocess image for OCR
         

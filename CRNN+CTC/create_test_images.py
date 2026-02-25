@@ -4,14 +4,14 @@ from PIL import Image, ImageDraw, ImageFont
 os.makedirs('test_images', exist_ok=True)
 
 def create_image(text, filename):
-    img = Image.new('RGB', (200, 64), color=(255, 255, 255))
+    img = Image.new('RGB', (400, 64), color=(255, 255, 255))
     draw = ImageDraw.Draw(img)
     try:
         font = ImageFont.truetype('arial.ttf', 20)
     except:
         font = ImageFont.load_default()
     bbox = draw.textbbox((0, 0), text, font=font)
-    x = max((200 - (bbox[2] - bbox[0])) // 2, 2)
+    x = max((400 - (bbox[2] - bbox[0])) // 2, 2)
     y = max((64  - (bbox[3] - bbox[1])) // 2, 2)
     draw.text((x, y), text, fill=(0, 0, 0), font=font)
     img.save(filename)

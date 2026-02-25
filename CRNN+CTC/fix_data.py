@@ -3,22 +3,30 @@ from PIL import Image, ImageDraw, ImageFont
 
 FIRST_NAMES = ['Juan', 'Maria', 'Jose', 'Ana', 'Pedro', 'Rosa', 'Carlos', 'Luz']
 LAST_NAMES  = ['Dela Cruz', 'Santos', 'Reyes', 'Garcia', 'Torres', 'Flores']
-PLACES      = ['Tarlac City', 'Manila', 'Quezon City', 'Cebu City', 'Davao City']
+HOUSE_NOS  = ['12', '34', '56', '78', '100', '215', '307']
+STREETS    = ['Rizal St.', 'Mabini St.', 'Bonifacio St.', 'Quezon Ave.']
+BARANGAYS  = ['Brgy. Sto. Cristo', 'Brgy. San Jose', 'Brgy. Maliwalo', 'Brgy. Tibag']
+MUNICIPALS = ['Tarlac City', 'Capas', 'Concepcion', 'Victoria']
+PROVINCES  = ['Tarlac', 'Pampanga', 'Nueva Ecija']
+
+def random_address():
+    return f"{random.choice(HOUSE_NOS)} {random.choice(STREETS)}, {random.choice(BARANGAYS)}, {random.choice(MUNICIPALS)}, {random.choice(PROVINCES)}"
+
 DATES       = ['01/15/1990', '03/22/1985', '07/04/2000', '11/30/1995', '05/18/1988']
 
 def random_text():
     name = random.choice(FIRST_NAMES) + ' ' + random.choice(LAST_NAMES)
-    return random.choice([name, random.choice(DATES), random.choice(PLACES)])
+    return random.choice([name, random.choice(DATES), random_address()])
 
 def create_image(text):
-    img = Image.new('RGB', (200, 64), color=(255, 255, 255))
+    img = Image.new('RGB', (400, 64), color=(255, 255, 255))
     draw = ImageDraw.Draw(img)
     try:
         font = ImageFont.truetype('arial.ttf', 20)
     except:
         font = ImageFont.load_default()
     bbox = draw.textbbox((0, 0), text, font=font)
-    x = max((200 - (bbox[2] - bbox[0])) // 2, 2)
+    x = max((400 - (bbox[2] - bbox[0])) // 2, 2)
     y = max((64  - (bbox[3] - bbox[1])) // 2, 2)
     draw.text((x, y), text, fill=(0, 0, 0), font=font)
     return img

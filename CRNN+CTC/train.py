@@ -1,3 +1,4 @@
+
 """
 Training Script for CRNN+CTC Civil Registry OCR
 Includes CTC loss, learning rate scheduling, and model checkpointing
@@ -65,7 +66,7 @@ class CRNNTrainer:
             shuffle=True,
             num_workers=config['num_workers'],
             collate_fn=collate_fn,
-            pin_memory=True
+            pin_memory=False
         )
         
         self.val_loader = DataLoader(
@@ -74,7 +75,7 @@ class CRNNTrainer:
             shuffle=False,
             num_workers=config['num_workers'],
             collate_fn=collate_fn,
-            pin_memory=True
+            pin_memory=False
         )
         
         # Initialize model
@@ -340,7 +341,7 @@ def main():
         # Model
         'model_type': 'standard',  # 'standard', 'ensemble', 'lightweight'
         'img_height': 64,
-        'img_width': 200,
+        'img_width': 400,
         'hidden_size': 256,
         'num_lstm_layers': 2,
         
@@ -349,7 +350,7 @@ def main():
         'epochs': 100,
         'learning_rate': 0.001,
         'weight_decay': 1e-5,
-        'num_workers': 4,
+        'num_workers': 0,
         
         # Scheduling & Early Stopping
         'lr_patience': 3,

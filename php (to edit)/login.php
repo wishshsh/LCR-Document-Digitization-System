@@ -19,7 +19,6 @@ if(isset($data->username) && isset($data->password)) {
         
         // VERIFY PASSWORD
         // Note: In a real app, use password_verify($p, $user['password_hash']). 
-        // Since your SQL dump has varchar(45) for hash, you might be using simple hashing or plain text for testing.
         // For this example, we assume direct comparison or simple hash:
         if ($p == $user['password_hash']) { 
             echo json_encode([

@@ -4,12 +4,7 @@ let uploadedFiles = {
     marriage: []
 };
 
-let records = [
-    { id: 'BC-001', type: 'birth', name: 'Juan Dela Cruz', date: '2024-01-15', status: 'Processed' },
-    { id: 'DC-001', type: 'death', name: 'Maria Santos', date: '2024-01-20', status: 'Pending' },
-    { id: 'MC-001', type: 'marriage-cert', name: 'Pedro & Ana Garcia', date: '2024-02-01', status: 'Processed' },
-    { id: 'ML-001', type: 'marriage-license', name: 'Jose & Carmen Reyes', date: '2024-02-05', status: 'Approved' }
-];
+let records = [];
 
 // Navigation history
 let navigationHistory = ['login'];
@@ -86,7 +81,7 @@ function showPage(pageName, addToHistory = true) {
 
     // Show records when navigating to records page
     if (pageName === 'records') {
-        displayRecords(records);
+        loadRecords();
     }
     
     // Update profile page when navigating to it
@@ -257,22 +252,45 @@ function logout() {
     }
 }
 
-// Login
+// Login via PHP Backend
 function login(event) {
     event.preventDefault();
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+    const usernameInput = document.getElementById('username').value;
+    const passwordInput = document.getElementById('password').value;
 
-    // Simple validation (in real app, this would be server-side)
-    if (username && password) {
-        isLoggedIn = true;
-        currentUser.username = username;
-        document.getElementById('headerButtons').style.display = 'flex';
-        showPage('services');
-        updateBackButton();
-    } else {
-        alert('Please enter valid credentials');
+    if (!usernameInput || !passwordInput) {
+        showNotification('Please enter both username and password', 'error');
+        return;
     }
+
+    fetch('php/login.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: usernameInput, password: passwordInput })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            isLoggedIn = true;
+            
+            // Update currentUser object with database info
+            currentUser.username = data.user.name;
+            currentUser.name = data.user.name; 
+            currentUser.role = data.user.role;
+            
+            // Update UI
+            document.getElementById('headerButtons').style.display = 'flex';
+            showPage('services');
+            updateBackButton();
+            showNotification('Login successful!', 'success');
+        } else {
+            showNotification(data.message || 'Invalid credentials', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Server connection failed.', 'error');
+    });
 }
 
 // File Upload
@@ -392,6 +410,31 @@ function displayRecords(recordsToDisplay) {
 
 function viewRecord(record) {
     alert(`Record Details:\n\nID: ${record.id}\nType: ${formatType(record.type)}\nName: ${record.name}\nDate: ${record.date}\nStatus: ${record.status}`);
+}
+
+// Fetch Records from PHP Backend
+function loadRecords() {
+    fetch('php/get_records.php')
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            console.error('Database error:', data.error);
+            return;
+        }
+        
+        // Map the database rows to match your frontend structure
+        // This overwrites the global 'records' array so filtering still works
+        records = data.map(dbRow => ({
+            id: 'DOC-' + dbRow.doc_id, 
+            type: dbRow.type_name.toLowerCase().replace(' ', '-'), // Rough mapping, adjust as needed
+            name: dbRow.uploader_name,
+            date: dbRow.upload_date.split(' ')[0], // Get just the YYYY-MM-DD part
+            status: dbRow.status || 'Pending'
+        }));
+
+        displayRecords(records);
+    })
+    .catch(error => console.error('Error loading records:', error));
 }
 
 function formatType(type) {

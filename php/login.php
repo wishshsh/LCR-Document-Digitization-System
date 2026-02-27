@@ -17,10 +17,11 @@ if(isset($data->username) && isset($data->password)) {
     if ($stmt->rowCount() > 0) {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        // VERIFY PASSWORD
-        // Note: In a real app, use password_verify($p, $user['password_hash']). 
-        // For this example, we assume direct comparison or simple hash:
-        if ($p == $user['password_hash']) { 
+        // SECURE PASSWORD VERIFICATION
+        // Change THIS:
+        // if (password_verify($p, $user['password_hash'])) { 
+        // TO THIS:
+        if ($p === $user['password_hash']) {
             echo json_encode([
                 "status" => "success", 
                 "message" => "Login successful",
@@ -31,10 +32,11 @@ if(isset($data->username) && isset($data->password)) {
                 ]
             ]);
         } else {
-            echo json_encode(["status" => "error", "message" => "Invalid password"]);
+            // Note: Keep error messages generic for security (don't specify if user or pass is wrong)
+            echo json_encode(["status" => "error", "message" => "Invalid username or password"]);
         }
     } else {
-        echo json_encode(["status" => "error", "message" => "User not found"]);
+        echo json_encode(["status" => "error", "message" => "Invalid username or password"]);
     }
 } else {
     echo json_encode(["status" => "error", "message" => "Invalid input"]);

@@ -1,8 +1,8 @@
 <?php
 $servername = "localhost";
-$username = ""; // Default XAMPP username
+$username = "root"; // Default XAMPP username
 $password = "";     // Default XAMPP password
-$dbname = "thesis_database";    // Matches your SQL Dump
+$dbname = "ocr";    // Matches your SQL Dump
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);

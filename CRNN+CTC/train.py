@@ -1,8 +1,5 @@
 
-"""
-Training Script for CRNN+CTC Civil Registry OCR
-Includes CTC loss, learning rate scheduling, and model checkpointing
-"""
+# Training Script for CRNN+CTC Civil Registry OCR Includes CTC loss, learning rate scheduling, and model checkpointing
 
 import torch
 import torch.nn as nn
@@ -88,34 +85,47 @@ class CRNNTrainer:
             num_lstm_layers=config['num_lstm_layers']
         )
         
-        initialize_weights(self.model)
         self.model = self.model.to(self.device)
-        
+
         # Loss function - CTC Loss
         self.criterion = nn.CTCLoss(blank=0, zero_infinity=True)
-        
-        # Optimizer
+
+        # Optimizer — lower LR prevents CTC collapse on epoch 1
         self.optimizer = optim.Adam(
             self.model.parameters(),
             lr=config['learning_rate'],
             weight_decay=config.get('weight_decay', 1e-5)
         )
-        
-        # Learning rate scheduler
+
+        # Warmup scheduler: ramp LR from near-zero to target over first N epochs,
+        # then hand off to ReduceLROnPlateau.
+        # This is the single most effective fix for CTC blank collapse.
+        warmup_epochs = config.get('warmup_epochs', 5)
+
+        def warmup_lambda(epoch):
+            if epoch < warmup_epochs:
+                return (epoch + 1) / warmup_epochs   # gradual: 0.2→0.4→0.6→0.8→1.0
+            return 1.0
+
+        self.warmup_scheduler = optim.lr_scheduler.LambdaLR(
+            self.optimizer, lr_lambda=warmup_lambda)
+
+        # ReduceLROnPlateau kicks in after warmup
         self.scheduler = optim.lr_scheduler.ReduceLROnPlateau(
             self.optimizer,
             mode='min',
             factor=0.5,
-            patience=config.get('lr_patience', 3),
+            patience=config.get('lr_patience', 5),
             min_lr=1e-6
         )
-        
+        self._warmup_epochs = warmup_epochs
+
         # Early stopping
         self.early_stopping = EarlyStopping(
             patience=config.get('early_stopping_patience', 10),
             min_delta=config.get('min_delta', 0.001)
         )
-        
+
         # Training history
         self.history = {
             'train_loss': [],
@@ -124,8 +134,31 @@ class CRNNTrainer:
             'val_wer': [],
             'learning_rates': []
         }
-        
-        print(f"✓ Model initialized with {sum(p.numel() for p in self.model.parameters()):,} parameters")
+
+        # ── Resume from checkpoint if available ──────────────
+        self.start_epoch = 1
+        self.best_val_loss = float('inf')
+        resume_path = self.checkpoint_dir / 'latest_checkpoint.pth'
+
+        if resume_path.exists():
+            print(f"\n  Found checkpoint: {resume_path}")
+            print(f"  Resuming training from last saved epoch...")
+            ckpt = torch.load(resume_path, map_location=self.device, weights_only=False)
+            self.model.load_state_dict(ckpt['model_state_dict'])
+            self.optimizer.load_state_dict(ckpt['optimizer_state_dict'])
+            self.scheduler.load_state_dict(ckpt['scheduler_state_dict'])
+            if 'warmup_scheduler_state_dict' in ckpt:
+                self.warmup_scheduler.load_state_dict(ckpt['warmup_scheduler_state_dict'])
+            self.start_epoch = ckpt['epoch'] + 1
+            self.best_val_loss = ckpt.get('val_loss', float('inf'))
+            self.history = ckpt.get('history', self.history)
+            print(f"  ✓ Resumed from Epoch {ckpt['epoch']}  "
+                  f"(Val Loss: {ckpt['val_loss']:.4f}, CER: {ckpt['val_cer']:.2f}%)")
+        else:
+            print(f"  No checkpoint found — starting fresh.")
+            initialize_weights(self.model)
+
+        print(f"✓ Model ready with {sum(p.numel() for p in self.model.parameters()):,} parameters")
     
     def train_epoch(self, epoch):
         """Train for one epoch"""
@@ -230,9 +263,9 @@ class CRNNTrainer:
         print("Starting Training")
         print("=" * 70)
         
-        best_val_loss = float('inf')
-        
-        for epoch in range(1, self.config['epochs'] + 1):
+        best_val_loss = self.best_val_loss
+
+        for epoch in range(self.start_epoch, self.config['epochs'] + 1):
             print(f"\nEpoch {epoch}/{self.config['epochs']}")
             print("-" * 70)
             
@@ -243,7 +276,11 @@ class CRNNTrainer:
             val_loss, val_cer, val_wer, predictions, ground_truths = self.validate()
             
             # Learning rate scheduling
-            self.scheduler.step(val_loss)
+            # Use warmup for first N epochs, then ReduceLROnPlateau
+            if epoch <= self._warmup_epochs:
+                self.warmup_scheduler.step()
+            else:
+                self.scheduler.step(val_loss)
             current_lr = self.optimizer.param_groups[0]['lr']
             
             # Update history
@@ -261,12 +298,27 @@ class CRNNTrainer:
             print(f"  Val WER:    {val_wer:.2f}%")
             print(f"  LR:         {current_lr:.6f}")
             
-            # Print sample predictions
+         # Print sample predictions
             print(f"\nSample Predictions:")
             for i in range(min(3, len(predictions))):
                 print(f"  GT:   {ground_truths[i]}")
                 print(f"  Pred: {predictions[i]}")
                 print()
+
+            #  show raw model output
+            with torch.no_grad():
+                sample_img = self.val_dataset[0][0].unsqueeze(0).to(self.device)
+                raw_out    = self.model(sample_img)
+                probs      = torch.softmax(raw_out, dim=2)
+                best_idx   = probs[:, 0, :].argmax(dim=1)
+                best_prob  = probs[:, 0, :].max(dim=1).values
+                blank_pct  = (best_idx == 0).float().mean().item() * 100
+                avg_conf   = best_prob.mean().item()
+                non_blank  = [self.train_dataset.idx_to_char.get(i.item(), '?')
+                              for i in best_idx if i.item() != 0]
+                print(f"  blank={blank_pct:.0f}%  conf={avg_conf:.3f}  "
+                      f"chars={''.join(non_blank[:20])!r}")
+
             
             # Save checkpoint
             is_best = val_loss < best_val_loss
@@ -295,6 +347,7 @@ class CRNNTrainer:
             'model_state_dict': self.model.state_dict(),
             'optimizer_state_dict': self.optimizer.state_dict(),
             'scheduler_state_dict': self.scheduler.state_dict(),
+            'warmup_scheduler_state_dict': self.warmup_scheduler.state_dict(),
             'val_loss': val_loss,
             'val_cer': val_cer,
             'char_to_idx': self.train_dataset.char_to_idx,
@@ -341,20 +394,21 @@ def main():
         # Model
         'model_type': 'standard',  # 'standard', 'ensemble', 'lightweight'
         'img_height': 64,
-        'img_width': 400,
-        'hidden_size': 256,
-        'num_lstm_layers': 2,
+        'img_width': 512,
+        'hidden_size': 128,
+        'num_lstm_layers': 1,
         
         # Training
         'batch_size': 32,
         'epochs': 100,
-        'learning_rate': 0.001,
+        'learning_rate': 0.0001,
         'weight_decay': 1e-5,
         'num_workers': 0,
-        
+        'warmup_epochs': 5,        # Ramp LR gradually for first 5 epochs
+
         # Scheduling & Early Stopping
-        'lr_patience': 3,
-        'early_stopping_patience': 10,
+        'lr_patience': 5,          # FIXED: was 3 — give model more time before halving LR
+        'early_stopping_patience': 20,  # FIXED: was 10 — more patience during zoom training
         'min_delta': 0.001,
         
         # Saving

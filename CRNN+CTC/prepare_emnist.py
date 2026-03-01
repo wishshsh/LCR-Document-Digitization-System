@@ -33,7 +33,7 @@ for i, (img_tensor, label_idx) in enumerate(train_data):
     img = np.rot90(img, k=3)
     img = np.fliplr(img)
     pil_img = Image.fromarray(img).convert('RGB')
-    pil_img = pil_img.resize((200, 64))
+    pil_img = pil_img.resize((400, 64))
     fname = f'emnist_{i:05d}.jpg'
     if i < 5000:
         pil_img.save(f'data/train/emnist/{fname}')

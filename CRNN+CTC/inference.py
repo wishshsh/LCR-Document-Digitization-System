@@ -1,362 +1,383 @@
 """
 Inference Script for CRNN+CTC Civil Registry OCR
-Production-ready implementation for document digitization
+
+TWO NORMALIZERS:
+  SimpleNormalizer   — for PIL-rendered synthetic images (matches training exactly)
+  AdaptiveNormalizer — for physical/scanned images (any zoom, any size)
+
+AUTO-DETECT MODE: automatically decides which pipeline to use based on
+text density in the image — zoomed-in images get adaptive treatment,
+clean synthetic images get simple treatment.
 """
 
 import torch
 import cv2
 import numpy as np
 from pathlib import Path
-import json
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 from crnn_model import get_crnn_model
 from utils import decode_ctc_predictions, extract_form_fields
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# HELPERS
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _to_gray(img: np.ndarray) -> np.ndarray:
+    if len(img.shape) == 3:
+        return cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    return img.copy()
+
+
+def _binarize(gray: np.ndarray) -> np.ndarray:
+    """Otsu, falls back to adaptive for uneven backgrounds."""
+    _, otsu = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    white_ratio = np.mean(otsu == 255)
+    if white_ratio < 0.30 or white_ratio > 0.97:
+        return cv2.adaptiveThreshold(
+            gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+            cv2.THRESH_BINARY, 11, 2)
+    return otsu
+
+
+def _crop_to_text(gray: np.ndarray, pad_ratio=0.15) -> np.ndarray:
+    """Crop tightly around dark pixels (the text)."""
+    inv = cv2.bitwise_not(gray)
+    _, thresh = cv2.threshold(inv, 20, 255, cv2.THRESH_BINARY)
+    coords = np.column_stack(np.where(thresh > 0))
+    if len(coords) == 0:
+        return gray
+    y_min, x_min = coords.min(axis=0)
+    y_max, x_max = coords.max(axis=0)
+    pad   = max(4, int((y_max - y_min) * pad_ratio))
+    y_min = max(0, y_min - pad)
+    x_min = max(0, x_min - pad)
+    y_max = min(gray.shape[0] - 1, y_max + pad)
+    x_max = min(gray.shape[1] - 1, x_max + pad)
+    return gray[y_min:y_max+1, x_min:x_max+1]
+
+
+def _aspect_resize(gray: np.ndarray, H: int, W: int) -> np.ndarray:
+    """Resize preserving aspect ratio, pad with white to fill canvas."""
+    h, w = gray.shape
+    if h == 0 or w == 0:
+        return np.ones((H, W), dtype=np.uint8) * 255
+    scale = H / h
+    new_w = int(w * scale)
+    new_h = H
+    if new_w > W:
+        scale = W / w
+        new_h = int(h * scale)
+        new_w = W
+    resized = cv2.resize(gray, (new_w, new_h), interpolation=cv2.INTER_LANCZOS4)
+    canvas  = np.ones((H, W), dtype=np.uint8) * 255
+    y_off   = (H - new_h) // 2
+    x_off   = (W - new_w) // 2
+    canvas[y_off:y_off+new_h, x_off:x_off+new_w] = resized
+    return canvas
+
+
+def _detect_mode(gray: np.ndarray) -> str:
+    """
+    Auto-detect whether image needs adaptive or simple normalization.
+
+    Logic:
+      - If >25% of pixels are dark, text is very large/zoomed → adaptive.
+      - If image size is far from training size (400x64) → adaptive.
+      - Otherwise → simple (matches training pipeline).
+    """
+    h, w  = gray.shape
+    _, bw = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+    dark_px = np.mean(bw == 0)
+
+    # Text fills too much of the image → zoomed in (like shane.jpg)
+    if dark_px > 0.25:
+        return 'adaptive'
+
+    # Image is far from expected training size (allow 50% tolerance)
+    if not (256 <= w <= 1024 and 32 <= h <= 128):
+        return 'adaptive'
+
+    return 'simple'
+
+
+def _to_tensor(img: np.ndarray) -> torch.Tensor:
+    return torch.FloatTensor(
+        img.astype(np.float32) / 255.0
+    ).unsqueeze(0).unsqueeze(0)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SIMPLE NORMALIZER  ← for PIL-rendered / training-matched images
+# ─────────────────────────────────────────────────────────────────────────────
+
+class SimpleNormalizer:
+    """
+    Matches fix_data.py training pipeline exactly:
+      grayscale → resize → binarize
+    Best for test images created by create_test_images.py.
+    """
+    def __init__(self, H=64, W=512):
+        self.H, self.W = H, W
+
+    def normalize(self, img: np.ndarray) -> np.ndarray:
+        gray    = _to_gray(img)
+        resized = cv2.resize(gray, (self.W, self.H), interpolation=cv2.INTER_LANCZOS4)
+        return _binarize(resized)
+
+    def normalize_from_path(self, path: str) -> np.ndarray:
+        img = cv2.imread(str(path))
+        if img is None:
+            raise ValueError(f"Cannot load: {path}")
+        return self.normalize(img)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ADAPTIVE NORMALIZER  ← for real / physical / scanned images
+# ─────────────────────────────────────────────────────────────────────────────
+
+class AdaptiveNormalizer:
+    """
+    For physical documents or images with non-standard zoom/size:
+      grayscale → denoise → crop text → aspect-ratio resize → binarize
+
+    Crops to actual text first, so a zoomed-in image like shane.jpg
+    gets scaled down to training size instead of being squeezed/stretched.
+    """
+    def __init__(self, H=64, W=512):
+        self.H, self.W = H, W
+
+    def normalize(self, img: np.ndarray) -> np.ndarray:
+        gray   = _to_gray(img)
+        gray   = cv2.fastNlMeansDenoising(gray, None, 10, 7, 21)
+        gray   = _crop_to_text(gray)
+        canvas = _aspect_resize(gray, self.H, self.W)
+        return _binarize(canvas)
+
+    def normalize_from_path(self, path: str) -> np.ndarray:
+        img = cv2.imread(str(path))
+        if img is None:
+            raise ValueError(f"Cannot load: {path}")
+        return self.normalize(img)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AUTO NORMALIZER  ← detects which pipeline to use per image automatically
+# ─────────────────────────────────────────────────────────────────────────────
+
+class AutoNormalizer:
+    """
+    Automatically picks Simple or Adaptive based on image characteristics.
+
+    Examples:
+      demo.jpg  (clean 400x64 PIL)   → Simple   (matches training)
+      name1.jpg (clean 400x64 PIL)   → Simple
+      shane.jpg (huge zoomed text)   → Adaptive (crop then resize)
+      real scan (any size/zoom)      → Adaptive
+    """
+    def __init__(self, H=64, W=512, verbose=False):
+        self.H, self.W = H, W
+        self.verbose   = verbose
+        self._simple   = SimpleNormalizer(H, W)
+        self._adaptive = AdaptiveNormalizer(H, W)
+
+    def normalize(self, img: np.ndarray) -> np.ndarray:
+        gray = _to_gray(img)
+        mode = _detect_mode(gray)
+        if self.verbose:
+            print(f"      auto → {mode}")
+        return self._simple.normalize(img) if mode == 'simple' \
+               else self._adaptive.normalize(img)
+
+    def normalize_from_path(self, path: str) -> np.ndarray:
+        img = cv2.imread(str(path))
+        if img is None:
+            raise ValueError(f"Cannot load: {path}")
+        gray = _to_gray(img)
+        mode = _detect_mode(gray)
+        if self.verbose:
+            print(f"      [{Path(path).name}] → {mode}")
+        return self._simple.normalize(img) if mode == 'simple' \
+               else self._adaptive.normalize(img)
+
+    def to_tensor(self, img: np.ndarray) -> torch.Tensor:
+        return _to_tensor(img)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# MAIN OCR CLASS
+# ─────────────────────────────────────────────────────────────────────────────
+
 class CivilRegistryOCR:
-    """
-    Production OCR system for Philippine Civil Registry documents
-    """
-    
-    def __init__(self, checkpoint_path, device='cuda'):
+
+    def __init__(self, checkpoint_path, device='cuda', mode='auto', verbose=False):
         """
-        Initialize OCR system
-        
         Args:
-            checkpoint_path: Path to trained model checkpoint
-            device: 'cuda' or 'cpu'
+            checkpoint_path : path to best_model.pth
+            device          : 'cuda' or 'cpu'
+            mode            : 'auto'     → auto-detect per image  (recommended)
+                              'simple'   → always use simple pipeline
+                              'adaptive' → always use adaptive pipeline
+            verbose         : print which mode was chosen per image
         """
-        # Set device
         if device == 'cuda' and not torch.cuda.is_available():
-            print("WARNING: CUDA not available, using CPU")
             device = 'cpu'
-        
-        self.device = torch.device(device)
-        
-        # Load checkpoint
+
+        self.device  = torch.device(device)
+        self.verbose = verbose
         print(f"Loading model from {checkpoint_path}...")
-        checkpoint = torch.load(checkpoint_path, map_location=self.device)
-        
-        # Load character mappings
+
+        checkpoint = torch.load(checkpoint_path, map_location=self.device,
+                                weights_only=False)
+
         self.char_to_idx = checkpoint['char_to_idx']
         self.idx_to_char = checkpoint['idx_to_char']
-        self.config = checkpoint.get('config', {})
-        
-        # Create model
+        self.config      = checkpoint.get('config', {})
+
+        img_height = self.config.get('img_height', 64)
+        img_width  = self.config.get('img_width',  512)
+
+        if mode == 'simple':
+            self.normalizer = SimpleNormalizer(img_height, img_width)
+        elif mode == 'adaptive':
+            self.normalizer = AdaptiveNormalizer(img_height, img_width)
+        else:
+            self.normalizer = AutoNormalizer(img_height, img_width, verbose=verbose)
+
         self.model = get_crnn_model(
             model_type=self.config.get('model_type', 'standard'),
-            img_height=self.config.get('img_height', 64),
+            img_height=img_height,
             num_chars=len(self.char_to_idx),
             hidden_size=self.config.get('hidden_size', 256),
             num_lstm_layers=self.config.get('num_lstm_layers', 2)
         )
-        
-        # Load weights
         self.model.load_state_dict(checkpoint['model_state_dict'])
         self.model = self.model.to(self.device)
         self.model.eval()
-        
-        print(f"Model loaded successfully") 
-        print(f"  Val CER: {checkpoint.get('val_cer', 0):.2f}%")
-        print(f"  Device: {self.device}")
-    
-    def preprocess_image(self, image_path, target_height=64, target_width=400):
-        """
-        Preprocess image for OCR
-        
-        Args:
-            image_path: Path to image file
-            target_height: Target image height
-            target_width: Target image width
-            
-        Returns:
-            Preprocessed image tensor
-        """
-        # Read image
-        img = cv2.imread(str(image_path), cv2.IMREAD_GRAYSCALE)
-        
-        if img is None:
-            raise ValueError(f"Failed to load image: {image_path}")
-        
-        # Denoise
-        img = cv2.fastNlMeansDenoising(img, None, 10, 7, 21)
-        
-        # Adaptive thresholding
-        img = cv2.adaptiveThreshold(
-            img, 255,
-            cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-            cv2.THRESH_BINARY,
-            11, 2
-        )
-        
-        # Resize
-        img = cv2.resize(img, (target_width, target_height))
-        
-        # Normalize
-        img = img.astype(np.float32) / 255.0
-        
-        # Convert to tensor [1, 1, H, W]
-        img = torch.FloatTensor(img).unsqueeze(0).unsqueeze(0)
-        
-        return img
-    
-    def predict(self, image_path, decode_method='greedy'):
-        """
-        Predict text from image
-        
-        Args:
-            image_path: Path to image file
-            decode_method: 'greedy' or 'beam_search'
-            
-        Returns:
-            Recognized text
-        """
-        # Preprocess
-        img = self.preprocess_image(image_path)
-        img = img.to(self.device)
-        
-        # Inference
+
+        print(f"Model loaded successfully")
+        print(f"  Val CER  : {checkpoint.get('val_cer', 0):.2f}%")
+        print(f"  Device   : {self.device}")
+        print(f"  Mode     : {mode}  ({img_height}x{img_width})")
+
+    def _preprocess(self, image_path) -> torch.Tensor:
+        normalized = self.normalizer.normalize_from_path(str(image_path))
+        return _to_tensor(normalized)
+
+    def predict(self, image_path, decode_method='greedy') -> str:
+        img = self._preprocess(image_path).to(self.device)
         with torch.no_grad():
             outputs = self.model(img)
             decoded = decode_ctc_predictions(
-                outputs.cpu(),
-                self.idx_to_char,
-                method=decode_method
-            )
-        
+                outputs.cpu(), self.idx_to_char, method=decode_method)
         return decoded[0]
-    
-    def predict_batch(self, image_paths, decode_method='greedy'):
-        """
-        Predict text from multiple images
-        
-        Args:
-            image_paths: List of image paths
-            decode_method: 'greedy' or 'beam_search'
-            
-        Returns:
-            List of recognized texts
-        """
+
+    def predict_batch(self, image_paths, decode_method='greedy') -> List[Dict]:
         results = []
-        
         for image_path in image_paths:
             try:
                 text = self.predict(image_path, decode_method)
-                results.append({
-                    'image_path': str(image_path),
-                    'text': text,
-                    'success': True
-                })
+                results.append({'image_path': str(image_path),
+                                'text': text, 'success': True})
             except Exception as e:
-                results.append({
-                    'image_path': str(image_path),
-                    'error': str(e),
-                    'success': False
-                })
-        
+                results.append({'image_path': str(image_path),
+                                'error': str(e), 'success': False})
         return results
-    
-    def process_form(self, form_image_path, form_type):
-        """
-        Process complete civil registry form
-        
-        Args:
-            form_image_path: Path to form image
-            form_type: 'form1a', 'form2a', 'form3a', 'form90'
-            
-        Returns:
-            Dictionary of extracted fields
-        """
-        # This is a simplified version
-        # In production, you would:
-        # 1. Detect form fields using template matching or object detection
-        # 2. Extract each field region
-        # 3. Run OCR on each field
-        # 4. Post-process and validate
-        
-        # For now, just recognize the entire form
-        text = self.predict(form_image_path)
-        
-        # Extract fields (simplified)
+
+    def process_form(self, form_image_path, form_type) -> Dict:
+        text   = self.predict(form_image_path)
         fields = extract_form_fields(text, form_type)
         fields['raw_text'] = text
-        
         return fields
 
+
+# ─────────────────────────────────────────────────────────────────────────────
+# FORM FIELD EXTRACTOR
+# ─────────────────────────────────────────────────────────────────────────────
 
 class FormFieldExtractor:
-    """
-    Extract specific fields from civil registry forms
-    """
-    
     def __init__(self, ocr_model: CivilRegistryOCR):
         self.ocr = ocr_model
-    
-    def extract_form1a_fields(self, form_image_path):
-        """
-        Extract fields from Form 1A (Birth Certificate)
-        
-        Expected fields:
-        - Child's name
-        - Date of birth
-        - Place of birth
-        - Sex
-        - Father's name
-        - Mother's name
-        """
-        # In production, use template matching to locate fields
-        # For now, process entire form
-        
-        text = self.ocr.predict(form_image_path)
-        
-        # Extract fields using pattern matching or NER
-        # This is simplified - in production use spaCy NER
-        fields = {
-            'form_type': 'Form 1A - Birth Certificate',
-            'raw_text': text,
-            # Add extracted fields here
-            'child_name': '',
-            'date_of_birth': '',
-            'place_of_birth': '',
-            'sex': '',
-            'father_name': '',
-            'mother_name': ''
-        }
-        
-        return fields
-    
-    def extract_form2a_fields(self, form_image_path):
-        """Extract fields from Form 2A (Death Certificate)"""
-        text = self.ocr.predict(form_image_path)
-        
-        fields = {
-            'form_type': 'Form 2A - Death Certificate',
-            'raw_text': text,
-            'deceased_name': '',
-            'date_of_death': '',
-            'place_of_death': '',
-            'cause_of_death': ''
-        }
-        
-        return fields
-    
-    def extract_form3a_fields(self, form_image_path):
-        """Extract fields from Form 3A (Marriage Certificate)"""
-        text = self.ocr.predict(form_image_path)
-        
-        fields = {
-            'form_type': 'Form 3A - Marriage Certificate',
-            'raw_text': text,
-            'husband_name': '',
-            'wife_name': '',
-            'date_of_marriage': '',
-            'place_of_marriage': ''
-        }
-        
-        return fields
-    
-    def extract_form90_fields(self, form_image_path):
-        """Extract fields from Form 90 (Marriage License Application)"""
-        text = self.ocr.predict(form_image_path)
-        
-        fields = {
-            'form_type': 'Form 90 - Marriage License Application',
-            'raw_text': text,
-            'applicant1_name': '',
-            'applicant2_name': '',
-            'date_of_application': ''
-        }
-        
-        return fields
 
+    def extract_form1a_fields(self, path):
+        text = self.ocr.predict(path)
+        return {'form_type': 'Form 1A - Birth Certificate', 'raw_text': text}
+
+    def extract_form2a_fields(self, path):
+        text = self.ocr.predict(path)
+        return {'form_type': 'Form 2A - Death Certificate', 'raw_text': text}
+
+    def extract_form3a_fields(self, path):
+        text = self.ocr.predict(path)
+        return {'form_type': 'Form 3A - Marriage Certificate', 'raw_text': text}
+
+    def extract_form90_fields(self, path):
+        text = self.ocr.predict(path)
+        return {'form_type': 'Form 90 - Marriage License Application',
+                'raw_text': text}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DEMO
+# ─────────────────────────────────────────────────────────────────────────────
 
 def demo_inference():
-    """
-    Demo function showing how to use the OCR system
-    """
     print("=" * 70)
-    print("Civil Registry OCR - Demo")
+    print("Civil Registry OCR  (auto-adaptive normalizer)")
     print("=" * 70)
-    
-    # Initialize OCR
+
     ocr = CivilRegistryOCR(
         checkpoint_path='checkpoints/best_model.pth',
-        device='cuda'
+        device='cuda',
+        mode='auto',
+        verbose=True   # shows which mode each image triggers
     )
-    
-    # Single image prediction
-    print("\n1. Single Image Prediction:")
+
+    print("\n1. Single Prediction:")
     try:
-        text = ocr.predict('test_images/sample_name.jpg')
-        print(f"   Recognized text: {text}")
+        result = ocr.predict('test_images/demo.jpg')
+        print(f"   Recognized text: {result}")
     except Exception as e:
         print(f"   Error: {e}")
-    
-    # Batch prediction
+
     print("\n2. Batch Prediction:")
-    image_paths = [
+    batch_results = ocr.predict_batch([
         'test_images/name1.jpg',
+        'test_images/shane.jpg',
         'test_images/date1.jpg',
-        'test_images/place1.jpg'
-    ]
-    
-    results = ocr.predict_batch(image_paths)
-    for result in results:
-        if result['success']:
-            print(f"   {result['image_path']}: {result['text']}")
-        else:
-            print(f"   {result['image_path']}: ERROR - {result['error']}")
-    
-    # Form processing
+        'test_images/place1.jpg',
+    ])
+    for r in batch_results:
+        status = r['text'] if r['success'] else f"ERROR - {r['error']}"
+        print(f"   {r['image_path']}: {status}")
+
     print("\n3. Form Processing:")
-    extractor = FormFieldExtractor(ocr)
-    
     try:
-        fields = extractor.extract_form1a_fields('test_images/form1a_sample.jpg')
-        print(f"   Form Type: {fields['form_type']}")
-        print(f"   Raw Text: {fields['raw_text'][:100]}...")
+        form_data = ocr.process_form('test_images/form1a_sample.jpg', 'form1a')
+        print(f"   Form Type: Form 1A - Birth Certificate")
+        print(f"   Raw Text: {form_data['raw_text']}")
     except Exception as e:
         print(f"   Error: {e}")
 
 
 def create_inference_api():
-    """
-    Create a simple API wrapper for the OCR system
-    Can be integrated with Flask/FastAPI
-    """
-    
     class OCR_API:
-        def __init__(self, checkpoint_path):
-            self.ocr = CivilRegistryOCR(checkpoint_path)
+        def __init__(self, checkpoint_path, mode='auto'):
+            self.ocr       = CivilRegistryOCR(checkpoint_path, mode=mode)
             self.extractor = FormFieldExtractor(self.ocr)
-        
-        def recognize_text(self, image_path):
-            """API endpoint: Recognize text from image"""
-            return {
-                'text': self.ocr.predict(image_path),
-                'success': True
-            }
-        
-        def process_birth_certificate(self, image_path):
-            """API endpoint: Process birth certificate"""
-            return self.extractor.extract_form1a_fields(image_path)
-        
-        def process_death_certificate(self, image_path):
-            """API endpoint: Process death certificate"""
-            return self.extractor.extract_form2a_fields(image_path)
-        
-        def process_marriage_certificate(self, image_path):
-            """API endpoint: Process marriage certificate"""
-            return self.extractor.extract_form3a_fields(image_path)
-        
-        def process_marriage_license(self, image_path):
-            """API endpoint: Process marriage license application"""
-            return self.extractor.extract_form90_fields(image_path)
-    
+        def recognize_text(self, p):
+            return {'text': self.ocr.predict(p), 'success': True}
+        def process_birth_certificate(self, p):
+            return self.extractor.extract_form1a_fields(p)
+        def process_death_certificate(self, p):
+            return self.extractor.extract_form2a_fields(p)
+        def process_marriage_certificate(self, p):
+            return self.extractor.extract_form3a_fields(p)
+        def process_marriage_license(self, p):
+            return self.extractor.extract_form90_fields(p)
     return OCR_API
 
 
 if __name__ == "__main__":
-    # Run demo
     demo_inference()

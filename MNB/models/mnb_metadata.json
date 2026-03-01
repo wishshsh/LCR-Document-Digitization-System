@@ -1,0 +1,13 @@
+{
+  "accuracy": 100.0,
+  "samples_per_class": 150,
+  "total_samples": 600,
+  "labels": {
+    "0": "Form 1A - Birth Certificate",
+    "1": "Form 2A - Death Certificate",
+    "2": "Form 3A - Marriage Certificate",
+    "3": "Form 90 - Application for Marriage License"
+  },
+  "model_path": "models\\mnb_classifier.pkl",
+  "vectorizer_path": "models\\tfidf_vectorizer.pkl"
+}

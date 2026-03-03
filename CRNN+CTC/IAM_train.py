@@ -14,7 +14,8 @@ DATASET:
 STEP ORDER:
   1. python IAM_train.py --prepare   ← converts IAM → annotations JSON
   2. python IAM_train.py --train     ← trains the CRNN model
-  3. python IAM_train.py --prepare --train  ← do both at once
+  3. python IAM_train.p
+  y --prepare --train  ← do both at once
 """
 
 import os

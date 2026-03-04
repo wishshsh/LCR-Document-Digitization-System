@@ -8,7 +8,7 @@ import torch.nn as nn
 
 class CRNN_CivilRegistry(nn.Module):
 
-    def __init__(self, img_height=64, num_chars=95, hidden_size=128, num_lstm_layers=1):
+    def __init__(self, img_height=64, num_chars=96, hidden_size=128, num_lstm_layers=1):
         super().__init__()
 
         # CNN — width reductions for 512px input:
@@ -71,19 +71,24 @@ def initialize_weights(model):
     for m in model.modules():
         if isinstance(m, nn.Conv2d):
             nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
-            if m.bias is not None: nn.init.constant_(m.bias, 0)
+            if m.bias is not None:
+                nn.init.constant_(m.bias, 0)
         elif isinstance(m, nn.BatchNorm2d):
-            nn.init.constant_(m.weight, 1); nn.init.constant_(m.bias, 0)
+            nn.init.constant_(m.weight, 1)
+            nn.init.constant_(m.bias, 0)
         elif isinstance(m, nn.Linear):
-            nn.init.normal_(m.weight, 0, 0.01); nn.init.constant_(m.bias, 0)
+            nn.init.normal_(m.weight, 0, 0.01)
+            nn.init.constant_(m.bias, 0)
         elif isinstance(m, nn.LSTM):
             for name, param in m.named_parameters():
-                if 'weight' in name: nn.init.orthogonal_(param)
-                elif 'bias' in name: nn.init.constant_(param, 0)
+                if 'weight' in name:
+                    nn.init.orthogonal_(param)
+                elif 'bias' in name:
+                    nn.init.constant_(param, 0)
 
 
 if __name__ == "__main__":
-    model = get_crnn_model('standard', img_height=64, num_chars=95, hidden_size=128, num_lstm_layers=1)
+    model = get_crnn_model('standard', img_height=64, num_chars=96, hidden_size=128, num_lstm_layers=1)
     initialize_weights(model)
     x = torch.randn(2, 1, 64, 512)
     out = model(x)

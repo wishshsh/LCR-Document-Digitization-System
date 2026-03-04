@@ -8,7 +8,7 @@ Usage:
     python field_extractor.py --pdf FORM_102.pdf --form birth
     python field_extractor.py --pdf FORM_97.pdf  --form marriage --visualize
     python field_extractor.py --pdf FORM_103.pdf --form death    --output results.json
-    python field_extractor.py --pdf FORM_102.pdf --form birth    --checkpoint checkpoints/best_model_iam.pth
+    python field_extractor.py --pdf FORM_102.pdf --form birth    --checkpoint checkpoints/best_model.pth
 """
 
 import argparse
@@ -23,6 +23,7 @@ import torch
 
 # ─────────────────────────────────────────────
 #  POPPLER PATH — adjust if needed
+#  Set to None if poppler is in your system PATH
 # ─────────────────────────────────────────────
 POPPLER_PATH = r"C:\Users\irish\OneDrive\Desktop\poppler-25.12.0\Library\bin"
 
@@ -35,204 +36,219 @@ DEFAULT_CHECKPOINT = "checkpoints/best_model.pth"
 # ══════════════════════════════════════════════════════════════
 #  FIELD COORDINATE MAPS
 #  Format: field_name: (x1, y1, x2, y2)  — all values 0.0–1.0
+#  Calibrated against actual PDFs at 200 DPI:
+#    Form 102 (Birth):    1700 × 2800 px
+#    Form 103 (Death):    1700 × 2878 px
+#    Form 97  (Marriage): 1700 × 2600 px
 # ══════════════════════════════════════════════════════════════
 
 BIRTH_FIELDS = {
-    # Header
-    "province":             (0.038, 0.068, 0.490, 0.088),
-    "registry_no":          (0.618, 0.068, 0.963, 0.088),
-    "city_municipality":    (0.038, 0.100, 0.580, 0.122),
-    # Item 1: Child Name (grid row y=136-174 => ratio 0.133-0.170)
-    "child_first_name":     (0.082, 0.145, 0.435, 0.163),
-    "child_middle_name":    (0.435, 0.145, 0.682, 0.163),
-    "child_last_name":      (0.682, 0.145, 0.963, 0.163),
-    # Items 2-3: Sex / Date of Birth (y=174-197 => 0.170-0.192)
-    "sex":                  (0.038, 0.175, 0.195, 0.191),
-    "dob_day":              (0.290, 0.175, 0.415, 0.191),
-    "dob_month":            (0.415, 0.175, 0.600, 0.191),
-    "dob_year":             (0.600, 0.175, 0.963, 0.191),
-    # Item 4: Place of Birth (y=208-240 => 0.203-0.234)
-    "place_birth_hospital": (0.082, 0.210, 0.388, 0.228),
-    "place_birth_city":     (0.388, 0.210, 0.622, 0.228),
-    "place_birth_province": (0.622, 0.210, 0.820, 0.228),
-    "weight_at_birth":      (0.820, 0.210, 0.963, 0.228),
-    # Items 5-6: Type/Order/Weight (y=197-208 => 0.192-0.203)
-    "type_of_birth":        (0.082, 0.193, 0.270, 0.208),
-    "multiple_birth_order": (0.270, 0.193, 0.492, 0.208),
-    "birth_order":          (0.492, 0.193, 0.700, 0.208),
-    "birth_weight_grams":   (0.820, 0.228, 0.963, 0.240),
-    # Item 7: Mother Maiden Name (y=240-265 => 0.234-0.259)
-    "mother_first_name":    (0.082, 0.238, 0.390, 0.254),
-    "mother_middle_name":   (0.390, 0.238, 0.635, 0.254),
-    "mother_last_name":     (0.635, 0.238, 0.963, 0.254),
-    # Items 8-12: Mother details (y=265-340 => 0.259-0.332)
-    "mother_citizenship":   (0.038, 0.262, 0.130, 0.278),
-    "mother_religion":      (0.130, 0.262, 0.490, 0.278),
-    "mother_occupation":    (0.492, 0.262, 0.730, 0.278),
-    "mother_age_at_birth":  (0.820, 0.262, 0.963, 0.278),
-    # Items 10a-c: Children count (y=340-364 => 0.332-0.355)
-    "mother_children_alive":        (0.082, 0.334, 0.245, 0.350),
-    "mother_children_still_living": (0.245, 0.334, 0.388, 0.350),
-    "mother_children_born_dead":    (0.388, 0.334, 0.492, 0.350),
-    # Item 13: Mother Residence (y=364-390 => 0.355-0.381)
-    "mother_residence_house":    (0.082, 0.358, 0.262, 0.374),
-    "mother_residence_city":     (0.262, 0.358, 0.490, 0.374),
-    "mother_residence_province": (0.490, 0.358, 0.680, 0.374),
-    "mother_residence_country":  (0.680, 0.358, 0.963, 0.374),
-    # Item 14: Father Name (y=390-415 => 0.381-0.405)
-    "father_first_name":    (0.082, 0.383, 0.390, 0.400),
-    "father_middle_name":   (0.390, 0.383, 0.635, 0.400),
-    "father_last_name":     (0.635, 0.383, 0.963, 0.400),
-    # Items 15-18: Father details (y=415-438 => 0.405-0.428)
-    "father_citizenship":   (0.038, 0.408, 0.130, 0.424),
-    "father_religion":      (0.130, 0.408, 0.390, 0.424),
-    "father_occupation":    (0.490, 0.408, 0.730, 0.424),
-    "father_age_at_birth":  (0.820, 0.408, 0.963, 0.424),
-    # Item 19: Father Residence (y=464-510 => 0.453-0.498)
-    "father_residence_house":    (0.082, 0.455, 0.262, 0.472),
-    "father_residence_city":     (0.262, 0.455, 0.490, 0.472),
-    "father_residence_province": (0.490, 0.455, 0.680, 0.472),
-    "father_residence_country":  (0.680, 0.455, 0.963, 0.472),
-    # Item 20a: Marriage of Parents (y=510-578 => 0.498-0.565)
-    "parents_marriage_month":    (0.082, 0.502, 0.198, 0.518),
-    "parents_marriage_day":      (0.198, 0.502, 0.270, 0.518),
-    "parents_marriage_year":     (0.270, 0.502, 0.355, 0.518),
-    "parents_marriage_city":     (0.355, 0.502, 0.555, 0.518),
-    "parents_marriage_province": (0.555, 0.502, 0.750, 0.518),
-    "parents_marriage_country":  (0.750, 0.502, 0.963, 0.518),
-    # Item 22: Informant (y=656+ => 0.641+)
-    "informant_name":         (0.082, 0.645, 0.390, 0.660),
-    "informant_address":      (0.082, 0.660, 0.390, 0.675),
-    "informant_date":         (0.082, 0.675, 0.250, 0.688),
+    # ── Header ────────────────────────────────────────────────
+    "province":               (0.08,  0.060, 0.48,  0.082),
+    "registry_no":            (0.62,  0.060, 0.95,  0.082),
+    "city_municipality":      (0.18,  0.082, 0.48,  0.102),
+
+    # ── Item 1: Child Name ─────────────────────────────────────
+    "child_first_name":       (0.14,  0.108, 0.42,  0.132),
+    "child_middle_name":      (0.42,  0.108, 0.65,  0.132),
+    "child_last_name":        (0.65,  0.108, 0.95,  0.132),
+
+    # ── Items 2-3: Sex / Date of Birth ─────────────────────────
+    "sex":                    (0.15,  0.138, 0.30,  0.162),
+    "dob_day":                (0.42,  0.138, 0.52,  0.162),
+    "dob_month":              (0.52,  0.138, 0.72,  0.162),
+    "dob_year":               (0.72,  0.138, 0.95,  0.162),
+
+    # ── Item 4: Place of Birth ─────────────────────────────────
+    "place_birth_hospital":   (0.22,  0.165, 0.50,  0.190),
+    "place_birth_city":       (0.50,  0.165, 0.68,  0.190),
+    "place_birth_province":   (0.68,  0.165, 0.88,  0.190),
+
+    # ── Items 5a / 6: Type of Birth / Weight ──────────────────
+    "type_of_birth":          (0.15,  0.192, 0.32,  0.215),
+    "weight_at_birth":        (0.74,  0.200, 0.95,  0.220),
+
+    # ── MOTHER section ─────────────────────────────────────────
+    # Item 7: Maiden Name (First / Middle / Last)
+    "mother_first_name":      (0.14,  0.278, 0.40,  0.300),
+    "mother_middle_name":     (0.40,  0.278, 0.63,  0.300),
+    "mother_last_name":       (0.63,  0.278, 0.95,  0.300),
+
+    # Item 8: Citizenship   Item 9: Religion
+    "mother_citizenship":     (0.15,  0.302, 0.38,  0.325),
+    "mother_religion":        (0.48,  0.302, 0.95,  0.325),
+
+    # Item 11: Occupation   Item 12: Age at birth
+    "mother_occupation":      (0.42,  0.348, 0.70,  0.370),
+    "mother_age_at_birth":    (0.83,  0.348, 0.95,  0.370),
+
+    # Item 13: Residence (House / City / Province)
+    "mother_residence_house":    (0.22, 0.375, 0.44, 0.398),
+    "mother_residence_city":     (0.44, 0.375, 0.64, 0.398),
+    "mother_residence_province": (0.64, 0.375, 0.80, 0.398),
+
+    # ── FATHER section ─────────────────────────────────────────
+    # Item 14: Name (First / Middle / Last)
+    "father_first_name":      (0.14,  0.468, 0.40,  0.492),
+    "father_middle_name":     (0.40,  0.468, 0.63,  0.492),
+    "father_last_name":       (0.63,  0.468, 0.95,  0.492),
+
+    # Item 15: Citizenship   Item 16: Religion
+    "father_citizenship":     (0.15,  0.495, 0.33,  0.518),
+    "father_religion":        (0.33,  0.495, 0.58,  0.518),
+
+    # Item 17: Occupation   Item 18: Age
+    "father_occupation":      (0.42,  0.520, 0.70,  0.542),
+    "father_age_at_birth":    (0.83,  0.520, 0.95,  0.542),
+
+    # Item 19: Residence (House / City / Province)
+    "father_residence_house":    (0.22, 0.545, 0.44, 0.568),
+    "father_residence_city":     (0.44, 0.545, 0.64, 0.568),
+    "father_residence_province": (0.64, 0.545, 0.80, 0.568),
+
+    # ── Item 20: Marriage of Parents ───────────────────────────
+    "parents_marriage_month":    (0.14, 0.608, 0.26, 0.628),
+    "parents_marriage_day":      (0.26, 0.608, 0.36, 0.628),
+    "parents_marriage_year":     (0.36, 0.608, 0.46, 0.628),
+    "parents_marriage_city":     (0.52, 0.608, 0.68, 0.628),
+    "parents_marriage_province": (0.68, 0.608, 0.82, 0.628),
+
+    # ── Item 22: Informant ─────────────────────────────────────
+    "informant_name":         (0.04,  0.748, 0.42,  0.768),
+    "informant_date":         (0.04,  0.790, 0.22,  0.808),
 }
+
 
 DEATH_FIELDS = {
-    # Header (below instruction text)
-    "province":          (0.038, 0.078, 0.328, 0.096),
-    "registry_no":       (0.420, 0.078, 0.700, 0.096),
-    "city_municipality": (0.038, 0.096, 0.328, 0.114),
-    # Item 1: Name + Sex (y=181 => 0.177)
-    "deceased_first_name":  (0.095, 0.180, 0.310, 0.198),
-    "deceased_middle_name": (0.310, 0.180, 0.545, 0.198),
-    "deceased_last_name":   (0.545, 0.180, 0.760, 0.198),
-    "sex":                  (0.760, 0.180, 0.963, 0.198),
-    # Items 3-5: Dates / Age (y=~220-276)
-    "dod_day":   (0.038, 0.224, 0.148, 0.242),
-    "dod_month": (0.148, 0.224, 0.280, 0.242),
-    "dod_year":  (0.280, 0.224, 0.390, 0.242),
-    "dob_day":   (0.390, 0.224, 0.480, 0.242),
-    "dob_month": (0.480, 0.224, 0.590, 0.242),
-    "dob_year":  (0.590, 0.224, 0.680, 0.242),
-    "age_years": (0.680, 0.224, 0.760, 0.242),
-    # Item 6: Place of Death (y=276 => 0.270)
-    "place_death_full": (0.038, 0.272, 0.700, 0.302),
-    # Item 7: Civil Status (y=320 => 0.313)
-    "civil_status": (0.038, 0.316, 0.380, 0.346),
-    # Items 8-9: Religion / Citizenship (y=361 => 0.352)
-    "religion":    (0.038, 0.354, 0.380, 0.374),
-    "citizenship": (0.380, 0.354, 0.700, 0.374),
-    # Item 9 cont: Residence
-    "residence_full": (0.038, 0.380, 0.700, 0.406),
-    # Items 11-13: Occupation / Father / Mother (y=479 => 0.468)
-    "occupation":  (0.038, 0.470, 0.310, 0.490),
-    "father_name": (0.310, 0.470, 0.630, 0.490),
-    "mother_name": (0.630, 0.470, 0.963, 0.490),
-    # Item 19b: Causes of Death (y=537 => 0.524)
-    "cause_immediate":  (0.168, 0.540, 0.580, 0.558),
-    "cause_antecedent": (0.168, 0.572, 0.580, 0.590),
-    "cause_underlying": (0.168, 0.604, 0.580, 0.622),
-    "cause_other":      (0.038, 0.636, 0.700, 0.658),
-    # Item 26: Informant (y=835 => 0.815)
-    "informant_name":    (0.038, 0.820, 0.310, 0.838),
-    "informant_address": (0.038, 0.856, 0.580, 0.872),
-    "informant_date":    (0.038, 0.874, 0.250, 0.888),
+    # ── Header ────────────────────────────────────────────────
+    "province":               (0.10,  0.127, 0.48,  0.150),
+    "registry_no":            (0.58,  0.116, 0.78,  0.145),
+    "city_municipality":      (0.18,  0.150, 0.50,  0.172),
+
+    # ── Item 1: Name (First / Middle / Last) ──────────────────
+    "deceased_first_name":    (0.12,  0.172, 0.36,  0.200),
+    "deceased_middle_name":   (0.36,  0.172, 0.58,  0.200),
+    "deceased_last_name":     (0.58,  0.172, 0.78,  0.200),
+
+    # ── Items 2-4: Sex / Religion / Age ───────────────────────
+    "sex":                    (0.08,  0.202, 0.18,  0.228),
+    "religion":               (0.22,  0.202, 0.42,  0.228),
+    "age_years":              (0.43,  0.202, 0.52,  0.228),
+
+    # ── Item 5: Place of Death ────────────────────────────────
+    "place_death_hospital":   (0.22,  0.228, 0.48,  0.255),
+    "place_death_city":       (0.48,  0.228, 0.63,  0.255),
+    "place_death_province":   (0.63,  0.228, 0.78,  0.255),
+
+    # ── Item 6: Date of Death   Item 7: Citizenship ───────────
+    "dod_day":                (0.20,  0.258, 0.30,  0.282),
+    "dod_month":              (0.30,  0.258, 0.46,  0.282),
+    "dod_year":               (0.46,  0.258, 0.60,  0.282),
+    "citizenship":            (0.62,  0.258, 0.78,  0.282),
+
+    # ── Item 8: Residence ─────────────────────────────────────
+    "residence_house":        (0.22,  0.285, 0.46,  0.308),
+    "residence_city":         (0.46,  0.285, 0.63,  0.308),
+    "residence_province":     (0.63,  0.285, 0.78,  0.308),
+
+    # ── Items 9-10: Civil Status / Occupation ─────────────────
+    "civil_status":           (0.04,  0.315, 0.32,  0.348),
+    "occupation":             (0.50,  0.315, 0.78,  0.348),
+
+    # ── Item 17: Causes of Death ──────────────────────────────
+    # Boxes sit on the actual fill underlines below each label (a, b, c, II)
+    "cause_immediate":        (0.25,  0.411, 0.63,  0.420),
+    "cause_antecedent":       (0.25,  0.431, 0.63,  0.441),
+    "cause_underlying":       (0.25,  0.451, 0.63,  0.460),
+    "cause_other":            (0.25,  0.471, 0.63,  0.481),
+
+    # ── Item 25: Informant ────────────────────────────────────
+    # Left col:  Signature / Name in Print / Relationship
+    # Right col: Address   / (2nd line)    / Date
+    "informant_name":         (0.04,  0.823, 0.38,  0.829),
+    "informant_address":      (0.42,  0.817, 0.78,  0.823),
+    "informant_date":         (0.42,  0.830, 0.62,  0.836),
 }
 
+
 MARRIAGE_FIELDS = {
-    # Header
-    "province":          (0.100, 0.068, 0.490, 0.082),
-    "city_municipality": (0.100, 0.082, 0.490, 0.100),
-    "registry_no":       (0.688, 0.068, 0.963, 0.082),
-    # Item 1: Names (y=135-184 => 0.132-0.180, 3 sub-rows)
-    "husband_first_name":  (0.100, 0.134, 0.490, 0.150),
-    "wife_first_name":     (0.510, 0.134, 0.963, 0.150),
-    "husband_middle_name": (0.100, 0.152, 0.490, 0.166),
-    "wife_middle_name":    (0.510, 0.152, 0.963, 0.166),
-    "husband_last_name":   (0.100, 0.168, 0.490, 0.182),
-    "wife_last_name":      (0.510, 0.168, 0.963, 0.182),
-    # Items 2a-b: DOB / Age (y=184-210 => 0.180-0.205)
-    "husband_dob_day":   (0.100, 0.182, 0.175, 0.198),
-    "husband_dob_month": (0.175, 0.182, 0.268, 0.198),
-    "husband_dob_year":  (0.268, 0.182, 0.362, 0.198),
-    "husband_age":       (0.362, 0.182, 0.490, 0.198),
-    "wife_dob_day":      (0.510, 0.182, 0.590, 0.198),
-    "wife_dob_month":    (0.590, 0.182, 0.678, 0.198),
-    "wife_dob_year":     (0.678, 0.182, 0.778, 0.198),
-    "wife_age":          (0.778, 0.182, 0.963, 0.198),
-    # Item 3: Place of Birth (y=210-234 => 0.205-0.229)
-    "husband_place_birth_city":     (0.100, 0.207, 0.268, 0.226),
-    "husband_place_birth_province": (0.268, 0.207, 0.390, 0.226),
-    "husband_place_birth_country":  (0.390, 0.207, 0.490, 0.226),
-    "wife_place_birth_city":        (0.510, 0.207, 0.678, 0.226),
-    "wife_place_birth_province":    (0.678, 0.207, 0.820, 0.226),
-    "wife_place_birth_country":     (0.820, 0.207, 0.963, 0.226),
-    # Items 4a-b: Sex / Citizenship (y=234-266 => 0.229-0.260)
-    "husband_sex":         (0.100, 0.231, 0.175, 0.250),
-    "husband_citizenship": (0.175, 0.231, 0.490, 0.250),
-    "wife_sex":            (0.510, 0.231, 0.590, 0.250),
-    "wife_citizenship":    (0.590, 0.231, 0.963, 0.250),
-    # Item 5: Residence (y=266-329 => 0.260-0.321)
-    "husband_residence": (0.100, 0.262, 0.490, 0.318),
-    "wife_residence":    (0.510, 0.262, 0.963, 0.318),
-    # Item 6: Religion (y=329-377 => 0.321-0.368)
-    "husband_religion": (0.100, 0.323, 0.490, 0.356),
-    "wife_religion":    (0.510, 0.323, 0.963, 0.356),
-    # Item 7: Civil Status (y=377-444 => 0.368-0.434)
-    "husband_civil_status": (0.100, 0.370, 0.490, 0.430),
-    "wife_civil_status":    (0.510, 0.370, 0.963, 0.430),
-    # Item 8: Father Names (y=444-489 => 0.434-0.478)
-    "husband_father_first":  (0.100, 0.436, 0.242, 0.455),
-    "husband_father_middle": (0.242, 0.436, 0.362, 0.455),
-    "husband_father_last":   (0.362, 0.436, 0.490, 0.455),
-    "wife_father_first":     (0.510, 0.436, 0.640, 0.455),
-    "wife_father_middle":    (0.640, 0.436, 0.778, 0.455),
-    "wife_father_last":      (0.778, 0.436, 0.963, 0.455),
-    # Item 9: Father Citizenship (y=489-501 => 0.478-0.489)
-    "husband_father_citizenship": (0.100, 0.480, 0.490, 0.496),
-    "wife_father_citizenship":    (0.510, 0.480, 0.963, 0.496),
-    # Item 10: Mother Names (y=501-550 => 0.489-0.537)
-    "husband_mother_first":  (0.100, 0.492, 0.222, 0.510),
-    "husband_mother_middle": (0.222, 0.492, 0.350, 0.510),
-    "husband_mother_last":   (0.350, 0.492, 0.490, 0.510),
-    "wife_mother_first":     (0.510, 0.492, 0.635, 0.510),
-    "wife_mother_middle":    (0.635, 0.492, 0.778, 0.510),
-    "wife_mother_last":      (0.778, 0.492, 0.963, 0.510),
-    # Item 11: Mother Citizenship (y=550-565 => 0.537-0.552)
-    "husband_mother_citizenship": (0.100, 0.539, 0.490, 0.555),
-    "wife_mother_citizenship":    (0.510, 0.539, 0.963, 0.555),
-    # Item 12: Consent Names (y=565-617 => 0.552-0.603)
-    "husband_consent_first":  (0.100, 0.554, 0.228, 0.572),
-    "husband_consent_middle": (0.228, 0.554, 0.355, 0.572),
-    "husband_consent_last":   (0.355, 0.554, 0.490, 0.572),
-    "wife_consent_first":     (0.510, 0.554, 0.630, 0.572),
-    "wife_consent_middle":    (0.630, 0.554, 0.778, 0.572),
-    "wife_consent_last":      (0.778, 0.554, 0.963, 0.572),
-    # Item 13: Relationship (y=617-638 => 0.603-0.623)
-    "husband_relationship": (0.100, 0.605, 0.490, 0.622),
-    "wife_relationship":    (0.510, 0.605, 0.963, 0.622),
-    # Item 14: Residence of Consent (y=638-704 => 0.623-0.688)
-    "husband_residence2": (0.100, 0.625, 0.490, 0.674),
-    "wife_residence2":    (0.510, 0.625, 0.963, 0.674),
-    # Item 15: Place of Marriage (y=704-737 => 0.688-0.720)
-    "place_marriage_office":   (0.100, 0.690, 0.490, 0.705),
-    "place_marriage_city":     (0.490, 0.690, 0.748, 0.705),
-    "place_marriage_province": (0.748, 0.690, 0.963, 0.705),
-    # Items 16-17: Date / Time (y=737+ => 0.720+)
-    "date_marriage_day":   (0.100, 0.722, 0.178, 0.736),
-    "date_marriage_month": (0.178, 0.722, 0.310, 0.736),
-    "date_marriage_year":  (0.310, 0.722, 0.412, 0.736),
-    "time_marriage":       (0.640, 0.716, 0.920, 0.730),
+    # ── Header ────────────────────────────────────────────────
+    "province":               (0.08,  0.076, 0.44,  0.098),
+    "registry_no":            (0.62,  0.076, 0.96,  0.098),
+    "city_municipality":      (0.18,  0.098, 0.46,  0.118),
+
+    # ── Item 1: Names of Contracting Parties ──────────────────
+    # First names (HUSBAND left half / WIFE right half)
+    "husband_first_name":     (0.14,  0.152, 0.42,  0.175),
+    "wife_first_name":        (0.55,  0.152, 0.82,  0.175),
+    # Middle names
+    "husband_middle_name":    (0.14,  0.175, 0.42,  0.198),
+    "wife_middle_name":       (0.55,  0.175, 0.82,  0.198),
+    # Last names
+    "husband_last_name":      (0.14,  0.198, 0.42,  0.220),
+    "wife_last_name":         (0.55,  0.198, 0.82,  0.220),
+
+    # ── Item 2a: Date of Birth / Age ──────────────────────────
+    "husband_dob_day":        (0.14,  0.222, 0.22,  0.243),
+    "husband_dob_month":      (0.22,  0.222, 0.32,  0.243),
+    "husband_dob_year":       (0.32,  0.222, 0.40,  0.243),
+    "husband_age":            (0.40,  0.222, 0.48,  0.243),
+    "wife_dob_day":           (0.55,  0.222, 0.62,  0.243),
+    "wife_dob_month":         (0.62,  0.222, 0.72,  0.243),
+    "wife_dob_year":          (0.72,  0.222, 0.80,  0.243),
+    "wife_age":               (0.80,  0.222, 0.88,  0.243),
+
+    # ── Item 3: Place of Birth ────────────────────────────────
+    "husband_place_birth_city":     (0.14, 0.245, 0.28, 0.265),
+    "husband_place_birth_province": (0.28, 0.245, 0.40, 0.265),
+    "wife_place_birth_city":        (0.55, 0.245, 0.68, 0.265),
+    "wife_place_birth_province":    (0.68, 0.245, 0.80, 0.265),
+
+    # ── Items 4a-b: Sex / Citizenship ─────────────────────────
+    "husband_sex":            (0.14,  0.268, 0.24,  0.288),
+    "husband_citizenship":    (0.24,  0.268, 0.46,  0.288),
+    "wife_sex":               (0.55,  0.268, 0.64,  0.288),
+    "wife_citizenship":       (0.64,  0.268, 0.82,  0.288),
+
+    # ── Item 5: Residence ─────────────────────────────────────
+    "husband_residence":      (0.14,  0.290, 0.46,  0.328),
+    "wife_residence":         (0.55,  0.290, 0.96,  0.328),
+
+    # ── Item 6: Religion ──────────────────────────────────────
+    "husband_religion":       (0.14,  0.330, 0.46,  0.352),
+    "wife_religion":          (0.55,  0.330, 0.96,  0.352),
+
+    # ── Item 7: Civil Status ──────────────────────────────────
+    "husband_civil_status":   (0.14,  0.353, 0.46,  0.373),
+    "wife_civil_status":      (0.55,  0.353, 0.82,  0.373),
+
+    # ── Item 8: Father Name ───────────────────────────────────
+    "husband_father_first":   (0.14,  0.395, 0.26,  0.415),
+    "husband_father_middle":  (0.26,  0.395, 0.37,  0.415),
+    "husband_father_last":    (0.37,  0.395, 0.46,  0.415),
+    "wife_father_first":      (0.55,  0.395, 0.66,  0.415),
+    "wife_father_middle":     (0.66,  0.395, 0.76,  0.415),
+    "wife_father_last":       (0.76,  0.395, 0.88,  0.415),
+
+    # ── Item 10: Mother Name ──────────────────────────────────
+    "husband_mother_first":   (0.14,  0.440, 0.26,  0.460),
+    "husband_mother_middle":  (0.26,  0.440, 0.37,  0.460),
+    "husband_mother_last":    (0.37,  0.440, 0.46,  0.460),
+    "wife_mother_first":      (0.55,  0.440, 0.66,  0.460),
+    "wife_mother_middle":     (0.66,  0.440, 0.76,  0.460),
+    "wife_mother_last":       (0.76,  0.440, 0.88,  0.460),
+
+    # ── Item 15: Place of Marriage ────────────────────────────
+    "place_marriage_office":  (0.14,  0.620, 0.44,  0.642),
+    "place_marriage_city":    (0.44,  0.620, 0.68,  0.642),
+    "place_marriage_province":(0.68,  0.620, 0.88,  0.642),
+
+    # ── Item 16: Date of Marriage ─────────────────────────────
+    "date_marriage_day":      (0.14,  0.643, 0.24,  0.662),
+    "date_marriage_month":    (0.24,  0.643, 0.38,  0.662),
+    "date_marriage_year":     (0.38,  0.643, 0.48,  0.662),
 }
+
 
 # ─────────────────────────────────────────────
 #  COLOUR PALETTE — for visualization
@@ -247,15 +263,12 @@ COLOURS = [
 
 # ══════════════════════════════════════════════════════════════
 #  CRNN IMAGE NORMALIZER
-#  Same pipeline as check_cer.py / inference.py:
-#    crop → resize (grayscale) → binarize LAST
 # ══════════════════════════════════════════════════════════════
 
 class FieldNormalizer:
     """
     Normalizes a cropped field image for CRNN inference.
-    Handles small field crops from scanned PDFs — applies
-    denoising + adaptive binarization before passing to the model.
+    Handles small field crops from scanned PDFs.
     """
     def __init__(self, target_height=64, target_width=512):
         self.H = target_height
@@ -305,8 +318,7 @@ class FieldNormalizer:
 
     def normalize(self, pil_image) -> np.ndarray:
         """Accept a PIL image crop, return normalized numpy array."""
-        import numpy as np
-        img = np.array(pil_image.convert("RGB"))
+        img  = np.array(pil_image.convert("RGB"))
         gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
         gray = cv2.fastNlMeansDenoising(gray, None, 10, 7, 21)
         gray = self._crop_to_text(gray)
@@ -334,13 +346,15 @@ def load_crnn_model(checkpoint_path: str, device: torch.device):
     config      = c.get("config", {})
     img_h       = config.get("img_height", 64)
     img_w       = config.get("img_width",  512)
-    char_to_idx = c["char_to_idx"]
     idx_to_char = c["idx_to_char"]
+
+    # Use actual weight shape — more reliable than saved char count
+    num_chars = c["model_state_dict"]["fc.weight"].shape[0]
 
     model = get_crnn_model(
         model_type=config.get("model_type", "standard"),
         img_height=img_h,
-        num_chars=len(char_to_idx),
+        num_chars=num_chars,
         hidden_size=config.get("hidden_size", 256),
         num_lstm_layers=config.get("num_lstm_layers", 2),
     ).to(device)
@@ -348,7 +362,8 @@ def load_crnn_model(checkpoint_path: str, device: torch.device):
     model.eval()
 
     val_cer = c.get("val_cer", None)
-    print(f"  Model loaded  |  val_cer={val_cer:.2f}%  |  chars={len(char_to_idx)}")
+    cer_str = f"{val_cer:.2f}%" if val_cer is not None else "N/A"
+    print(f"  Model loaded  |  val_cer={cer_str}  |  chars={num_chars}")
     return model, idx_to_char, img_h, img_w
 
 
@@ -398,7 +413,6 @@ def run_crnn_ocr(crops: dict, model, idx_to_char: dict,
     """
     Run CRNN inference on each field crop.
     Returns dict of field_name → recognized text.
-    Empty fields (blank/no ink) are returned as empty string.
     """
     normalizer = FieldNormalizer(target_height=img_h, target_width=img_w)
     results    = {}
@@ -491,8 +505,7 @@ def main():
         print("Make sure training is complete and best_model.pth exists.")
         sys.exit(1)
 
-    model, idx_to_char, img_h, img_w = load_crnn_model(
-        args.checkpoint, device)
+    model, idx_to_char, img_h, img_w = load_crnn_model(args.checkpoint, device)
 
     # ── 2. Convert PDF → image ────────────────────────────────
     print(f"\n  Converting PDF to image at {args.dpi} DPI...")

@@ -94,7 +94,10 @@ class ImageNormalizer:
 
     def normalize(self, img: np.ndarray) -> np.ndarray:
         gray = self._to_gray(img)
-        gray = cv2.fastNlMeansDenoising(gray, None, 10, 7, 21)
+        # NOTE: fastNlMeansDenoising intentionally removed from training pipeline.
+        # It is slow (~200ms/image) and pointless on clean synthetic images.
+        # Denoising is only applied in check_cer.py / inference.py (AdaptiveNormalizer)
+        # which runs on real scanned documents where denoising actually helps.
         gray = self._crop_to_text(gray)
         gray = self._aspect_resize(gray)
         return self._binarize(gray)
@@ -149,6 +152,41 @@ class Augmenter:
             img   = cv2.warpAffine(img, M, (w, h),
                                    borderMode=cv2.BORDER_CONSTANT,
                                    borderValue=255)
+
+        # ── NEW: Horizontal line noise ────────────────────────────────────────
+        # Simulates ruled form lines bleeding through behind the text.
+        # Civil registry forms have printed horizontal grid lines — scanners
+        # often pick these up as faint grey stripes across text fields.
+        if random.random() < 0.3:
+            h, w    = img.shape
+            n_lines = random.randint(1, 3)
+            for _ in range(n_lines):
+                y         = random.randint(0, h - 1)
+                thickness = random.choice([1, 1, 1, 2])   # mostly 1px
+                intensity = random.randint(160, 220)       # light grey, not black
+                cv2.line(img, (0, y), (w, y),
+                         color=intensity, thickness=thickness)
+
+        # ── NEW: Perspective warp ─────────────────────────────────────────────
+        # Simulates documents scanned or photographed at a slight angle.
+        # Keystone distortion is common when forms are placed unevenly on
+        # a flatbed scanner or photographed with a phone camera.
+        if random.random() < 0.25:
+            h, w  = img.shape
+            d     = 0.03
+            dx    = int(w * d)
+            dy    = int(h * d)
+            src   = np.float32([[0, 0], [w, 0], [w, h], [0, h]])
+            dst   = np.float32([
+                [random.randint(0, dx),     random.randint(0, dy)],
+                [w - random.randint(0, dx), random.randint(0, dy)],
+                [w - random.randint(0, dx), h - random.randint(0, dy)],
+                [random.randint(0, dx),     h - random.randint(0, dy)],
+            ])
+            M   = cv2.getPerspectiveTransform(src, dst)
+            img = cv2.warpPerspective(img, M, (w, h),
+                                      borderMode=cv2.BORDER_CONSTANT,
+                                      borderValue=255)
 
         return img
 

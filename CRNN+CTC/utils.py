@@ -329,8 +329,12 @@ def load_checkpoint(checkpoint_path, model, optimizer=None, device='cpu'):
     
     print(f"✓ Loaded checkpoint from {checkpoint_path}")
     print(f"  Epoch: {checkpoint.get('epoch', 'N/A')}")
-    print(f"  Val Loss: {checkpoint.get('val_loss', 'N/A'):.4f}")
-    print(f"  Val CER: {checkpoint.get('val_cer', 'N/A'):.2f}%")
+    if 'val_cer' in checkpoint:
+        print(f"  Val CER  : {checkpoint['val_cer']:.4f}%")
+    elif 'val_loss' in checkpoint:
+        print(f"  Val Loss : {checkpoint['val_loss']:.4f}  (run compare_live_cer.py for true CER)")
+    else:
+        print(f"  Val CER  : N/A  (run compare_live_cer.py for true CER)")
     
     return model, optimizer, checkpoint
 

@@ -355,8 +355,8 @@ def load_crnn_model(checkpoint_path: str, device: torch.device):
         model_type=config.get("model_type", "standard"),
         img_height=img_h,
         num_chars=num_chars,
-        hidden_size=config.get("hidden_size", 256),
-        num_lstm_layers=config.get("num_lstm_layers", 2),
+        hidden_size=config.get("hidden_size", 128),       # FIXED: was 256 — must match trained model
+        num_lstm_layers=config.get("num_lstm_layers", 1), # FIXED: was 2 — must match trained model
     ).to(device)
     model.load_state_dict(c["model_state_dict"])
     model.eval()

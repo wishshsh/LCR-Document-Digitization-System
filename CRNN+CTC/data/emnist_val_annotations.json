@@ -1,87 +1,87 @@
 [
   {
     "image_path": "emnist/emnist_05000.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05001.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05002.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05003.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05004.jpg",
-    "text": "T"
-  },
-  {
-    "image_path": "emnist/emnist_05005.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05006.jpg",
-    "text": "C"
-  },
-  {
-    "image_path": "emnist/emnist_05007.jpg",
-    "text": "B"
-  },
-  {
-    "image_path": "emnist/emnist_05008.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05009.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05010.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05011.jpg",
-    "text": "l"
-  },
-  {
-    "image_path": "emnist/emnist_05012.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05013.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05014.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05015.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05016.jpg",
-    "text": "a"
-  },
-  {
-    "image_path": "emnist/emnist_05017.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05018.jpg",
-    "text": "U"
-  },
-  {
-    "image_path": "emnist/emnist_05019.jpg",
     "text": "3"
   },
   {
+    "image_path": "emnist/emnist_05001.jpg",
+    "text": "I"
+  },
+  {
+    "image_path": "emnist/emnist_05002.jpg",
+    "text": "Q"
+  },
+  {
+    "image_path": "emnist/emnist_05003.jpg",
+    "text": "g"
+  },
+  {
+    "image_path": "emnist/emnist_05004.jpg",
+    "text": "S"
+  },
+  {
+    "image_path": "emnist/emnist_05005.jpg",
+    "text": "6"
+  },
+  {
+    "image_path": "emnist/emnist_05006.jpg",
+    "text": "a"
+  },
+  {
+    "image_path": "emnist/emnist_05007.jpg",
+    "text": "U"
+  },
+  {
+    "image_path": "emnist/emnist_05008.jpg",
+    "text": "q"
+  },
+  {
+    "image_path": "emnist/emnist_05009.jpg",
+    "text": "R"
+  },
+  {
+    "image_path": "emnist/emnist_05010.jpg",
+    "text": "g"
+  },
+  {
+    "image_path": "emnist/emnist_05011.jpg",
+    "text": "3"
+  },
+  {
+    "image_path": "emnist/emnist_05012.jpg",
+    "text": "O"
+  },
+  {
+    "image_path": "emnist/emnist_05013.jpg",
+    "text": "5"
+  },
+  {
+    "image_path": "emnist/emnist_05014.jpg",
+    "text": "b"
+  },
+  {
+    "image_path": "emnist/emnist_05015.jpg",
+    "text": "N"
+  },
+  {
+    "image_path": "emnist/emnist_05016.jpg",
+    "text": "4"
+  },
+  {
+    "image_path": "emnist/emnist_05017.jpg",
+    "text": "g"
+  },
+  {
+    "image_path": "emnist/emnist_05018.jpg",
+    "text": "g"
+  },
+  {
+    "image_path": "emnist/emnist_05019.jpg",
+    "text": "I"
+  },
+  {
     "image_path": "emnist/emnist_05020.jpg",
-    "text": "W"
+    "text": "5"
   },
   {
     "image_path": "emnist/emnist_05021.jpg",
@@ -89,191 +89,191 @@
   },
   {
     "image_path": "emnist/emnist_05022.jpg",
-    "text": "N"
+    "text": "6"
   },
   {
     "image_path": "emnist/emnist_05023.jpg",
-    "text": "C"
+    "text": "a"
   },
   {
     "image_path": "emnist/emnist_05024.jpg",
-    "text": "j"
+    "text": "4"
   },
   {
     "image_path": "emnist/emnist_05025.jpg",
-    "text": "f"
+    "text": "9"
   },
   {
     "image_path": "emnist/emnist_05026.jpg",
-    "text": "8"
+    "text": "L"
   },
   {
     "image_path": "emnist/emnist_05027.jpg",
-    "text": "P"
+    "text": "B"
   },
   {
     "image_path": "emnist/emnist_05028.jpg",
-    "text": "W"
+    "text": "h"
   },
   {
     "image_path": "emnist/emnist_05029.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05030.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05031.jpg",
-    "text": "b"
-  },
-  {
-    "image_path": "emnist/emnist_05032.jpg",
-    "text": "f"
-  },
-  {
-    "image_path": "emnist/emnist_05033.jpg",
-    "text": "S"
-  },
-  {
-    "image_path": "emnist/emnist_05034.jpg",
-    "text": "N"
-  },
-  {
-    "image_path": "emnist/emnist_05035.jpg",
-    "text": "b"
-  },
-  {
-    "image_path": "emnist/emnist_05036.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05037.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05038.jpg",
-    "text": "I"
-  },
-  {
-    "image_path": "emnist/emnist_05039.jpg",
-    "text": "r"
-  },
-  {
-    "image_path": "emnist/emnist_05040.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05041.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05042.jpg",
-    "text": "b"
-  },
-  {
-    "image_path": "emnist/emnist_05043.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05044.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05045.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05046.jpg",
-    "text": "S"
-  },
-  {
-    "image_path": "emnist/emnist_05047.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05048.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05049.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05050.jpg",
-    "text": "o"
-  },
-  {
-    "image_path": "emnist/emnist_05051.jpg",
-    "text": "i"
-  },
-  {
-    "image_path": "emnist/emnist_05052.jpg",
-    "text": "s"
-  },
-  {
-    "image_path": "emnist/emnist_05053.jpg",
-    "text": "r"
-  },
-  {
-    "image_path": "emnist/emnist_05054.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05055.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05056.jpg",
-    "text": "U"
-  },
-  {
-    "image_path": "emnist/emnist_05057.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05058.jpg",
-    "text": "l"
-  },
-  {
-    "image_path": "emnist/emnist_05059.jpg",
-    "text": "S"
-  },
-  {
-    "image_path": "emnist/emnist_05060.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05061.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05062.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05063.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05064.jpg",
-    "text": "C"
-  },
-  {
-    "image_path": "emnist/emnist_05065.jpg",
     "text": "A"
   },
   {
-    "image_path": "emnist/emnist_05066.jpg",
-    "text": "w"
+    "image_path": "emnist/emnist_05030.jpg",
+    "text": "Y"
   },
   {
-    "image_path": "emnist/emnist_05067.jpg",
+    "image_path": "emnist/emnist_05031.jpg",
+    "text": "3"
+  },
+  {
+    "image_path": "emnist/emnist_05032.jpg",
+    "text": "X"
+  },
+  {
+    "image_path": "emnist/emnist_05033.jpg",
+    "text": "V"
+  },
+  {
+    "image_path": "emnist/emnist_05034.jpg",
+    "text": "d"
+  },
+  {
+    "image_path": "emnist/emnist_05035.jpg",
+    "text": "U"
+  },
+  {
+    "image_path": "emnist/emnist_05036.jpg",
+    "text": "C"
+  },
+  {
+    "image_path": "emnist/emnist_05037.jpg",
+    "text": "F"
+  },
+  {
+    "image_path": "emnist/emnist_05038.jpg",
+    "text": "U"
+  },
+  {
+    "image_path": "emnist/emnist_05039.jpg",
+    "text": "a"
+  },
+  {
+    "image_path": "emnist/emnist_05040.jpg",
+    "text": "d"
+  },
+  {
+    "image_path": "emnist/emnist_05041.jpg",
+    "text": "7"
+  },
+  {
+    "image_path": "emnist/emnist_05042.jpg",
+    "text": "C"
+  },
+  {
+    "image_path": "emnist/emnist_05043.jpg",
+    "text": "6"
+  },
+  {
+    "image_path": "emnist/emnist_05044.jpg",
+    "text": "V"
+  },
+  {
+    "image_path": "emnist/emnist_05045.jpg",
+    "text": "K"
+  },
+  {
+    "image_path": "emnist/emnist_05046.jpg",
+    "text": "M"
+  },
+  {
+    "image_path": "emnist/emnist_05047.jpg",
+    "text": "K"
+  },
+  {
+    "image_path": "emnist/emnist_05048.jpg",
+    "text": "L"
+  },
+  {
+    "image_path": "emnist/emnist_05049.jpg",
+    "text": "n"
+  },
+  {
+    "image_path": "emnist/emnist_05050.jpg",
+    "text": "h"
+  },
+  {
+    "image_path": "emnist/emnist_05051.jpg",
+    "text": "e"
+  },
+  {
+    "image_path": "emnist/emnist_05052.jpg",
+    "text": "e"
+  },
+  {
+    "image_path": "emnist/emnist_05053.jpg",
+    "text": "b"
+  },
+  {
+    "image_path": "emnist/emnist_05054.jpg",
+    "text": "e"
+  },
+  {
+    "image_path": "emnist/emnist_05055.jpg",
     "text": "H"
   },
   {
+    "image_path": "emnist/emnist_05056.jpg",
+    "text": "Y"
+  },
+  {
+    "image_path": "emnist/emnist_05057.jpg",
+    "text": "D"
+  },
+  {
+    "image_path": "emnist/emnist_05058.jpg",
+    "text": "O"
+  },
+  {
+    "image_path": "emnist/emnist_05059.jpg",
+    "text": "A"
+  },
+  {
+    "image_path": "emnist/emnist_05060.jpg",
+    "text": "Q"
+  },
+  {
+    "image_path": "emnist/emnist_05061.jpg",
+    "text": "9"
+  },
+  {
+    "image_path": "emnist/emnist_05062.jpg",
+    "text": "h"
+  },
+  {
+    "image_path": "emnist/emnist_05063.jpg",
+    "text": "C"
+  },
+  {
+    "image_path": "emnist/emnist_05064.jpg",
+    "text": "f"
+  },
+  {
+    "image_path": "emnist/emnist_05065.jpg",
+    "text": "F"
+  },
+  {
+    "image_path": "emnist/emnist_05066.jpg",
+    "text": "N"
+  },
+  {
+    "image_path": "emnist/emnist_05067.jpg",
+    "text": "8"
+  },
+  {
     "image_path": "emnist/emnist_05068.jpg",
-    "text": "p"
+    "text": "W"
   },
   {
     "image_path": "emnist/emnist_05069.jpg",
@@ -281,183 +281,183 @@
   },
   {
     "image_path": "emnist/emnist_05070.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05071.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05072.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05073.jpg",
-    "text": "w"
-  },
-  {
-    "image_path": "emnist/emnist_05074.jpg",
-    "text": "t"
-  },
-  {
-    "image_path": "emnist/emnist_05075.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05076.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05077.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05078.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05079.jpg",
-    "text": "l"
-  },
-  {
-    "image_path": "emnist/emnist_05080.jpg",
-    "text": "s"
-  },
-  {
-    "image_path": "emnist/emnist_05081.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05082.jpg",
     "text": "N"
   },
   {
-    "image_path": "emnist/emnist_05083.jpg",
-    "text": "d"
+    "image_path": "emnist/emnist_05071.jpg",
+    "text": "C"
   },
   {
-    "image_path": "emnist/emnist_05084.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05085.jpg",
-    "text": "V"
-  },
-  {
-    "image_path": "emnist/emnist_05086.jpg",
-    "text": "d"
-  },
-  {
-    "image_path": "emnist/emnist_05087.jpg",
-    "text": "M"
-  },
-  {
-    "image_path": "emnist/emnist_05088.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05089.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05090.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05091.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05092.jpg",
-    "text": "U"
-  },
-  {
-    "image_path": "emnist/emnist_05093.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05094.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05095.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05096.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05097.jpg",
-    "text": "S"
-  },
-  {
-    "image_path": "emnist/emnist_05098.jpg",
-    "text": "u"
-  },
-  {
-    "image_path": "emnist/emnist_05099.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05100.jpg",
-    "text": "d"
-  },
-  {
-    "image_path": "emnist/emnist_05101.jpg",
-    "text": "S"
-  },
-  {
-    "image_path": "emnist/emnist_05102.jpg",
+    "image_path": "emnist/emnist_05072.jpg",
     "text": "7"
   },
   {
-    "image_path": "emnist/emnist_05103.jpg",
-    "text": "2"
+    "image_path": "emnist/emnist_05073.jpg",
+    "text": "a"
   },
   {
-    "image_path": "emnist/emnist_05104.jpg",
+    "image_path": "emnist/emnist_05074.jpg",
+    "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05075.jpg",
+    "text": "1"
+  },
+  {
+    "image_path": "emnist/emnist_05076.jpg",
     "text": "h"
   },
   {
-    "image_path": "emnist/emnist_05105.jpg",
+    "image_path": "emnist/emnist_05077.jpg",
     "text": "F"
   },
   {
-    "image_path": "emnist/emnist_05106.jpg",
-    "text": "r"
+    "image_path": "emnist/emnist_05078.jpg",
+    "text": "W"
   },
   {
-    "image_path": "emnist/emnist_05107.jpg",
-    "text": "S"
+    "image_path": "emnist/emnist_05079.jpg",
+    "text": "A"
   },
   {
-    "image_path": "emnist/emnist_05108.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05109.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05110.jpg",
-    "text": "v"
-  },
-  {
-    "image_path": "emnist/emnist_05111.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05112.jpg",
+    "image_path": "emnist/emnist_05080.jpg",
     "text": "6"
   },
   {
-    "image_path": "emnist/emnist_05113.jpg",
+    "image_path": "emnist/emnist_05081.jpg",
+    "text": "7"
+  },
+  {
+    "image_path": "emnist/emnist_05082.jpg",
+    "text": "Z"
+  },
+  {
+    "image_path": "emnist/emnist_05083.jpg",
+    "text": "G"
+  },
+  {
+    "image_path": "emnist/emnist_05084.jpg",
+    "text": "S"
+  },
+  {
+    "image_path": "emnist/emnist_05085.jpg",
+    "text": "C"
+  },
+  {
+    "image_path": "emnist/emnist_05086.jpg",
+    "text": "9"
+  },
+  {
+    "image_path": "emnist/emnist_05087.jpg",
+    "text": "N"
+  },
+  {
+    "image_path": "emnist/emnist_05088.jpg",
+    "text": "X"
+  },
+  {
+    "image_path": "emnist/emnist_05089.jpg",
+    "text": "f"
+  },
+  {
+    "image_path": "emnist/emnist_05090.jpg",
+    "text": "K"
+  },
+  {
+    "image_path": "emnist/emnist_05091.jpg",
+    "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05092.jpg",
     "text": "8"
   },
   {
-    "image_path": "emnist/emnist_05114.jpg",
+    "image_path": "emnist/emnist_05093.jpg",
+    "text": "3"
+  },
+  {
+    "image_path": "emnist/emnist_05094.jpg",
+    "text": "T"
+  },
+  {
+    "image_path": "emnist/emnist_05095.jpg",
+    "text": "K"
+  },
+  {
+    "image_path": "emnist/emnist_05096.jpg",
+    "text": "H"
+  },
+  {
+    "image_path": "emnist/emnist_05097.jpg",
+    "text": "h"
+  },
+  {
+    "image_path": "emnist/emnist_05098.jpg",
+    "text": "9"
+  },
+  {
+    "image_path": "emnist/emnist_05099.jpg",
+    "text": "O"
+  },
+  {
+    "image_path": "emnist/emnist_05100.jpg",
+    "text": "5"
+  },
+  {
+    "image_path": "emnist/emnist_05101.jpg",
+    "text": "D"
+  },
+  {
+    "image_path": "emnist/emnist_05102.jpg",
+    "text": "Y"
+  },
+  {
+    "image_path": "emnist/emnist_05103.jpg",
+    "text": "F"
+  },
+  {
+    "image_path": "emnist/emnist_05104.jpg",
+    "text": "V"
+  },
+  {
+    "image_path": "emnist/emnist_05105.jpg",
+    "text": "6"
+  },
+  {
+    "image_path": "emnist/emnist_05106.jpg",
     "text": "M"
+  },
+  {
+    "image_path": "emnist/emnist_05107.jpg",
+    "text": "O"
+  },
+  {
+    "image_path": "emnist/emnist_05108.jpg",
+    "text": "R"
+  },
+  {
+    "image_path": "emnist/emnist_05109.jpg",
+    "text": "I"
+  },
+  {
+    "image_path": "emnist/emnist_05110.jpg",
+    "text": "Y"
+  },
+  {
+    "image_path": "emnist/emnist_05111.jpg",
+    "text": "5"
+  },
+  {
+    "image_path": "emnist/emnist_05112.jpg",
+    "text": "X"
+  },
+  {
+    "image_path": "emnist/emnist_05113.jpg",
+    "text": "G"
+  },
+  {
+    "image_path": "emnist/emnist_05114.jpg",
+    "text": "2"
   },
   {
     "image_path": "emnist/emnist_05115.jpg",
@@ -465,135 +465,135 @@
   },
   {
     "image_path": "emnist/emnist_05116.jpg",
-    "text": "L"
-  },
-  {
-    "image_path": "emnist/emnist_05117.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05118.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05119.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05120.jpg",
-    "text": "s"
-  },
-  {
-    "image_path": "emnist/emnist_05121.jpg",
-    "text": "t"
-  },
-  {
-    "image_path": "emnist/emnist_05122.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05123.jpg",
-    "text": "w"
-  },
-  {
-    "image_path": "emnist/emnist_05124.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05125.jpg",
-    "text": "X"
-  },
-  {
-    "image_path": "emnist/emnist_05126.jpg",
-    "text": "U"
-  },
-  {
-    "image_path": "emnist/emnist_05127.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05128.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05129.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05130.jpg",
-    "text": "w"
-  },
-  {
-    "image_path": "emnist/emnist_05131.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05132.jpg",
-    "text": "a"
-  },
-  {
-    "image_path": "emnist/emnist_05133.jpg",
     "text": "V"
   },
   {
-    "image_path": "emnist/emnist_05134.jpg",
-    "text": "6"
+    "image_path": "emnist/emnist_05117.jpg",
+    "text": "a"
   },
   {
-    "image_path": "emnist/emnist_05135.jpg",
-    "text": "6"
+    "image_path": "emnist/emnist_05118.jpg",
+    "text": "H"
   },
   {
-    "image_path": "emnist/emnist_05136.jpg",
-    "text": "r"
+    "image_path": "emnist/emnist_05119.jpg",
+    "text": "G"
   },
   {
-    "image_path": "emnist/emnist_05137.jpg",
+    "image_path": "emnist/emnist_05120.jpg",
+    "text": "L"
+  },
+  {
+    "image_path": "emnist/emnist_05121.jpg",
+    "text": "L"
+  },
+  {
+    "image_path": "emnist/emnist_05122.jpg",
+    "text": "D"
+  },
+  {
+    "image_path": "emnist/emnist_05123.jpg",
+    "text": "4"
+  },
+  {
+    "image_path": "emnist/emnist_05124.jpg",
+    "text": "T"
+  },
+  {
+    "image_path": "emnist/emnist_05125.jpg",
     "text": "C"
   },
   {
+    "image_path": "emnist/emnist_05126.jpg",
+    "text": "Z"
+  },
+  {
+    "image_path": "emnist/emnist_05127.jpg",
+    "text": "8"
+  },
+  {
+    "image_path": "emnist/emnist_05128.jpg",
+    "text": "4"
+  },
+  {
+    "image_path": "emnist/emnist_05129.jpg",
+    "text": "L"
+  },
+  {
+    "image_path": "emnist/emnist_05130.jpg",
+    "text": "E"
+  },
+  {
+    "image_path": "emnist/emnist_05131.jpg",
+    "text": "Q"
+  },
+  {
+    "image_path": "emnist/emnist_05132.jpg",
+    "text": "Q"
+  },
+  {
+    "image_path": "emnist/emnist_05133.jpg",
+    "text": "G"
+  },
+  {
+    "image_path": "emnist/emnist_05134.jpg",
+    "text": "R"
+  },
+  {
+    "image_path": "emnist/emnist_05135.jpg",
+    "text": "Z"
+  },
+  {
+    "image_path": "emnist/emnist_05136.jpg",
+    "text": "7"
+  },
+  {
+    "image_path": "emnist/emnist_05137.jpg",
+    "text": "N"
+  },
+  {
     "image_path": "emnist/emnist_05138.jpg",
-    "text": "S"
+    "text": "J"
   },
   {
     "image_path": "emnist/emnist_05139.jpg",
-    "text": "q"
+    "text": "Z"
   },
   {
     "image_path": "emnist/emnist_05140.jpg",
-    "text": "S"
+    "text": "G"
   },
   {
     "image_path": "emnist/emnist_05141.jpg",
-    "text": "0"
+    "text": "3"
   },
   {
     "image_path": "emnist/emnist_05142.jpg",
-    "text": "9"
+    "text": "I"
   },
   {
     "image_path": "emnist/emnist_05143.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05144.jpg",
     "text": "1"
   },
   {
+    "image_path": "emnist/emnist_05144.jpg",
+    "text": "I"
+  },
+  {
     "image_path": "emnist/emnist_05145.jpg",
-    "text": "8"
+    "text": "J"
   },
   {
     "image_path": "emnist/emnist_05146.jpg",
-    "text": "5"
+    "text": "t"
   },
   {
     "image_path": "emnist/emnist_05147.jpg",
-    "text": "7"
+    "text": "F"
   },
   {
     "image_path": "emnist/emnist_05148.jpg",
-    "text": "7"
+    "text": "d"
   },
   {
     "image_path": "emnist/emnist_05149.jpg",
@@ -601,11 +601,11 @@
   },
   {
     "image_path": "emnist/emnist_05150.jpg",
-    "text": "b"
+    "text": "a"
   },
   {
     "image_path": "emnist/emnist_05151.jpg",
-    "text": "8"
+    "text": "I"
   },
   {
     "image_path": "emnist/emnist_05152.jpg",
@@ -613,55 +613,55 @@
   },
   {
     "image_path": "emnist/emnist_05153.jpg",
-    "text": "9"
+    "text": "C"
   },
   {
     "image_path": "emnist/emnist_05154.jpg",
-    "text": "7"
+    "text": "N"
   },
   {
     "image_path": "emnist/emnist_05155.jpg",
-    "text": "J"
+    "text": "Y"
   },
   {
     "image_path": "emnist/emnist_05156.jpg",
-    "text": "5"
+    "text": "B"
   },
   {
     "image_path": "emnist/emnist_05157.jpg",
-    "text": "4"
+    "text": "0"
   },
   {
     "image_path": "emnist/emnist_05158.jpg",
-    "text": "7"
+    "text": "U"
   },
   {
     "image_path": "emnist/emnist_05159.jpg",
-    "text": "l"
+    "text": "J"
   },
   {
     "image_path": "emnist/emnist_05160.jpg",
-    "text": "3"
+    "text": "0"
   },
   {
     "image_path": "emnist/emnist_05161.jpg",
-    "text": "q"
+    "text": "a"
   },
   {
     "image_path": "emnist/emnist_05162.jpg",
-    "text": "r"
+    "text": "L"
   },
   {
     "image_path": "emnist/emnist_05163.jpg",
-    "text": "6"
+    "text": "S"
   },
   {
     "image_path": "emnist/emnist_05164.jpg",
-    "text": "K"
+    "text": "X"
   },
   {
     "image_path": "emnist/emnist_05165.jpg",
-    "text": "e"
+    "text": "D"
   },
   {
     "image_path": "emnist/emnist_05166.jpg",
@@ -669,67 +669,67 @@
   },
   {
     "image_path": "emnist/emnist_05167.jpg",
-    "text": "4"
+    "text": "9"
   },
   {
     "image_path": "emnist/emnist_05168.jpg",
-    "text": "h"
+    "text": "K"
   },
   {
     "image_path": "emnist/emnist_05169.jpg",
-    "text": "E"
+    "text": "F"
   },
   {
     "image_path": "emnist/emnist_05170.jpg",
-    "text": "0"
+    "text": "E"
   },
   {
     "image_path": "emnist/emnist_05171.jpg",
-    "text": "6"
+    "text": "B"
   },
   {
     "image_path": "emnist/emnist_05172.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05173.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05174.jpg",
-    "text": "S"
-  },
-  {
-    "image_path": "emnist/emnist_05175.jpg",
-    "text": "g"
-  },
-  {
-    "image_path": "emnist/emnist_05176.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05177.jpg",
-    "text": "i"
-  },
-  {
-    "image_path": "emnist/emnist_05178.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05179.jpg",
     "text": "4"
   },
   {
+    "image_path": "emnist/emnist_05173.jpg",
+    "text": "h"
+  },
+  {
+    "image_path": "emnist/emnist_05174.jpg",
+    "text": "9"
+  },
+  {
+    "image_path": "emnist/emnist_05175.jpg",
+    "text": "Z"
+  },
+  {
+    "image_path": "emnist/emnist_05176.jpg",
+    "text": "W"
+  },
+  {
+    "image_path": "emnist/emnist_05177.jpg",
+    "text": "e"
+  },
+  {
+    "image_path": "emnist/emnist_05178.jpg",
+    "text": "f"
+  },
+  {
+    "image_path": "emnist/emnist_05179.jpg",
+    "text": "C"
+  },
+  {
     "image_path": "emnist/emnist_05180.jpg",
-    "text": "T"
+    "text": "P"
   },
   {
     "image_path": "emnist/emnist_05181.jpg",
-    "text": "5"
+    "text": "r"
   },
   {
     "image_path": "emnist/emnist_05182.jpg",
-    "text": "Z"
+    "text": "T"
   },
   {
     "image_path": "emnist/emnist_05183.jpg",
@@ -737,195 +737,195 @@
   },
   {
     "image_path": "emnist/emnist_05184.jpg",
-    "text": "e"
+    "text": "J"
   },
   {
     "image_path": "emnist/emnist_05185.jpg",
-    "text": "U"
+    "text": "L"
   },
   {
     "image_path": "emnist/emnist_05186.jpg",
-    "text": "0"
+    "text": "7"
   },
   {
     "image_path": "emnist/emnist_05187.jpg",
-    "text": "R"
+    "text": "D"
   },
   {
     "image_path": "emnist/emnist_05188.jpg",
-    "text": "S"
+    "text": "2"
   },
   {
     "image_path": "emnist/emnist_05189.jpg",
-    "text": "a"
-  },
-  {
-    "image_path": "emnist/emnist_05190.jpg",
-    "text": "Z"
-  },
-  {
-    "image_path": "emnist/emnist_05191.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05192.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05193.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05194.jpg",
-    "text": "P"
-  },
-  {
-    "image_path": "emnist/emnist_05195.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05196.jpg",
-    "text": "P"
-  },
-  {
-    "image_path": "emnist/emnist_05197.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05198.jpg",
-    "text": "n"
-  },
-  {
-    "image_path": "emnist/emnist_05199.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05200.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05201.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05202.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05203.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05204.jpg",
-    "text": "i"
-  },
-  {
-    "image_path": "emnist/emnist_05205.jpg",
-    "text": "A"
-  },
-  {
-    "image_path": "emnist/emnist_05206.jpg",
-    "text": "K"
-  },
-  {
-    "image_path": "emnist/emnist_05207.jpg",
-    "text": "n"
-  },
-  {
-    "image_path": "emnist/emnist_05208.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05209.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05210.jpg",
-    "text": "I"
-  },
-  {
-    "image_path": "emnist/emnist_05211.jpg",
-    "text": "a"
-  },
-  {
-    "image_path": "emnist/emnist_05212.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05213.jpg",
-    "text": "t"
-  },
-  {
-    "image_path": "emnist/emnist_05214.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05215.jpg",
-    "text": "M"
-  },
-  {
-    "image_path": "emnist/emnist_05216.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05217.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05218.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05219.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05220.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05221.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05222.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05223.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05224.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05225.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05226.jpg",
-    "text": "h"
-  },
-  {
-    "image_path": "emnist/emnist_05227.jpg",
-    "text": "E"
-  },
-  {
-    "image_path": "emnist/emnist_05228.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05229.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05230.jpg",
     "text": "0"
   },
   {
-    "image_path": "emnist/emnist_05231.jpg",
+    "image_path": "emnist/emnist_05190.jpg",
     "text": "8"
+  },
+  {
+    "image_path": "emnist/emnist_05191.jpg",
+    "text": "f"
+  },
+  {
+    "image_path": "emnist/emnist_05192.jpg",
+    "text": "d"
+  },
+  {
+    "image_path": "emnist/emnist_05193.jpg",
+    "text": "K"
+  },
+  {
+    "image_path": "emnist/emnist_05194.jpg",
+    "text": "Q"
+  },
+  {
+    "image_path": "emnist/emnist_05195.jpg",
+    "text": "E"
+  },
+  {
+    "image_path": "emnist/emnist_05196.jpg",
+    "text": "H"
+  },
+  {
+    "image_path": "emnist/emnist_05197.jpg",
+    "text": "9"
+  },
+  {
+    "image_path": "emnist/emnist_05198.jpg",
+    "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05199.jpg",
+    "text": "J"
+  },
+  {
+    "image_path": "emnist/emnist_05200.jpg",
+    "text": "S"
+  },
+  {
+    "image_path": "emnist/emnist_05201.jpg",
+    "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05202.jpg",
+    "text": "E"
+  },
+  {
+    "image_path": "emnist/emnist_05203.jpg",
+    "text": "S"
+  },
+  {
+    "image_path": "emnist/emnist_05204.jpg",
+    "text": "2"
+  },
+  {
+    "image_path": "emnist/emnist_05205.jpg",
+    "text": "9"
+  },
+  {
+    "image_path": "emnist/emnist_05206.jpg",
+    "text": "D"
+  },
+  {
+    "image_path": "emnist/emnist_05207.jpg",
+    "text": "5"
+  },
+  {
+    "image_path": "emnist/emnist_05208.jpg",
+    "text": "b"
+  },
+  {
+    "image_path": "emnist/emnist_05209.jpg",
+    "text": "A"
+  },
+  {
+    "image_path": "emnist/emnist_05210.jpg",
+    "text": "3"
+  },
+  {
+    "image_path": "emnist/emnist_05211.jpg",
+    "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05212.jpg",
+    "text": "D"
+  },
+  {
+    "image_path": "emnist/emnist_05213.jpg",
+    "text": "B"
+  },
+  {
+    "image_path": "emnist/emnist_05214.jpg",
+    "text": "G"
+  },
+  {
+    "image_path": "emnist/emnist_05215.jpg",
+    "text": "6"
+  },
+  {
+    "image_path": "emnist/emnist_05216.jpg",
+    "text": "5"
+  },
+  {
+    "image_path": "emnist/emnist_05217.jpg",
+    "text": "Y"
+  },
+  {
+    "image_path": "emnist/emnist_05218.jpg",
+    "text": "F"
+  },
+  {
+    "image_path": "emnist/emnist_05219.jpg",
+    "text": "R"
+  },
+  {
+    "image_path": "emnist/emnist_05220.jpg",
+    "text": "M"
+  },
+  {
+    "image_path": "emnist/emnist_05221.jpg",
+    "text": "U"
+  },
+  {
+    "image_path": "emnist/emnist_05222.jpg",
+    "text": "Q"
+  },
+  {
+    "image_path": "emnist/emnist_05223.jpg",
+    "text": "J"
+  },
+  {
+    "image_path": "emnist/emnist_05224.jpg",
+    "text": "r"
+  },
+  {
+    "image_path": "emnist/emnist_05225.jpg",
+    "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05226.jpg",
+    "text": "B"
+  },
+  {
+    "image_path": "emnist/emnist_05227.jpg",
+    "text": "O"
+  },
+  {
+    "image_path": "emnist/emnist_05228.jpg",
+    "text": "Y"
+  },
+  {
+    "image_path": "emnist/emnist_05229.jpg",
+    "text": "D"
+  },
+  {
+    "image_path": "emnist/emnist_05230.jpg",
+    "text": "2"
+  },
+  {
+    "image_path": "emnist/emnist_05231.jpg",
+    "text": "n"
   },
   {
     "image_path": "emnist/emnist_05232.jpg",
@@ -933,63 +933,63 @@
   },
   {
     "image_path": "emnist/emnist_05233.jpg",
-    "text": "0"
+    "text": "V"
   },
   {
     "image_path": "emnist/emnist_05234.jpg",
-    "text": "O"
+    "text": "5"
   },
   {
     "image_path": "emnist/emnist_05235.jpg",
-    "text": "t"
+    "text": "g"
   },
   {
     "image_path": "emnist/emnist_05236.jpg",
-    "text": "U"
+    "text": "X"
   },
   {
     "image_path": "emnist/emnist_05237.jpg",
-    "text": "1"
+    "text": "D"
   },
   {
     "image_path": "emnist/emnist_05238.jpg",
-    "text": "0"
+    "text": "K"
   },
   {
     "image_path": "emnist/emnist_05239.jpg",
-    "text": "P"
+    "text": "D"
   },
   {
     "image_path": "emnist/emnist_05240.jpg",
-    "text": "4"
+    "text": "2"
   },
   {
     "image_path": "emnist/emnist_05241.jpg",
-    "text": "9"
+    "text": "4"
   },
   {
     "image_path": "emnist/emnist_05242.jpg",
-    "text": "0"
+    "text": "3"
   },
   {
     "image_path": "emnist/emnist_05243.jpg",
-    "text": "e"
+    "text": "H"
   },
   {
     "image_path": "emnist/emnist_05244.jpg",
-    "text": "1"
+    "text": "D"
   },
   {
     "image_path": "emnist/emnist_05245.jpg",
-    "text": "7"
+    "text": "n"
   },
   {
     "image_path": "emnist/emnist_05246.jpg",
-    "text": "O"
+    "text": "K"
   },
   {
     "image_path": "emnist/emnist_05247.jpg",
-    "text": "N"
+    "text": "L"
   },
   {
     "image_path": "emnist/emnist_05248.jpg",
@@ -997,19 +997,19 @@
   },
   {
     "image_path": "emnist/emnist_05249.jpg",
-    "text": "7"
+    "text": "D"
   },
   {
     "image_path": "emnist/emnist_05250.jpg",
-    "text": "I"
+    "text": "Z"
   },
   {
     "image_path": "emnist/emnist_05251.jpg",
-    "text": "S"
+    "text": "n"
   },
   {
     "image_path": "emnist/emnist_05252.jpg",
-    "text": "0"
+    "text": "B"
   },
   {
     "image_path": "emnist/emnist_05253.jpg",
@@ -1017,27 +1017,27 @@
   },
   {
     "image_path": "emnist/emnist_05254.jpg",
-    "text": "4"
+    "text": "E"
   },
   {
     "image_path": "emnist/emnist_05255.jpg",
-    "text": "U"
+    "text": "h"
   },
   {
     "image_path": "emnist/emnist_05256.jpg",
-    "text": "b"
+    "text": "K"
   },
   {
     "image_path": "emnist/emnist_05257.jpg",
-    "text": "d"
+    "text": "9"
   },
   {
     "image_path": "emnist/emnist_05258.jpg",
-    "text": "8"
+    "text": "C"
   },
   {
     "image_path": "emnist/emnist_05259.jpg",
-    "text": "8"
+    "text": "H"
   },
   {
     "image_path": "emnist/emnist_05260.jpg",
@@ -1045,127 +1045,127 @@
   },
   {
     "image_path": "emnist/emnist_05261.jpg",
-    "text": "O"
+    "text": "t"
   },
   {
     "image_path": "emnist/emnist_05262.jpg",
-    "text": "0"
+    "text": "H"
   },
   {
     "image_path": "emnist/emnist_05263.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05264.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05265.jpg",
-    "text": "R"
-  },
-  {
-    "image_path": "emnist/emnist_05266.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05267.jpg",
-    "text": "d"
-  },
-  {
-    "image_path": "emnist/emnist_05268.jpg",
-    "text": "S"
-  },
-  {
-    "image_path": "emnist/emnist_05269.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05270.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05271.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05272.jpg",
-    "text": "W"
-  },
-  {
-    "image_path": "emnist/emnist_05273.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05274.jpg",
-    "text": "M"
-  },
-  {
-    "image_path": "emnist/emnist_05275.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05276.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05277.jpg",
-    "text": "A"
-  },
-  {
-    "image_path": "emnist/emnist_05278.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05279.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05280.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05281.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05282.jpg",
     "text": "2"
   },
   {
-    "image_path": "emnist/emnist_05283.jpg",
-    "text": "o"
+    "image_path": "emnist/emnist_05264.jpg",
+    "text": "9"
   },
   {
-    "image_path": "emnist/emnist_05284.jpg",
-    "text": "e"
+    "image_path": "emnist/emnist_05265.jpg",
+    "text": "0"
   },
   {
-    "image_path": "emnist/emnist_05285.jpg",
-    "text": "5"
+    "image_path": "emnist/emnist_05266.jpg",
+    "text": "q"
   },
   {
-    "image_path": "emnist/emnist_05286.jpg",
+    "image_path": "emnist/emnist_05267.jpg",
+    "text": "2"
+  },
+  {
+    "image_path": "emnist/emnist_05268.jpg",
     "text": "G"
   },
   {
+    "image_path": "emnist/emnist_05269.jpg",
+    "text": "D"
+  },
+  {
+    "image_path": "emnist/emnist_05270.jpg",
+    "text": "1"
+  },
+  {
+    "image_path": "emnist/emnist_05271.jpg",
+    "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05272.jpg",
+    "text": "5"
+  },
+  {
+    "image_path": "emnist/emnist_05273.jpg",
+    "text": "D"
+  },
+  {
+    "image_path": "emnist/emnist_05274.jpg",
+    "text": "C"
+  },
+  {
+    "image_path": "emnist/emnist_05275.jpg",
+    "text": "K"
+  },
+  {
+    "image_path": "emnist/emnist_05276.jpg",
+    "text": "E"
+  },
+  {
+    "image_path": "emnist/emnist_05277.jpg",
+    "text": "e"
+  },
+  {
+    "image_path": "emnist/emnist_05278.jpg",
+    "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05279.jpg",
+    "text": "M"
+  },
+  {
+    "image_path": "emnist/emnist_05280.jpg",
+    "text": "h"
+  },
+  {
+    "image_path": "emnist/emnist_05281.jpg",
+    "text": "f"
+  },
+  {
+    "image_path": "emnist/emnist_05282.jpg",
+    "text": "3"
+  },
+  {
+    "image_path": "emnist/emnist_05283.jpg",
+    "text": "T"
+  },
+  {
+    "image_path": "emnist/emnist_05284.jpg",
+    "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05285.jpg",
+    "text": "g"
+  },
+  {
+    "image_path": "emnist/emnist_05286.jpg",
+    "text": "q"
+  },
+  {
     "image_path": "emnist/emnist_05287.jpg",
-    "text": "a"
+    "text": "t"
   },
   {
     "image_path": "emnist/emnist_05288.jpg",
-    "text": "4"
+    "text": "Z"
   },
   {
     "image_path": "emnist/emnist_05289.jpg",
-    "text": "8"
+    "text": "b"
   },
   {
     "image_path": "emnist/emnist_05290.jpg",
-    "text": "I"
+    "text": "O"
   },
   {
     "image_path": "emnist/emnist_05291.jpg",
-    "text": "A"
+    "text": "B"
   },
   {
     "image_path": "emnist/emnist_05292.jpg",
@@ -1173,515 +1173,515 @@
   },
   {
     "image_path": "emnist/emnist_05293.jpg",
-    "text": "I"
+    "text": "h"
   },
   {
     "image_path": "emnist/emnist_05294.jpg",
-    "text": "O"
+    "text": "Z"
   },
   {
     "image_path": "emnist/emnist_05295.jpg",
-    "text": "7"
+    "text": "d"
   },
   {
     "image_path": "emnist/emnist_05296.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05297.jpg",
-    "text": "N"
-  },
-  {
-    "image_path": "emnist/emnist_05298.jpg",
-    "text": "W"
-  },
-  {
-    "image_path": "emnist/emnist_05299.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05300.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05301.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05302.jpg",
-    "text": "n"
-  },
-  {
-    "image_path": "emnist/emnist_05303.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05304.jpg",
-    "text": "a"
-  },
-  {
-    "image_path": "emnist/emnist_05305.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05306.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05307.jpg",
-    "text": "b"
-  },
-  {
-    "image_path": "emnist/emnist_05308.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05309.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05310.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05311.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05312.jpg",
-    "text": "s"
-  },
-  {
-    "image_path": "emnist/emnist_05313.jpg",
-    "text": "l"
-  },
-  {
-    "image_path": "emnist/emnist_05314.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05315.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05316.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05317.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05318.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05319.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05320.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05321.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05322.jpg",
-    "text": "w"
-  },
-  {
-    "image_path": "emnist/emnist_05323.jpg",
-    "text": "r"
-  },
-  {
-    "image_path": "emnist/emnist_05324.jpg",
-    "text": "M"
-  },
-  {
-    "image_path": "emnist/emnist_05325.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05326.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05327.jpg",
-    "text": "U"
-  },
-  {
-    "image_path": "emnist/emnist_05328.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05329.jpg",
-    "text": "B"
-  },
-  {
-    "image_path": "emnist/emnist_05330.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05331.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05332.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05333.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05334.jpg",
-    "text": "r"
-  },
-  {
-    "image_path": "emnist/emnist_05335.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05336.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05337.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05338.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05339.jpg",
-    "text": "T"
-  },
-  {
-    "image_path": "emnist/emnist_05340.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05341.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05342.jpg",
-    "text": "L"
-  },
-  {
-    "image_path": "emnist/emnist_05343.jpg",
-    "text": "k"
-  },
-  {
-    "image_path": "emnist/emnist_05344.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05345.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05346.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05347.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05348.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05349.jpg",
-    "text": "d"
-  },
-  {
-    "image_path": "emnist/emnist_05350.jpg",
-    "text": "d"
-  },
-  {
-    "image_path": "emnist/emnist_05351.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05352.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05353.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05354.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05355.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05356.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05357.jpg",
-    "text": "I"
-  },
-  {
-    "image_path": "emnist/emnist_05358.jpg",
-    "text": "r"
-  },
-  {
-    "image_path": "emnist/emnist_05359.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05360.jpg",
-    "text": "n"
-  },
-  {
-    "image_path": "emnist/emnist_05361.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05362.jpg",
     "text": "t"
   },
   {
-    "image_path": "emnist/emnist_05363.jpg",
-    "text": "2"
+    "image_path": "emnist/emnist_05297.jpg",
+    "text": "X"
   },
   {
-    "image_path": "emnist/emnist_05364.jpg",
-    "text": "9"
+    "image_path": "emnist/emnist_05298.jpg",
+    "text": "O"
   },
   {
-    "image_path": "emnist/emnist_05365.jpg",
-    "text": "V"
-  },
-  {
-    "image_path": "emnist/emnist_05366.jpg",
-    "text": "S"
-  },
-  {
-    "image_path": "emnist/emnist_05367.jpg",
+    "image_path": "emnist/emnist_05299.jpg",
     "text": "e"
   },
   {
-    "image_path": "emnist/emnist_05368.jpg",
-    "text": "4"
+    "image_path": "emnist/emnist_05300.jpg",
+    "text": "W"
   },
   {
-    "image_path": "emnist/emnist_05369.jpg",
-    "text": "N"
+    "image_path": "emnist/emnist_05301.jpg",
+    "text": "X"
   },
   {
-    "image_path": "emnist/emnist_05370.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05371.jpg",
+    "image_path": "emnist/emnist_05302.jpg",
     "text": "J"
   },
   {
-    "image_path": "emnist/emnist_05372.jpg",
-    "text": "l"
+    "image_path": "emnist/emnist_05303.jpg",
+    "text": "L"
   },
   {
-    "image_path": "emnist/emnist_05373.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05374.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05375.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05376.jpg",
+    "image_path": "emnist/emnist_05304.jpg",
     "text": "3"
   },
   {
-    "image_path": "emnist/emnist_05377.jpg",
-    "text": "k"
-  },
-  {
-    "image_path": "emnist/emnist_05378.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05379.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05380.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05381.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05382.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05383.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05384.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05385.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05386.jpg",
-    "text": "M"
-  },
-  {
-    "image_path": "emnist/emnist_05387.jpg",
-    "text": "q"
-  },
-  {
-    "image_path": "emnist/emnist_05388.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05389.jpg",
-    "text": "U"
-  },
-  {
-    "image_path": "emnist/emnist_05390.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05391.jpg",
+    "image_path": "emnist/emnist_05305.jpg",
     "text": "S"
   },
   {
-    "image_path": "emnist/emnist_05392.jpg",
+    "image_path": "emnist/emnist_05306.jpg",
     "text": "4"
   },
   {
-    "image_path": "emnist/emnist_05393.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05394.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05395.jpg",
+    "image_path": "emnist/emnist_05307.jpg",
     "text": "9"
   },
   {
-    "image_path": "emnist/emnist_05396.jpg",
-    "text": "R"
+    "image_path": "emnist/emnist_05308.jpg",
+    "text": "W"
   },
   {
-    "image_path": "emnist/emnist_05397.jpg",
-    "text": "5"
+    "image_path": "emnist/emnist_05309.jpg",
+    "text": "J"
   },
   {
-    "image_path": "emnist/emnist_05398.jpg",
-    "text": "r"
+    "image_path": "emnist/emnist_05310.jpg",
+    "text": "S"
   },
   {
-    "image_path": "emnist/emnist_05399.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05400.jpg",
-    "text": "r"
-  },
-  {
-    "image_path": "emnist/emnist_05401.jpg",
-    "text": "a"
-  },
-  {
-    "image_path": "emnist/emnist_05402.jpg",
-    "text": "r"
-  },
-  {
-    "image_path": "emnist/emnist_05403.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05404.jpg",
-    "text": "T"
-  },
-  {
-    "image_path": "emnist/emnist_05405.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05406.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05407.jpg",
-    "text": "n"
-  },
-  {
-    "image_path": "emnist/emnist_05408.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05409.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05410.jpg",
-    "text": "n"
-  },
-  {
-    "image_path": "emnist/emnist_05411.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05412.jpg",
-    "text": "w"
-  },
-  {
-    "image_path": "emnist/emnist_05413.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05414.jpg",
-    "text": "a"
-  },
-  {
-    "image_path": "emnist/emnist_05415.jpg",
+    "image_path": "emnist/emnist_05311.jpg",
     "text": "b"
   },
   {
-    "image_path": "emnist/emnist_05416.jpg",
-    "text": "O"
+    "image_path": "emnist/emnist_05312.jpg",
+    "text": "b"
   },
   {
-    "image_path": "emnist/emnist_05417.jpg",
+    "image_path": "emnist/emnist_05313.jpg",
+    "text": "h"
+  },
+  {
+    "image_path": "emnist/emnist_05314.jpg",
+    "text": "C"
+  },
+  {
+    "image_path": "emnist/emnist_05315.jpg",
+    "text": "5"
+  },
+  {
+    "image_path": "emnist/emnist_05316.jpg",
+    "text": "H"
+  },
+  {
+    "image_path": "emnist/emnist_05317.jpg",
     "text": "r"
   },
   {
-    "image_path": "emnist/emnist_05418.jpg",
-    "text": "7"
+    "image_path": "emnist/emnist_05318.jpg",
+    "text": "n"
   },
   {
-    "image_path": "emnist/emnist_05419.jpg",
+    "image_path": "emnist/emnist_05319.jpg",
+    "text": "M"
+  },
+  {
+    "image_path": "emnist/emnist_05320.jpg",
+    "text": "I"
+  },
+  {
+    "image_path": "emnist/emnist_05321.jpg",
+    "text": "b"
+  },
+  {
+    "image_path": "emnist/emnist_05322.jpg",
+    "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05323.jpg",
+    "text": "g"
+  },
+  {
+    "image_path": "emnist/emnist_05324.jpg",
+    "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05325.jpg",
+    "text": "F"
+  },
+  {
+    "image_path": "emnist/emnist_05326.jpg",
+    "text": "g"
+  },
+  {
+    "image_path": "emnist/emnist_05327.jpg",
+    "text": "Y"
+  },
+  {
+    "image_path": "emnist/emnist_05328.jpg",
+    "text": "V"
+  },
+  {
+    "image_path": "emnist/emnist_05329.jpg",
     "text": "9"
   },
   {
-    "image_path": "emnist/emnist_05420.jpg",
+    "image_path": "emnist/emnist_05330.jpg",
+    "text": "7"
+  },
+  {
+    "image_path": "emnist/emnist_05331.jpg",
+    "text": "Y"
+  },
+  {
+    "image_path": "emnist/emnist_05332.jpg",
     "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05333.jpg",
+    "text": "M"
+  },
+  {
+    "image_path": "emnist/emnist_05334.jpg",
+    "text": "K"
+  },
+  {
+    "image_path": "emnist/emnist_05335.jpg",
+    "text": "E"
+  },
+  {
+    "image_path": "emnist/emnist_05336.jpg",
+    "text": "S"
+  },
+  {
+    "image_path": "emnist/emnist_05337.jpg",
+    "text": "Z"
+  },
+  {
+    "image_path": "emnist/emnist_05338.jpg",
+    "text": "E"
+  },
+  {
+    "image_path": "emnist/emnist_05339.jpg",
+    "text": "b"
+  },
+  {
+    "image_path": "emnist/emnist_05340.jpg",
+    "text": "5"
+  },
+  {
+    "image_path": "emnist/emnist_05341.jpg",
+    "text": "6"
+  },
+  {
+    "image_path": "emnist/emnist_05342.jpg",
+    "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05343.jpg",
+    "text": "9"
+  },
+  {
+    "image_path": "emnist/emnist_05344.jpg",
+    "text": "C"
+  },
+  {
+    "image_path": "emnist/emnist_05345.jpg",
+    "text": "f"
+  },
+  {
+    "image_path": "emnist/emnist_05346.jpg",
+    "text": "C"
+  },
+  {
+    "image_path": "emnist/emnist_05347.jpg",
+    "text": "M"
+  },
+  {
+    "image_path": "emnist/emnist_05348.jpg",
+    "text": "3"
+  },
+  {
+    "image_path": "emnist/emnist_05349.jpg",
+    "text": "q"
+  },
+  {
+    "image_path": "emnist/emnist_05350.jpg",
+    "text": "O"
+  },
+  {
+    "image_path": "emnist/emnist_05351.jpg",
+    "text": "b"
+  },
+  {
+    "image_path": "emnist/emnist_05352.jpg",
+    "text": "U"
+  },
+  {
+    "image_path": "emnist/emnist_05353.jpg",
+    "text": "A"
+  },
+  {
+    "image_path": "emnist/emnist_05354.jpg",
+    "text": "f"
+  },
+  {
+    "image_path": "emnist/emnist_05355.jpg",
+    "text": "8"
+  },
+  {
+    "image_path": "emnist/emnist_05356.jpg",
+    "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05357.jpg",
+    "text": "5"
+  },
+  {
+    "image_path": "emnist/emnist_05358.jpg",
+    "text": "n"
+  },
+  {
+    "image_path": "emnist/emnist_05359.jpg",
+    "text": "F"
+  },
+  {
+    "image_path": "emnist/emnist_05360.jpg",
+    "text": "M"
+  },
+  {
+    "image_path": "emnist/emnist_05361.jpg",
+    "text": "Q"
+  },
+  {
+    "image_path": "emnist/emnist_05362.jpg",
+    "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05363.jpg",
+    "text": "d"
+  },
+  {
+    "image_path": "emnist/emnist_05364.jpg",
+    "text": "I"
+  },
+  {
+    "image_path": "emnist/emnist_05365.jpg",
+    "text": "O"
+  },
+  {
+    "image_path": "emnist/emnist_05366.jpg",
+    "text": "3"
+  },
+  {
+    "image_path": "emnist/emnist_05367.jpg",
+    "text": "6"
+  },
+  {
+    "image_path": "emnist/emnist_05368.jpg",
+    "text": "Z"
+  },
+  {
+    "image_path": "emnist/emnist_05369.jpg",
+    "text": "Q"
+  },
+  {
+    "image_path": "emnist/emnist_05370.jpg",
+    "text": "D"
+  },
+  {
+    "image_path": "emnist/emnist_05371.jpg",
+    "text": "a"
+  },
+  {
+    "image_path": "emnist/emnist_05372.jpg",
+    "text": "S"
+  },
+  {
+    "image_path": "emnist/emnist_05373.jpg",
+    "text": "t"
+  },
+  {
+    "image_path": "emnist/emnist_05374.jpg",
+    "text": "b"
+  },
+  {
+    "image_path": "emnist/emnist_05375.jpg",
+    "text": "F"
+  },
+  {
+    "image_path": "emnist/emnist_05376.jpg",
+    "text": "b"
+  },
+  {
+    "image_path": "emnist/emnist_05377.jpg",
+    "text": "J"
+  },
+  {
+    "image_path": "emnist/emnist_05378.jpg",
+    "text": "5"
+  },
+  {
+    "image_path": "emnist/emnist_05379.jpg",
+    "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05380.jpg",
+    "text": "4"
+  },
+  {
+    "image_path": "emnist/emnist_05381.jpg",
+    "text": "O"
+  },
+  {
+    "image_path": "emnist/emnist_05382.jpg",
+    "text": "I"
+  },
+  {
+    "image_path": "emnist/emnist_05383.jpg",
+    "text": "1"
+  },
+  {
+    "image_path": "emnist/emnist_05384.jpg",
+    "text": "a"
+  },
+  {
+    "image_path": "emnist/emnist_05385.jpg",
+    "text": "F"
+  },
+  {
+    "image_path": "emnist/emnist_05386.jpg",
+    "text": "5"
+  },
+  {
+    "image_path": "emnist/emnist_05387.jpg",
+    "text": "e"
+  },
+  {
+    "image_path": "emnist/emnist_05388.jpg",
+    "text": "I"
+  },
+  {
+    "image_path": "emnist/emnist_05389.jpg",
+    "text": "J"
+  },
+  {
+    "image_path": "emnist/emnist_05390.jpg",
+    "text": "Y"
+  },
+  {
+    "image_path": "emnist/emnist_05391.jpg",
+    "text": "U"
+  },
+  {
+    "image_path": "emnist/emnist_05392.jpg",
+    "text": "W"
+  },
+  {
+    "image_path": "emnist/emnist_05393.jpg",
+    "text": "b"
+  },
+  {
+    "image_path": "emnist/emnist_05394.jpg",
+    "text": "q"
+  },
+  {
+    "image_path": "emnist/emnist_05395.jpg",
+    "text": "n"
+  },
+  {
+    "image_path": "emnist/emnist_05396.jpg",
+    "text": "I"
+  },
+  {
+    "image_path": "emnist/emnist_05397.jpg",
+    "text": "7"
+  },
+  {
+    "image_path": "emnist/emnist_05398.jpg",
+    "text": "E"
+  },
+  {
+    "image_path": "emnist/emnist_05399.jpg",
+    "text": "I"
+  },
+  {
+    "image_path": "emnist/emnist_05400.jpg",
+    "text": "b"
+  },
+  {
+    "image_path": "emnist/emnist_05401.jpg",
+    "text": "N"
+  },
+  {
+    "image_path": "emnist/emnist_05402.jpg",
+    "text": "M"
+  },
+  {
+    "image_path": "emnist/emnist_05403.jpg",
+    "text": "Z"
+  },
+  {
+    "image_path": "emnist/emnist_05404.jpg",
+    "text": "G"
+  },
+  {
+    "image_path": "emnist/emnist_05405.jpg",
+    "text": "3"
+  },
+  {
+    "image_path": "emnist/emnist_05406.jpg",
+    "text": "H"
+  },
+  {
+    "image_path": "emnist/emnist_05407.jpg",
+    "text": "8"
+  },
+  {
+    "image_path": "emnist/emnist_05408.jpg",
+    "text": "h"
+  },
+  {
+    "image_path": "emnist/emnist_05409.jpg",
+    "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05410.jpg",
+    "text": "Z"
+  },
+  {
+    "image_path": "emnist/emnist_05411.jpg",
+    "text": "C"
+  },
+  {
+    "image_path": "emnist/emnist_05412.jpg",
+    "text": "J"
+  },
+  {
+    "image_path": "emnist/emnist_05413.jpg",
+    "text": "E"
+  },
+  {
+    "image_path": "emnist/emnist_05414.jpg",
+    "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05415.jpg",
+    "text": "3"
+  },
+  {
+    "image_path": "emnist/emnist_05416.jpg",
+    "text": "U"
+  },
+  {
+    "image_path": "emnist/emnist_05417.jpg",
+    "text": "Z"
+  },
+  {
+    "image_path": "emnist/emnist_05418.jpg",
+    "text": "g"
+  },
+  {
+    "image_path": "emnist/emnist_05419.jpg",
+    "text": "3"
+  },
+  {
+    "image_path": "emnist/emnist_05420.jpg",
+    "text": "T"
   },
   {
     "image_path": "emnist/emnist_05421.jpg",
@@ -1689,323 +1689,323 @@
   },
   {
     "image_path": "emnist/emnist_05422.jpg",
-    "text": "l"
+    "text": "f"
   },
   {
     "image_path": "emnist/emnist_05423.jpg",
-    "text": "o"
+    "text": "f"
   },
   {
     "image_path": "emnist/emnist_05424.jpg",
-    "text": "4"
+    "text": "S"
   },
   {
     "image_path": "emnist/emnist_05425.jpg",
-    "text": "7"
+    "text": "R"
   },
   {
     "image_path": "emnist/emnist_05426.jpg",
-    "text": "6"
+    "text": "1"
   },
   {
     "image_path": "emnist/emnist_05427.jpg",
-    "text": "8"
+    "text": "W"
   },
   {
     "image_path": "emnist/emnist_05428.jpg",
-    "text": "I"
-  },
-  {
-    "image_path": "emnist/emnist_05429.jpg",
-    "text": "l"
-  },
-  {
-    "image_path": "emnist/emnist_05430.jpg",
-    "text": "A"
-  },
-  {
-    "image_path": "emnist/emnist_05431.jpg",
-    "text": "z"
-  },
-  {
-    "image_path": "emnist/emnist_05432.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05433.jpg",
-    "text": "U"
-  },
-  {
-    "image_path": "emnist/emnist_05434.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05435.jpg",
-    "text": "U"
-  },
-  {
-    "image_path": "emnist/emnist_05436.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05437.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05438.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05439.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05440.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05441.jpg",
-    "text": "H"
-  },
-  {
-    "image_path": "emnist/emnist_05442.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05443.jpg",
-    "text": "N"
-  },
-  {
-    "image_path": "emnist/emnist_05444.jpg",
-    "text": "t"
-  },
-  {
-    "image_path": "emnist/emnist_05445.jpg",
-    "text": "w"
-  },
-  {
-    "image_path": "emnist/emnist_05446.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05447.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05448.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05449.jpg",
-    "text": "l"
-  },
-  {
-    "image_path": "emnist/emnist_05450.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05451.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05452.jpg",
     "text": "a"
   },
   {
-    "image_path": "emnist/emnist_05453.jpg",
-    "text": "4"
+    "image_path": "emnist/emnist_05429.jpg",
+    "text": "M"
   },
   {
-    "image_path": "emnist/emnist_05454.jpg",
-    "text": "9"
+    "image_path": "emnist/emnist_05430.jpg",
+    "text": "M"
   },
   {
-    "image_path": "emnist/emnist_05455.jpg",
-    "text": "t"
+    "image_path": "emnist/emnist_05431.jpg",
+    "text": "R"
   },
   {
-    "image_path": "emnist/emnist_05456.jpg",
-    "text": "w"
-  },
-  {
-    "image_path": "emnist/emnist_05457.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05458.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05459.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05460.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05461.jpg",
-    "text": "U"
-  },
-  {
-    "image_path": "emnist/emnist_05462.jpg",
-    "text": "B"
-  },
-  {
-    "image_path": "emnist/emnist_05463.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05464.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05465.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05466.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05467.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05468.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05469.jpg",
-    "text": "S"
-  },
-  {
-    "image_path": "emnist/emnist_05470.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05471.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05472.jpg",
-    "text": "C"
-  },
-  {
-    "image_path": "emnist/emnist_05473.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05474.jpg",
+    "image_path": "emnist/emnist_05432.jpg",
     "text": "g"
   },
   {
-    "image_path": "emnist/emnist_05475.jpg",
-    "text": "9"
+    "image_path": "emnist/emnist_05433.jpg",
+    "text": "b"
   },
   {
-    "image_path": "emnist/emnist_05476.jpg",
-    "text": "Q"
+    "image_path": "emnist/emnist_05434.jpg",
+    "text": "R"
   },
   {
-    "image_path": "emnist/emnist_05477.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05478.jpg",
-    "text": "m"
-  },
-  {
-    "image_path": "emnist/emnist_05479.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05480.jpg",
-    "text": "D"
-  },
-  {
-    "image_path": "emnist/emnist_05481.jpg",
-    "text": "U"
-  },
-  {
-    "image_path": "emnist/emnist_05482.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05483.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05484.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05485.jpg",
-    "text": "k"
-  },
-  {
-    "image_path": "emnist/emnist_05486.jpg",
-    "text": "V"
-  },
-  {
-    "image_path": "emnist/emnist_05487.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05488.jpg",
-    "text": "S"
-  },
-  {
-    "image_path": "emnist/emnist_05489.jpg",
-    "text": "F"
-  },
-  {
-    "image_path": "emnist/emnist_05490.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05491.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05492.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05493.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05494.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05495.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05496.jpg",
+    "image_path": "emnist/emnist_05435.jpg",
     "text": "J"
   },
   {
-    "image_path": "emnist/emnist_05497.jpg",
+    "image_path": "emnist/emnist_05436.jpg",
+    "text": "X"
+  },
+  {
+    "image_path": "emnist/emnist_05437.jpg",
+    "text": "b"
+  },
+  {
+    "image_path": "emnist/emnist_05438.jpg",
+    "text": "7"
+  },
+  {
+    "image_path": "emnist/emnist_05439.jpg",
+    "text": "Z"
+  },
+  {
+    "image_path": "emnist/emnist_05440.jpg",
+    "text": "D"
+  },
+  {
+    "image_path": "emnist/emnist_05441.jpg",
+    "text": "B"
+  },
+  {
+    "image_path": "emnist/emnist_05442.jpg",
+    "text": "U"
+  },
+  {
+    "image_path": "emnist/emnist_05443.jpg",
+    "text": "r"
+  },
+  {
+    "image_path": "emnist/emnist_05444.jpg",
+    "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05445.jpg",
+    "text": "5"
+  },
+  {
+    "image_path": "emnist/emnist_05446.jpg",
+    "text": "W"
+  },
+  {
+    "image_path": "emnist/emnist_05447.jpg",
     "text": "L"
   },
   {
-    "image_path": "emnist/emnist_05498.jpg",
+    "image_path": "emnist/emnist_05448.jpg",
+    "text": "E"
+  },
+  {
+    "image_path": "emnist/emnist_05449.jpg",
+    "text": "A"
+  },
+  {
+    "image_path": "emnist/emnist_05450.jpg",
+    "text": "g"
+  },
+  {
+    "image_path": "emnist/emnist_05451.jpg",
     "text": "t"
   },
   {
-    "image_path": "emnist/emnist_05499.jpg",
-    "text": "Y"
+    "image_path": "emnist/emnist_05452.jpg",
+    "text": "C"
   },
   {
-    "image_path": "emnist/emnist_05500.jpg",
+    "image_path": "emnist/emnist_05453.jpg",
+    "text": "2"
+  },
+  {
+    "image_path": "emnist/emnist_05454.jpg",
+    "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05455.jpg",
+    "text": "e"
+  },
+  {
+    "image_path": "emnist/emnist_05456.jpg",
+    "text": "O"
+  },
+  {
+    "image_path": "emnist/emnist_05457.jpg",
+    "text": "N"
+  },
+  {
+    "image_path": "emnist/emnist_05458.jpg",
+    "text": "K"
+  },
+  {
+    "image_path": "emnist/emnist_05459.jpg",
+    "text": "O"
+  },
+  {
+    "image_path": "emnist/emnist_05460.jpg",
+    "text": "J"
+  },
+  {
+    "image_path": "emnist/emnist_05461.jpg",
+    "text": "I"
+  },
+  {
+    "image_path": "emnist/emnist_05462.jpg",
+    "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05463.jpg",
+    "text": "T"
+  },
+  {
+    "image_path": "emnist/emnist_05464.jpg",
+    "text": "H"
+  },
+  {
+    "image_path": "emnist/emnist_05465.jpg",
+    "text": "q"
+  },
+  {
+    "image_path": "emnist/emnist_05466.jpg",
+    "text": "K"
+  },
+  {
+    "image_path": "emnist/emnist_05467.jpg",
+    "text": "2"
+  },
+  {
+    "image_path": "emnist/emnist_05468.jpg",
+    "text": "1"
+  },
+  {
+    "image_path": "emnist/emnist_05469.jpg",
+    "text": "G"
+  },
+  {
+    "image_path": "emnist/emnist_05470.jpg",
     "text": "6"
   },
   {
+    "image_path": "emnist/emnist_05471.jpg",
+    "text": "d"
+  },
+  {
+    "image_path": "emnist/emnist_05472.jpg",
+    "text": "D"
+  },
+  {
+    "image_path": "emnist/emnist_05473.jpg",
+    "text": "F"
+  },
+  {
+    "image_path": "emnist/emnist_05474.jpg",
+    "text": "L"
+  },
+  {
+    "image_path": "emnist/emnist_05475.jpg",
+    "text": "6"
+  },
+  {
+    "image_path": "emnist/emnist_05476.jpg",
+    "text": "9"
+  },
+  {
+    "image_path": "emnist/emnist_05477.jpg",
+    "text": "L"
+  },
+  {
+    "image_path": "emnist/emnist_05478.jpg",
+    "text": "C"
+  },
+  {
+    "image_path": "emnist/emnist_05479.jpg",
+    "text": "I"
+  },
+  {
+    "image_path": "emnist/emnist_05480.jpg",
+    "text": "f"
+  },
+  {
+    "image_path": "emnist/emnist_05481.jpg",
+    "text": "a"
+  },
+  {
+    "image_path": "emnist/emnist_05482.jpg",
+    "text": "S"
+  },
+  {
+    "image_path": "emnist/emnist_05483.jpg",
+    "text": "V"
+  },
+  {
+    "image_path": "emnist/emnist_05484.jpg",
+    "text": "3"
+  },
+  {
+    "image_path": "emnist/emnist_05485.jpg",
+    "text": "2"
+  },
+  {
+    "image_path": "emnist/emnist_05486.jpg",
+    "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05487.jpg",
+    "text": "h"
+  },
+  {
+    "image_path": "emnist/emnist_05488.jpg",
+    "text": "1"
+  },
+  {
+    "image_path": "emnist/emnist_05489.jpg",
+    "text": "O"
+  },
+  {
+    "image_path": "emnist/emnist_05490.jpg",
+    "text": "O"
+  },
+  {
+    "image_path": "emnist/emnist_05491.jpg",
+    "text": "A"
+  },
+  {
+    "image_path": "emnist/emnist_05492.jpg",
+    "text": "S"
+  },
+  {
+    "image_path": "emnist/emnist_05493.jpg",
+    "text": "L"
+  },
+  {
+    "image_path": "emnist/emnist_05494.jpg",
+    "text": "J"
+  },
+  {
+    "image_path": "emnist/emnist_05495.jpg",
+    "text": "O"
+  },
+  {
+    "image_path": "emnist/emnist_05496.jpg",
+    "text": "K"
+  },
+  {
+    "image_path": "emnist/emnist_05497.jpg",
+    "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05498.jpg",
+    "text": "n"
+  },
+  {
+    "image_path": "emnist/emnist_05499.jpg",
+    "text": "4"
+  },
+  {
+    "image_path": "emnist/emnist_05500.jpg",
+    "text": "N"
+  },
+  {
     "image_path": "emnist/emnist_05501.jpg",
-    "text": "Z"
+    "text": "C"
   },
   {
     "image_path": "emnist/emnist_05502.jpg",
@@ -2013,123 +2013,123 @@
   },
   {
     "image_path": "emnist/emnist_05503.jpg",
-    "text": "0"
+    "text": "B"
   },
   {
     "image_path": "emnist/emnist_05504.jpg",
-    "text": "6"
+    "text": "X"
   },
   {
     "image_path": "emnist/emnist_05505.jpg",
-    "text": "O"
+    "text": "H"
   },
   {
     "image_path": "emnist/emnist_05506.jpg",
-    "text": "A"
+    "text": "J"
   },
   {
     "image_path": "emnist/emnist_05507.jpg",
-    "text": "6"
+    "text": "r"
   },
   {
     "image_path": "emnist/emnist_05508.jpg",
-    "text": "6"
+    "text": "3"
   },
   {
     "image_path": "emnist/emnist_05509.jpg",
-    "text": "E"
+    "text": "Z"
   },
   {
     "image_path": "emnist/emnist_05510.jpg",
-    "text": "5"
+    "text": "T"
   },
   {
     "image_path": "emnist/emnist_05511.jpg",
-    "text": "8"
+    "text": "q"
   },
   {
     "image_path": "emnist/emnist_05512.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05513.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05514.jpg",
-    "text": "m"
-  },
-  {
-    "image_path": "emnist/emnist_05515.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05516.jpg",
-    "text": "F"
-  },
-  {
-    "image_path": "emnist/emnist_05517.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05518.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05519.jpg",
-    "text": "S"
-  },
-  {
-    "image_path": "emnist/emnist_05520.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05521.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05522.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05523.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05524.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05525.jpg",
-    "text": "L"
-  },
-  {
-    "image_path": "emnist/emnist_05526.jpg",
     "text": "O"
   },
   {
-    "image_path": "emnist/emnist_05527.jpg",
+    "image_path": "emnist/emnist_05513.jpg",
+    "text": "G"
+  },
+  {
+    "image_path": "emnist/emnist_05514.jpg",
+    "text": "q"
+  },
+  {
+    "image_path": "emnist/emnist_05515.jpg",
+    "text": "U"
+  },
+  {
+    "image_path": "emnist/emnist_05516.jpg",
+    "text": "T"
+  },
+  {
+    "image_path": "emnist/emnist_05517.jpg",
+    "text": "C"
+  },
+  {
+    "image_path": "emnist/emnist_05518.jpg",
     "text": "6"
   },
   {
+    "image_path": "emnist/emnist_05519.jpg",
+    "text": "V"
+  },
+  {
+    "image_path": "emnist/emnist_05520.jpg",
+    "text": "G"
+  },
+  {
+    "image_path": "emnist/emnist_05521.jpg",
+    "text": "M"
+  },
+  {
+    "image_path": "emnist/emnist_05522.jpg",
+    "text": "Y"
+  },
+  {
+    "image_path": "emnist/emnist_05523.jpg",
+    "text": "L"
+  },
+  {
+    "image_path": "emnist/emnist_05524.jpg",
+    "text": "8"
+  },
+  {
+    "image_path": "emnist/emnist_05525.jpg",
+    "text": "9"
+  },
+  {
+    "image_path": "emnist/emnist_05526.jpg",
+    "text": "b"
+  },
+  {
+    "image_path": "emnist/emnist_05527.jpg",
+    "text": "3"
+  },
+  {
     "image_path": "emnist/emnist_05528.jpg",
-    "text": "Q"
+    "text": "V"
   },
   {
     "image_path": "emnist/emnist_05529.jpg",
-    "text": "F"
+    "text": "V"
   },
   {
     "image_path": "emnist/emnist_05530.jpg",
-    "text": "1"
+    "text": "g"
   },
   {
     "image_path": "emnist/emnist_05531.jpg",
-    "text": "5"
+    "text": "P"
   },
   {
     "image_path": "emnist/emnist_05532.jpg",
-    "text": "U"
+    "text": "6"
   },
   {
     "image_path": "emnist/emnist_05533.jpg",
@@ -2137,43 +2137,43 @@
   },
   {
     "image_path": "emnist/emnist_05534.jpg",
-    "text": "8"
+    "text": "M"
   },
   {
     "image_path": "emnist/emnist_05535.jpg",
-    "text": "O"
+    "text": "B"
   },
   {
     "image_path": "emnist/emnist_05536.jpg",
-    "text": "6"
+    "text": "D"
   },
   {
     "image_path": "emnist/emnist_05537.jpg",
-    "text": "S"
+    "text": "n"
   },
   {
     "image_path": "emnist/emnist_05538.jpg",
-    "text": "F"
+    "text": "9"
   },
   {
     "image_path": "emnist/emnist_05539.jpg",
-    "text": "5"
+    "text": "1"
   },
   {
     "image_path": "emnist/emnist_05540.jpg",
-    "text": "5"
+    "text": "A"
   },
   {
     "image_path": "emnist/emnist_05541.jpg",
-    "text": "e"
+    "text": "H"
   },
   {
     "image_path": "emnist/emnist_05542.jpg",
-    "text": "t"
+    "text": "N"
   },
   {
     "image_path": "emnist/emnist_05543.jpg",
-    "text": "u"
+    "text": "7"
   },
   {
     "image_path": "emnist/emnist_05544.jpg",
@@ -2181,215 +2181,215 @@
   },
   {
     "image_path": "emnist/emnist_05545.jpg",
-    "text": "H"
+    "text": "f"
   },
   {
     "image_path": "emnist/emnist_05546.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05547.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05548.jpg",
-    "text": "M"
-  },
-  {
-    "image_path": "emnist/emnist_05549.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05550.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05551.jpg",
-    "text": "U"
-  },
-  {
-    "image_path": "emnist/emnist_05552.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05553.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05554.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05555.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05556.jpg",
-    "text": "d"
-  },
-  {
-    "image_path": "emnist/emnist_05557.jpg",
     "text": "N"
   },
   {
-    "image_path": "emnist/emnist_05558.jpg",
-    "text": "1"
+    "image_path": "emnist/emnist_05547.jpg",
+    "text": "d"
   },
   {
-    "image_path": "emnist/emnist_05559.jpg",
-    "text": "3"
+    "image_path": "emnist/emnist_05548.jpg",
+    "text": "2"
   },
   {
-    "image_path": "emnist/emnist_05560.jpg",
-    "text": "O"
+    "image_path": "emnist/emnist_05549.jpg",
+    "text": "0"
   },
   {
-    "image_path": "emnist/emnist_05561.jpg",
-    "text": "9"
+    "image_path": "emnist/emnist_05550.jpg",
+    "text": "E"
   },
   {
-    "image_path": "emnist/emnist_05562.jpg",
+    "image_path": "emnist/emnist_05551.jpg",
+    "text": "6"
+  },
+  {
+    "image_path": "emnist/emnist_05552.jpg",
+    "text": "Q"
+  },
+  {
+    "image_path": "emnist/emnist_05553.jpg",
+    "text": "n"
+  },
+  {
+    "image_path": "emnist/emnist_05554.jpg",
+    "text": "Z"
+  },
+  {
+    "image_path": "emnist/emnist_05555.jpg",
+    "text": "f"
+  },
+  {
+    "image_path": "emnist/emnist_05556.jpg",
     "text": "C"
   },
   {
-    "image_path": "emnist/emnist_05563.jpg",
-    "text": "1"
+    "image_path": "emnist/emnist_05557.jpg",
+    "text": "R"
   },
   {
-    "image_path": "emnist/emnist_05564.jpg",
-    "text": "6"
+    "image_path": "emnist/emnist_05558.jpg",
+    "text": "b"
   },
   {
-    "image_path": "emnist/emnist_05565.jpg",
-    "text": "M"
+    "image_path": "emnist/emnist_05559.jpg",
+    "text": "N"
   },
   {
-    "image_path": "emnist/emnist_05566.jpg",
-    "text": "i"
+    "image_path": "emnist/emnist_05560.jpg",
+    "text": "A"
   },
   {
-    "image_path": "emnist/emnist_05567.jpg",
-    "text": "O"
+    "image_path": "emnist/emnist_05561.jpg",
+    "text": "2"
   },
   {
-    "image_path": "emnist/emnist_05568.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05569.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05570.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05571.jpg",
-    "text": "Z"
-  },
-  {
-    "image_path": "emnist/emnist_05572.jpg",
-    "text": "G"
-  },
-  {
-    "image_path": "emnist/emnist_05573.jpg",
-    "text": "p"
-  },
-  {
-    "image_path": "emnist/emnist_05574.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05575.jpg",
-    "text": "a"
-  },
-  {
-    "image_path": "emnist/emnist_05576.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05577.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05578.jpg",
-    "text": "W"
-  },
-  {
-    "image_path": "emnist/emnist_05579.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05580.jpg",
+    "image_path": "emnist/emnist_05562.jpg",
     "text": "5"
   },
   {
-    "image_path": "emnist/emnist_05581.jpg",
+    "image_path": "emnist/emnist_05563.jpg",
+    "text": "3"
+  },
+  {
+    "image_path": "emnist/emnist_05564.jpg",
+    "text": "X"
+  },
+  {
+    "image_path": "emnist/emnist_05565.jpg",
+    "text": "q"
+  },
+  {
+    "image_path": "emnist/emnist_05566.jpg",
+    "text": "E"
+  },
+  {
+    "image_path": "emnist/emnist_05567.jpg",
+    "text": "a"
+  },
+  {
+    "image_path": "emnist/emnist_05568.jpg",
     "text": "J"
   },
   {
-    "image_path": "emnist/emnist_05582.jpg",
-    "text": "F"
+    "image_path": "emnist/emnist_05569.jpg",
+    "text": "K"
   },
   {
-    "image_path": "emnist/emnist_05583.jpg",
-    "text": "U"
+    "image_path": "emnist/emnist_05570.jpg",
+    "text": "5"
   },
   {
-    "image_path": "emnist/emnist_05584.jpg",
-    "text": "L"
-  },
-  {
-    "image_path": "emnist/emnist_05585.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05586.jpg",
-    "text": "P"
-  },
-  {
-    "image_path": "emnist/emnist_05587.jpg",
+    "image_path": "emnist/emnist_05571.jpg",
     "text": "8"
   },
   {
-    "image_path": "emnist/emnist_05588.jpg",
+    "image_path": "emnist/emnist_05572.jpg",
+    "text": "r"
+  },
+  {
+    "image_path": "emnist/emnist_05573.jpg",
     "text": "V"
   },
   {
-    "image_path": "emnist/emnist_05589.jpg",
+    "image_path": "emnist/emnist_05574.jpg",
+    "text": "W"
+  },
+  {
+    "image_path": "emnist/emnist_05575.jpg",
     "text": "6"
   },
   {
+    "image_path": "emnist/emnist_05576.jpg",
+    "text": "Y"
+  },
+  {
+    "image_path": "emnist/emnist_05577.jpg",
+    "text": "3"
+  },
+  {
+    "image_path": "emnist/emnist_05578.jpg",
+    "text": "B"
+  },
+  {
+    "image_path": "emnist/emnist_05579.jpg",
+    "text": "a"
+  },
+  {
+    "image_path": "emnist/emnist_05580.jpg",
+    "text": "B"
+  },
+  {
+    "image_path": "emnist/emnist_05581.jpg",
+    "text": "V"
+  },
+  {
+    "image_path": "emnist/emnist_05582.jpg",
+    "text": "W"
+  },
+  {
+    "image_path": "emnist/emnist_05583.jpg",
+    "text": "e"
+  },
+  {
+    "image_path": "emnist/emnist_05584.jpg",
+    "text": "3"
+  },
+  {
+    "image_path": "emnist/emnist_05585.jpg",
+    "text": "r"
+  },
+  {
+    "image_path": "emnist/emnist_05586.jpg",
+    "text": "5"
+  },
+  {
+    "image_path": "emnist/emnist_05587.jpg",
+    "text": "L"
+  },
+  {
+    "image_path": "emnist/emnist_05588.jpg",
+    "text": "f"
+  },
+  {
+    "image_path": "emnist/emnist_05589.jpg",
+    "text": "T"
+  },
+  {
     "image_path": "emnist/emnist_05590.jpg",
-    "text": "4"
+    "text": "I"
   },
   {
     "image_path": "emnist/emnist_05591.jpg",
-    "text": "Z"
+    "text": "q"
   },
   {
     "image_path": "emnist/emnist_05592.jpg",
-    "text": "1"
+    "text": "8"
   },
   {
     "image_path": "emnist/emnist_05593.jpg",
-    "text": "9"
+    "text": "K"
   },
   {
     "image_path": "emnist/emnist_05594.jpg",
-    "text": "M"
+    "text": "0"
   },
   {
     "image_path": "emnist/emnist_05595.jpg",
-    "text": "1"
+    "text": "d"
   },
   {
     "image_path": "emnist/emnist_05596.jpg",
-    "text": "9"
+    "text": "E"
   },
   {
     "image_path": "emnist/emnist_05597.jpg",
-    "text": "7"
+    "text": "V"
   },
   {
     "image_path": "emnist/emnist_05598.jpg",
@@ -2397,47 +2397,47 @@
   },
   {
     "image_path": "emnist/emnist_05599.jpg",
-    "text": "S"
+    "text": "Z"
   },
   {
     "image_path": "emnist/emnist_05600.jpg",
-    "text": "o"
+    "text": "1"
   },
   {
     "image_path": "emnist/emnist_05601.jpg",
-    "text": "a"
+    "text": "0"
   },
   {
     "image_path": "emnist/emnist_05602.jpg",
-    "text": "4"
+    "text": "S"
   },
   {
     "image_path": "emnist/emnist_05603.jpg",
-    "text": "b"
+    "text": "O"
   },
   {
     "image_path": "emnist/emnist_05604.jpg",
-    "text": "2"
+    "text": "q"
   },
   {
     "image_path": "emnist/emnist_05605.jpg",
-    "text": "5"
+    "text": "P"
   },
   {
     "image_path": "emnist/emnist_05606.jpg",
-    "text": "F"
+    "text": "h"
   },
   {
     "image_path": "emnist/emnist_05607.jpg",
-    "text": "0"
+    "text": "W"
   },
   {
     "image_path": "emnist/emnist_05608.jpg",
-    "text": "0"
+    "text": "9"
   },
   {
     "image_path": "emnist/emnist_05609.jpg",
-    "text": "6"
+    "text": "N"
   },
   {
     "image_path": "emnist/emnist_05610.jpg",
@@ -2445,63 +2445,63 @@
   },
   {
     "image_path": "emnist/emnist_05611.jpg",
-    "text": "e"
+    "text": "n"
   },
   {
     "image_path": "emnist/emnist_05612.jpg",
-    "text": "a"
-  },
-  {
-    "image_path": "emnist/emnist_05613.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05614.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05615.jpg",
-    "text": "a"
-  },
-  {
-    "image_path": "emnist/emnist_05616.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05617.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05618.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05619.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05620.jpg",
-    "text": "a"
-  },
-  {
-    "image_path": "emnist/emnist_05621.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05622.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05623.jpg",
-    "text": "V"
-  },
-  {
-    "image_path": "emnist/emnist_05624.jpg",
     "text": "U"
   },
   {
+    "image_path": "emnist/emnist_05613.jpg",
+    "text": "g"
+  },
+  {
+    "image_path": "emnist/emnist_05614.jpg",
+    "text": "R"
+  },
+  {
+    "image_path": "emnist/emnist_05615.jpg",
+    "text": "A"
+  },
+  {
+    "image_path": "emnist/emnist_05616.jpg",
+    "text": "n"
+  },
+  {
+    "image_path": "emnist/emnist_05617.jpg",
+    "text": "3"
+  },
+  {
+    "image_path": "emnist/emnist_05618.jpg",
+    "text": "H"
+  },
+  {
+    "image_path": "emnist/emnist_05619.jpg",
+    "text": "7"
+  },
+  {
+    "image_path": "emnist/emnist_05620.jpg",
+    "text": "e"
+  },
+  {
+    "image_path": "emnist/emnist_05621.jpg",
+    "text": "X"
+  },
+  {
+    "image_path": "emnist/emnist_05622.jpg",
+    "text": "V"
+  },
+  {
+    "image_path": "emnist/emnist_05623.jpg",
+    "text": "e"
+  },
+  {
+    "image_path": "emnist/emnist_05624.jpg",
+    "text": "K"
+  },
+  {
     "image_path": "emnist/emnist_05625.jpg",
-    "text": "O"
+    "text": "W"
   },
   {
     "image_path": "emnist/emnist_05626.jpg",
@@ -2509,207 +2509,207 @@
   },
   {
     "image_path": "emnist/emnist_05627.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05628.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05629.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05630.jpg",
-    "text": "r"
-  },
-  {
-    "image_path": "emnist/emnist_05631.jpg",
-    "text": "s"
-  },
-  {
-    "image_path": "emnist/emnist_05632.jpg",
-    "text": "t"
-  },
-  {
-    "image_path": "emnist/emnist_05633.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05634.jpg",
-    "text": "U"
-  },
-  {
-    "image_path": "emnist/emnist_05635.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05636.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05637.jpg",
     "text": "S"
   },
   {
-    "image_path": "emnist/emnist_05638.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05639.jpg",
-    "text": "t"
-  },
-  {
-    "image_path": "emnist/emnist_05640.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05641.jpg",
-    "text": "z"
-  },
-  {
-    "image_path": "emnist/emnist_05642.jpg",
-    "text": "h"
-  },
-  {
-    "image_path": "emnist/emnist_05643.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05644.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05645.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05646.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05647.jpg",
-    "text": "c"
-  },
-  {
-    "image_path": "emnist/emnist_05648.jpg",
-    "text": "k"
-  },
-  {
-    "image_path": "emnist/emnist_05649.jpg",
-    "text": "i"
-  },
-  {
-    "image_path": "emnist/emnist_05650.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05651.jpg",
-    "text": "J"
-  },
-  {
-    "image_path": "emnist/emnist_05652.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05653.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05654.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05655.jpg",
-    "text": "w"
-  },
-  {
-    "image_path": "emnist/emnist_05656.jpg",
-    "text": "L"
-  },
-  {
-    "image_path": "emnist/emnist_05657.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05658.jpg",
+    "image_path": "emnist/emnist_05628.jpg",
     "text": "1"
   },
   {
-    "image_path": "emnist/emnist_05659.jpg",
-    "text": "4"
+    "image_path": "emnist/emnist_05629.jpg",
+    "text": "b"
   },
   {
-    "image_path": "emnist/emnist_05660.jpg",
-    "text": "8"
+    "image_path": "emnist/emnist_05630.jpg",
+    "text": "S"
   },
   {
-    "image_path": "emnist/emnist_05661.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05662.jpg",
-    "text": "a"
-  },
-  {
-    "image_path": "emnist/emnist_05663.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05664.jpg",
-    "text": "c"
-  },
-  {
-    "image_path": "emnist/emnist_05665.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05666.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05667.jpg",
-    "text": "r"
-  },
-  {
-    "image_path": "emnist/emnist_05668.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05669.jpg",
+    "image_path": "emnist/emnist_05631.jpg",
     "text": "5"
   },
   {
-    "image_path": "emnist/emnist_05670.jpg",
+    "image_path": "emnist/emnist_05632.jpg",
+    "text": "9"
+  },
+  {
+    "image_path": "emnist/emnist_05633.jpg",
+    "text": "N"
+  },
+  {
+    "image_path": "emnist/emnist_05634.jpg",
+    "text": "H"
+  },
+  {
+    "image_path": "emnist/emnist_05635.jpg",
+    "text": "G"
+  },
+  {
+    "image_path": "emnist/emnist_05636.jpg",
+    "text": "N"
+  },
+  {
+    "image_path": "emnist/emnist_05637.jpg",
+    "text": "N"
+  },
+  {
+    "image_path": "emnist/emnist_05638.jpg",
     "text": "M"
   },
   {
+    "image_path": "emnist/emnist_05639.jpg",
+    "text": "E"
+  },
+  {
+    "image_path": "emnist/emnist_05640.jpg",
+    "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05641.jpg",
+    "text": "E"
+  },
+  {
+    "image_path": "emnist/emnist_05642.jpg",
+    "text": "g"
+  },
+  {
+    "image_path": "emnist/emnist_05643.jpg",
+    "text": "t"
+  },
+  {
+    "image_path": "emnist/emnist_05644.jpg",
+    "text": "Z"
+  },
+  {
+    "image_path": "emnist/emnist_05645.jpg",
+    "text": "e"
+  },
+  {
+    "image_path": "emnist/emnist_05646.jpg",
+    "text": "e"
+  },
+  {
+    "image_path": "emnist/emnist_05647.jpg",
+    "text": "U"
+  },
+  {
+    "image_path": "emnist/emnist_05648.jpg",
+    "text": "M"
+  },
+  {
+    "image_path": "emnist/emnist_05649.jpg",
+    "text": "R"
+  },
+  {
+    "image_path": "emnist/emnist_05650.jpg",
+    "text": "Q"
+  },
+  {
+    "image_path": "emnist/emnist_05651.jpg",
+    "text": "A"
+  },
+  {
+    "image_path": "emnist/emnist_05652.jpg",
+    "text": "O"
+  },
+  {
+    "image_path": "emnist/emnist_05653.jpg",
+    "text": "K"
+  },
+  {
+    "image_path": "emnist/emnist_05654.jpg",
+    "text": "I"
+  },
+  {
+    "image_path": "emnist/emnist_05655.jpg",
+    "text": "6"
+  },
+  {
+    "image_path": "emnist/emnist_05656.jpg",
+    "text": "C"
+  },
+  {
+    "image_path": "emnist/emnist_05657.jpg",
+    "text": "A"
+  },
+  {
+    "image_path": "emnist/emnist_05658.jpg",
+    "text": "t"
+  },
+  {
+    "image_path": "emnist/emnist_05659.jpg",
+    "text": "R"
+  },
+  {
+    "image_path": "emnist/emnist_05660.jpg",
+    "text": "2"
+  },
+  {
+    "image_path": "emnist/emnist_05661.jpg",
+    "text": "a"
+  },
+  {
+    "image_path": "emnist/emnist_05662.jpg",
+    "text": "L"
+  },
+  {
+    "image_path": "emnist/emnist_05663.jpg",
+    "text": "J"
+  },
+  {
+    "image_path": "emnist/emnist_05664.jpg",
+    "text": "d"
+  },
+  {
+    "image_path": "emnist/emnist_05665.jpg",
+    "text": "T"
+  },
+  {
+    "image_path": "emnist/emnist_05666.jpg",
+    "text": "4"
+  },
+  {
+    "image_path": "emnist/emnist_05667.jpg",
+    "text": "1"
+  },
+  {
+    "image_path": "emnist/emnist_05668.jpg",
+    "text": "t"
+  },
+  {
+    "image_path": "emnist/emnist_05669.jpg",
+    "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05670.jpg",
+    "text": "3"
+  },
+  {
     "image_path": "emnist/emnist_05671.jpg",
-    "text": "5"
+    "text": "M"
   },
   {
     "image_path": "emnist/emnist_05672.jpg",
-    "text": "7"
+    "text": "Z"
   },
   {
     "image_path": "emnist/emnist_05673.jpg",
-    "text": "P"
+    "text": "E"
   },
   {
     "image_path": "emnist/emnist_05674.jpg",
-    "text": "7"
+    "text": "A"
   },
   {
     "image_path": "emnist/emnist_05675.jpg",
-    "text": "8"
+    "text": "t"
   },
   {
     "image_path": "emnist/emnist_05676.jpg",
-    "text": "8"
+    "text": "2"
   },
   {
     "image_path": "emnist/emnist_05677.jpg",
-    "text": "9"
+    "text": "6"
   },
   {
     "image_path": "emnist/emnist_05678.jpg",
@@ -2717,459 +2717,459 @@
   },
   {
     "image_path": "emnist/emnist_05679.jpg",
-    "text": "N"
+    "text": "7"
   },
   {
     "image_path": "emnist/emnist_05680.jpg",
-    "text": "r"
-  },
-  {
-    "image_path": "emnist/emnist_05681.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05682.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05683.jpg",
-    "text": "g"
-  },
-  {
-    "image_path": "emnist/emnist_05684.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05685.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05686.jpg",
-    "text": "V"
-  },
-  {
-    "image_path": "emnist/emnist_05687.jpg",
-    "text": "k"
-  },
-  {
-    "image_path": "emnist/emnist_05688.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05689.jpg",
-    "text": "p"
-  },
-  {
-    "image_path": "emnist/emnist_05690.jpg",
-    "text": "W"
-  },
-  {
-    "image_path": "emnist/emnist_05691.jpg",
-    "text": "r"
-  },
-  {
-    "image_path": "emnist/emnist_05692.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05693.jpg",
-    "text": "E"
-  },
-  {
-    "image_path": "emnist/emnist_05694.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05695.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05696.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05697.jpg",
     "text": "T"
   },
   {
-    "image_path": "emnist/emnist_05698.jpg",
-    "text": "5"
+    "image_path": "emnist/emnist_05681.jpg",
+    "text": "B"
   },
   {
-    "image_path": "emnist/emnist_05699.jpg",
-    "text": "7"
+    "image_path": "emnist/emnist_05682.jpg",
+    "text": "d"
   },
   {
-    "image_path": "emnist/emnist_05700.jpg",
-    "text": "P"
+    "image_path": "emnist/emnist_05683.jpg",
+    "text": "L"
   },
   {
-    "image_path": "emnist/emnist_05701.jpg",
-    "text": "6"
+    "image_path": "emnist/emnist_05684.jpg",
+    "text": "X"
   },
   {
-    "image_path": "emnist/emnist_05702.jpg",
-    "text": "0"
+    "image_path": "emnist/emnist_05685.jpg",
+    "text": "V"
   },
   {
-    "image_path": "emnist/emnist_05703.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05704.jpg",
-    "text": "M"
-  },
-  {
-    "image_path": "emnist/emnist_05705.jpg",
-    "text": "n"
-  },
-  {
-    "image_path": "emnist/emnist_05706.jpg",
-    "text": "t"
-  },
-  {
-    "image_path": "emnist/emnist_05707.jpg",
+    "image_path": "emnist/emnist_05686.jpg",
     "text": "I"
   },
   {
-    "image_path": "emnist/emnist_05708.jpg",
-    "text": "n"
-  },
-  {
-    "image_path": "emnist/emnist_05709.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05710.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05711.jpg",
-    "text": "c"
-  },
-  {
-    "image_path": "emnist/emnist_05712.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05713.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05714.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05715.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05716.jpg",
-    "text": "B"
-  },
-  {
-    "image_path": "emnist/emnist_05717.jpg",
-    "text": "v"
-  },
-  {
-    "image_path": "emnist/emnist_05718.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05719.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05720.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05721.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05722.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05723.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05724.jpg",
-    "text": "l"
-  },
-  {
-    "image_path": "emnist/emnist_05725.jpg",
-    "text": "c"
-  },
-  {
-    "image_path": "emnist/emnist_05726.jpg",
-    "text": "h"
-  },
-  {
-    "image_path": "emnist/emnist_05727.jpg",
-    "text": "i"
-  },
-  {
-    "image_path": "emnist/emnist_05728.jpg",
-    "text": "q"
-  },
-  {
-    "image_path": "emnist/emnist_05729.jpg",
-    "text": "y"
-  },
-  {
-    "image_path": "emnist/emnist_05730.jpg",
-    "text": "N"
-  },
-  {
-    "image_path": "emnist/emnist_05731.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05732.jpg",
-    "text": "C"
-  },
-  {
-    "image_path": "emnist/emnist_05733.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05734.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05735.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05736.jpg",
-    "text": "S"
-  },
-  {
-    "image_path": "emnist/emnist_05737.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05738.jpg",
-    "text": "r"
-  },
-  {
-    "image_path": "emnist/emnist_05739.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05740.jpg",
-    "text": "t"
-  },
-  {
-    "image_path": "emnist/emnist_05741.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05742.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05743.jpg",
-    "text": "C"
-  },
-  {
-    "image_path": "emnist/emnist_05744.jpg",
-    "text": "S"
-  },
-  {
-    "image_path": "emnist/emnist_05745.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05746.jpg",
-    "text": "P"
-  },
-  {
-    "image_path": "emnist/emnist_05747.jpg",
-    "text": "z"
-  },
-  {
-    "image_path": "emnist/emnist_05748.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05749.jpg",
-    "text": "U"
-  },
-  {
-    "image_path": "emnist/emnist_05750.jpg",
-    "text": "t"
-  },
-  {
-    "image_path": "emnist/emnist_05751.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05752.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05753.jpg",
-    "text": "U"
-  },
-  {
-    "image_path": "emnist/emnist_05754.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05755.jpg",
-    "text": "l"
-  },
-  {
-    "image_path": "emnist/emnist_05756.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05757.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05758.jpg",
-    "text": "G"
-  },
-  {
-    "image_path": "emnist/emnist_05759.jpg",
-    "text": "N"
-  },
-  {
-    "image_path": "emnist/emnist_05760.jpg",
-    "text": "z"
-  },
-  {
-    "image_path": "emnist/emnist_05761.jpg",
-    "text": "p"
-  },
-  {
-    "image_path": "emnist/emnist_05762.jpg",
-    "text": "B"
-  },
-  {
-    "image_path": "emnist/emnist_05763.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05764.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05765.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05766.jpg",
+    "image_path": "emnist/emnist_05687.jpg",
     "text": "a"
   },
   {
-    "image_path": "emnist/emnist_05767.jpg",
-    "text": "U"
+    "image_path": "emnist/emnist_05688.jpg",
+    "text": "Z"
   },
   {
-    "image_path": "emnist/emnist_05768.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05769.jpg",
-    "text": "q"
-  },
-  {
-    "image_path": "emnist/emnist_05770.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05771.jpg",
-    "text": "m"
-  },
-  {
-    "image_path": "emnist/emnist_05772.jpg",
-    "text": "d"
-  },
-  {
-    "image_path": "emnist/emnist_05773.jpg",
-    "text": "M"
-  },
-  {
-    "image_path": "emnist/emnist_05774.jpg",
-    "text": "P"
-  },
-  {
-    "image_path": "emnist/emnist_05775.jpg",
-    "text": "H"
-  },
-  {
-    "image_path": "emnist/emnist_05776.jpg",
-    "text": "d"
-  },
-  {
-    "image_path": "emnist/emnist_05777.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05778.jpg",
+    "image_path": "emnist/emnist_05689.jpg",
     "text": "5"
   },
   {
-    "image_path": "emnist/emnist_05779.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05780.jpg",
-    "text": "s"
-  },
-  {
-    "image_path": "emnist/emnist_05781.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05782.jpg",
-    "text": "J"
-  },
-  {
-    "image_path": "emnist/emnist_05783.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05784.jpg",
+    "image_path": "emnist/emnist_05690.jpg",
     "text": "d"
   },
   {
-    "image_path": "emnist/emnist_05785.jpg",
-    "text": "7"
+    "image_path": "emnist/emnist_05691.jpg",
+    "text": "E"
   },
   {
-    "image_path": "emnist/emnist_05786.jpg",
-    "text": "p"
+    "image_path": "emnist/emnist_05692.jpg",
+    "text": "H"
   },
   {
-    "image_path": "emnist/emnist_05787.jpg",
-    "text": "1"
+    "image_path": "emnist/emnist_05693.jpg",
+    "text": "P"
   },
   {
-    "image_path": "emnist/emnist_05788.jpg",
+    "image_path": "emnist/emnist_05694.jpg",
+    "text": "t"
+  },
+  {
+    "image_path": "emnist/emnist_05695.jpg",
+    "text": "8"
+  },
+  {
+    "image_path": "emnist/emnist_05696.jpg",
     "text": "n"
   },
   {
-    "image_path": "emnist/emnist_05789.jpg",
-    "text": "6"
+    "image_path": "emnist/emnist_05697.jpg",
+    "text": "F"
   },
   {
-    "image_path": "emnist/emnist_05790.jpg",
-    "text": "b"
+    "image_path": "emnist/emnist_05698.jpg",
+    "text": "I"
   },
   {
-    "image_path": "emnist/emnist_05791.jpg",
+    "image_path": "emnist/emnist_05699.jpg",
+    "text": "J"
+  },
+  {
+    "image_path": "emnist/emnist_05700.jpg",
+    "text": "B"
+  },
+  {
+    "image_path": "emnist/emnist_05701.jpg",
+    "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05702.jpg",
+    "text": "Q"
+  },
+  {
+    "image_path": "emnist/emnist_05703.jpg",
+    "text": "Q"
+  },
+  {
+    "image_path": "emnist/emnist_05704.jpg",
+    "text": "2"
+  },
+  {
+    "image_path": "emnist/emnist_05705.jpg",
+    "text": "A"
+  },
+  {
+    "image_path": "emnist/emnist_05706.jpg",
+    "text": "8"
+  },
+  {
+    "image_path": "emnist/emnist_05707.jpg",
+    "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05708.jpg",
+    "text": "g"
+  },
+  {
+    "image_path": "emnist/emnist_05709.jpg",
+    "text": "Z"
+  },
+  {
+    "image_path": "emnist/emnist_05710.jpg",
+    "text": "D"
+  },
+  {
+    "image_path": "emnist/emnist_05711.jpg",
+    "text": "D"
+  },
+  {
+    "image_path": "emnist/emnist_05712.jpg",
+    "text": "G"
+  },
+  {
+    "image_path": "emnist/emnist_05713.jpg",
+    "text": "Q"
+  },
+  {
+    "image_path": "emnist/emnist_05714.jpg",
+    "text": "8"
+  },
+  {
+    "image_path": "emnist/emnist_05715.jpg",
     "text": "S"
   },
   {
-    "image_path": "emnist/emnist_05792.jpg",
+    "image_path": "emnist/emnist_05716.jpg",
+    "text": "R"
+  },
+  {
+    "image_path": "emnist/emnist_05717.jpg",
+    "text": "R"
+  },
+  {
+    "image_path": "emnist/emnist_05718.jpg",
+    "text": "r"
+  },
+  {
+    "image_path": "emnist/emnist_05719.jpg",
+    "text": "f"
+  },
+  {
+    "image_path": "emnist/emnist_05720.jpg",
+    "text": "7"
+  },
+  {
+    "image_path": "emnist/emnist_05721.jpg",
+    "text": "8"
+  },
+  {
+    "image_path": "emnist/emnist_05722.jpg",
+    "text": "Q"
+  },
+  {
+    "image_path": "emnist/emnist_05723.jpg",
+    "text": "O"
+  },
+  {
+    "image_path": "emnist/emnist_05724.jpg",
+    "text": "8"
+  },
+  {
+    "image_path": "emnist/emnist_05725.jpg",
+    "text": "h"
+  },
+  {
+    "image_path": "emnist/emnist_05726.jpg",
     "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05727.jpg",
+    "text": "f"
+  },
+  {
+    "image_path": "emnist/emnist_05728.jpg",
+    "text": "J"
+  },
+  {
+    "image_path": "emnist/emnist_05729.jpg",
+    "text": "V"
+  },
+  {
+    "image_path": "emnist/emnist_05730.jpg",
+    "text": "S"
+  },
+  {
+    "image_path": "emnist/emnist_05731.jpg",
+    "text": "r"
+  },
+  {
+    "image_path": "emnist/emnist_05732.jpg",
+    "text": "t"
+  },
+  {
+    "image_path": "emnist/emnist_05733.jpg",
+    "text": "9"
+  },
+  {
+    "image_path": "emnist/emnist_05734.jpg",
+    "text": "E"
+  },
+  {
+    "image_path": "emnist/emnist_05735.jpg",
+    "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05736.jpg",
+    "text": "1"
+  },
+  {
+    "image_path": "emnist/emnist_05737.jpg",
+    "text": "B"
+  },
+  {
+    "image_path": "emnist/emnist_05738.jpg",
+    "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05739.jpg",
+    "text": "e"
+  },
+  {
+    "image_path": "emnist/emnist_05740.jpg",
+    "text": "W"
+  },
+  {
+    "image_path": "emnist/emnist_05741.jpg",
+    "text": "J"
+  },
+  {
+    "image_path": "emnist/emnist_05742.jpg",
+    "text": "V"
+  },
+  {
+    "image_path": "emnist/emnist_05743.jpg",
+    "text": "J"
+  },
+  {
+    "image_path": "emnist/emnist_05744.jpg",
+    "text": "A"
+  },
+  {
+    "image_path": "emnist/emnist_05745.jpg",
+    "text": "U"
+  },
+  {
+    "image_path": "emnist/emnist_05746.jpg",
+    "text": "q"
+  },
+  {
+    "image_path": "emnist/emnist_05747.jpg",
+    "text": "7"
+  },
+  {
+    "image_path": "emnist/emnist_05748.jpg",
+    "text": "M"
+  },
+  {
+    "image_path": "emnist/emnist_05749.jpg",
+    "text": "X"
+  },
+  {
+    "image_path": "emnist/emnist_05750.jpg",
+    "text": "A"
+  },
+  {
+    "image_path": "emnist/emnist_05751.jpg",
+    "text": "4"
+  },
+  {
+    "image_path": "emnist/emnist_05752.jpg",
+    "text": "R"
+  },
+  {
+    "image_path": "emnist/emnist_05753.jpg",
+    "text": "L"
+  },
+  {
+    "image_path": "emnist/emnist_05754.jpg",
+    "text": "R"
+  },
+  {
+    "image_path": "emnist/emnist_05755.jpg",
+    "text": "E"
+  },
+  {
+    "image_path": "emnist/emnist_05756.jpg",
+    "text": "E"
+  },
+  {
+    "image_path": "emnist/emnist_05757.jpg",
+    "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05758.jpg",
+    "text": "1"
+  },
+  {
+    "image_path": "emnist/emnist_05759.jpg",
+    "text": "e"
+  },
+  {
+    "image_path": "emnist/emnist_05760.jpg",
+    "text": "a"
+  },
+  {
+    "image_path": "emnist/emnist_05761.jpg",
+    "text": "8"
+  },
+  {
+    "image_path": "emnist/emnist_05762.jpg",
+    "text": "X"
+  },
+  {
+    "image_path": "emnist/emnist_05763.jpg",
+    "text": "T"
+  },
+  {
+    "image_path": "emnist/emnist_05764.jpg",
+    "text": "G"
+  },
+  {
+    "image_path": "emnist/emnist_05765.jpg",
+    "text": "F"
+  },
+  {
+    "image_path": "emnist/emnist_05766.jpg",
+    "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05767.jpg",
+    "text": "H"
+  },
+  {
+    "image_path": "emnist/emnist_05768.jpg",
+    "text": "T"
+  },
+  {
+    "image_path": "emnist/emnist_05769.jpg",
+    "text": "B"
+  },
+  {
+    "image_path": "emnist/emnist_05770.jpg",
+    "text": "d"
+  },
+  {
+    "image_path": "emnist/emnist_05771.jpg",
+    "text": "G"
+  },
+  {
+    "image_path": "emnist/emnist_05772.jpg",
+    "text": "7"
+  },
+  {
+    "image_path": "emnist/emnist_05773.jpg",
+    "text": "5"
+  },
+  {
+    "image_path": "emnist/emnist_05774.jpg",
+    "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05775.jpg",
+    "text": "8"
+  },
+  {
+    "image_path": "emnist/emnist_05776.jpg",
+    "text": "a"
+  },
+  {
+    "image_path": "emnist/emnist_05777.jpg",
+    "text": "B"
+  },
+  {
+    "image_path": "emnist/emnist_05778.jpg",
+    "text": "M"
+  },
+  {
+    "image_path": "emnist/emnist_05779.jpg",
+    "text": "e"
+  },
+  {
+    "image_path": "emnist/emnist_05780.jpg",
+    "text": "E"
+  },
+  {
+    "image_path": "emnist/emnist_05781.jpg",
+    "text": "f"
+  },
+  {
+    "image_path": "emnist/emnist_05782.jpg",
+    "text": "U"
+  },
+  {
+    "image_path": "emnist/emnist_05783.jpg",
+    "text": "n"
+  },
+  {
+    "image_path": "emnist/emnist_05784.jpg",
+    "text": "L"
+  },
+  {
+    "image_path": "emnist/emnist_05785.jpg",
+    "text": "b"
+  },
+  {
+    "image_path": "emnist/emnist_05786.jpg",
+    "text": "L"
+  },
+  {
+    "image_path": "emnist/emnist_05787.jpg",
+    "text": "q"
+  },
+  {
+    "image_path": "emnist/emnist_05788.jpg",
+    "text": "h"
+  },
+  {
+    "image_path": "emnist/emnist_05789.jpg",
+    "text": "C"
+  },
+  {
+    "image_path": "emnist/emnist_05790.jpg",
+    "text": "S"
+  },
+  {
+    "image_path": "emnist/emnist_05791.jpg",
+    "text": "D"
+  },
+  {
+    "image_path": "emnist/emnist_05792.jpg",
+    "text": "G"
   },
   {
     "image_path": "emnist/emnist_05793.jpg",
@@ -3177,319 +3177,319 @@
   },
   {
     "image_path": "emnist/emnist_05794.jpg",
-    "text": "U"
+    "text": "M"
   },
   {
     "image_path": "emnist/emnist_05795.jpg",
-    "text": "e"
+    "text": "V"
   },
   {
     "image_path": "emnist/emnist_05796.jpg",
-    "text": "3"
+    "text": "F"
   },
   {
     "image_path": "emnist/emnist_05797.jpg",
-    "text": "2"
+    "text": "X"
   },
   {
     "image_path": "emnist/emnist_05798.jpg",
-    "text": "S"
+    "text": "5"
   },
   {
     "image_path": "emnist/emnist_05799.jpg",
-    "text": "7"
+    "text": "H"
   },
   {
     "image_path": "emnist/emnist_05800.jpg",
-    "text": "1"
+    "text": "q"
   },
   {
     "image_path": "emnist/emnist_05801.jpg",
-    "text": "P"
+    "text": "T"
   },
   {
     "image_path": "emnist/emnist_05802.jpg",
-    "text": "5"
+    "text": "Z"
   },
   {
     "image_path": "emnist/emnist_05803.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05804.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05805.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05806.jpg",
-    "text": "F"
-  },
-  {
-    "image_path": "emnist/emnist_05807.jpg",
-    "text": "T"
-  },
-  {
-    "image_path": "emnist/emnist_05808.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05809.jpg",
-    "text": "N"
-  },
-  {
-    "image_path": "emnist/emnist_05810.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05811.jpg",
-    "text": "l"
-  },
-  {
-    "image_path": "emnist/emnist_05812.jpg",
-    "text": "x"
-  },
-  {
-    "image_path": "emnist/emnist_05813.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05814.jpg",
-    "text": "Z"
-  },
-  {
-    "image_path": "emnist/emnist_05815.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05816.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05817.jpg",
-    "text": "S"
-  },
-  {
-    "image_path": "emnist/emnist_05818.jpg",
-    "text": "l"
-  },
-  {
-    "image_path": "emnist/emnist_05819.jpg",
-    "text": "t"
-  },
-  {
-    "image_path": "emnist/emnist_05820.jpg",
-    "text": "c"
-  },
-  {
-    "image_path": "emnist/emnist_05821.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05822.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05823.jpg",
-    "text": "P"
-  },
-  {
-    "image_path": "emnist/emnist_05824.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05825.jpg",
-    "text": "T"
-  },
-  {
-    "image_path": "emnist/emnist_05826.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05827.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05828.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05829.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05830.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05831.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05832.jpg",
-    "text": "Z"
-  },
-  {
-    "image_path": "emnist/emnist_05833.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05834.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05835.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05836.jpg",
-    "text": "R"
-  },
-  {
-    "image_path": "emnist/emnist_05837.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05838.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05839.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05840.jpg",
     "text": "0"
   },
   {
-    "image_path": "emnist/emnist_05841.jpg",
-    "text": "P"
+    "image_path": "emnist/emnist_05804.jpg",
+    "text": "9"
   },
   {
-    "image_path": "emnist/emnist_05842.jpg",
-    "text": "6"
+    "image_path": "emnist/emnist_05805.jpg",
+    "text": "Z"
   },
   {
-    "image_path": "emnist/emnist_05843.jpg",
-    "text": "G"
+    "image_path": "emnist/emnist_05806.jpg",
+    "text": "X"
   },
   {
-    "image_path": "emnist/emnist_05844.jpg",
+    "image_path": "emnist/emnist_05807.jpg",
     "text": "S"
   },
   {
-    "image_path": "emnist/emnist_05845.jpg",
-    "text": "e"
+    "image_path": "emnist/emnist_05808.jpg",
+    "text": "I"
   },
   {
-    "image_path": "emnist/emnist_05846.jpg",
-    "text": "t"
-  },
-  {
-    "image_path": "emnist/emnist_05847.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05848.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05849.jpg",
-    "text": "E"
-  },
-  {
-    "image_path": "emnist/emnist_05850.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05851.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05852.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05853.jpg",
-    "text": "S"
-  },
-  {
-    "image_path": "emnist/emnist_05854.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05855.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05856.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05857.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05858.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05859.jpg",
-    "text": "2"
-  },
-  {
-    "image_path": "emnist/emnist_05860.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05861.jpg",
-    "text": "d"
-  },
-  {
-    "image_path": "emnist/emnist_05862.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05863.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05864.jpg",
-    "text": "U"
-  },
-  {
-    "image_path": "emnist/emnist_05865.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05866.jpg",
-    "text": "F"
-  },
-  {
-    "image_path": "emnist/emnist_05867.jpg",
+    "image_path": "emnist/emnist_05809.jpg",
     "text": "O"
   },
   {
-    "image_path": "emnist/emnist_05868.jpg",
-    "text": "c"
+    "image_path": "emnist/emnist_05810.jpg",
+    "text": "7"
   },
   {
-    "image_path": "emnist/emnist_05869.jpg",
-    "text": "1"
+    "image_path": "emnist/emnist_05811.jpg",
+    "text": "Y"
   },
   {
-    "image_path": "emnist/emnist_05870.jpg",
+    "image_path": "emnist/emnist_05812.jpg",
+    "text": "6"
+  },
+  {
+    "image_path": "emnist/emnist_05813.jpg",
     "text": "T"
   },
   {
+    "image_path": "emnist/emnist_05814.jpg",
+    "text": "J"
+  },
+  {
+    "image_path": "emnist/emnist_05815.jpg",
+    "text": "n"
+  },
+  {
+    "image_path": "emnist/emnist_05816.jpg",
+    "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05817.jpg",
+    "text": "M"
+  },
+  {
+    "image_path": "emnist/emnist_05818.jpg",
+    "text": "6"
+  },
+  {
+    "image_path": "emnist/emnist_05819.jpg",
+    "text": "W"
+  },
+  {
+    "image_path": "emnist/emnist_05820.jpg",
+    "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05821.jpg",
+    "text": "S"
+  },
+  {
+    "image_path": "emnist/emnist_05822.jpg",
+    "text": "F"
+  },
+  {
+    "image_path": "emnist/emnist_05823.jpg",
+    "text": "d"
+  },
+  {
+    "image_path": "emnist/emnist_05824.jpg",
+    "text": "A"
+  },
+  {
+    "image_path": "emnist/emnist_05825.jpg",
+    "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05826.jpg",
+    "text": "D"
+  },
+  {
+    "image_path": "emnist/emnist_05827.jpg",
+    "text": "6"
+  },
+  {
+    "image_path": "emnist/emnist_05828.jpg",
+    "text": "U"
+  },
+  {
+    "image_path": "emnist/emnist_05829.jpg",
+    "text": "2"
+  },
+  {
+    "image_path": "emnist/emnist_05830.jpg",
+    "text": "4"
+  },
+  {
+    "image_path": "emnist/emnist_05831.jpg",
+    "text": "O"
+  },
+  {
+    "image_path": "emnist/emnist_05832.jpg",
+    "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05833.jpg",
+    "text": "t"
+  },
+  {
+    "image_path": "emnist/emnist_05834.jpg",
+    "text": "Z"
+  },
+  {
+    "image_path": "emnist/emnist_05835.jpg",
+    "text": "J"
+  },
+  {
+    "image_path": "emnist/emnist_05836.jpg",
+    "text": "F"
+  },
+  {
+    "image_path": "emnist/emnist_05837.jpg",
+    "text": "a"
+  },
+  {
+    "image_path": "emnist/emnist_05838.jpg",
+    "text": "d"
+  },
+  {
+    "image_path": "emnist/emnist_05839.jpg",
+    "text": "9"
+  },
+  {
+    "image_path": "emnist/emnist_05840.jpg",
+    "text": "n"
+  },
+  {
+    "image_path": "emnist/emnist_05841.jpg",
+    "text": "8"
+  },
+  {
+    "image_path": "emnist/emnist_05842.jpg",
+    "text": "W"
+  },
+  {
+    "image_path": "emnist/emnist_05843.jpg",
+    "text": "L"
+  },
+  {
+    "image_path": "emnist/emnist_05844.jpg",
+    "text": "b"
+  },
+  {
+    "image_path": "emnist/emnist_05845.jpg",
+    "text": "W"
+  },
+  {
+    "image_path": "emnist/emnist_05846.jpg",
+    "text": "1"
+  },
+  {
+    "image_path": "emnist/emnist_05847.jpg",
+    "text": "a"
+  },
+  {
+    "image_path": "emnist/emnist_05848.jpg",
+    "text": "Q"
+  },
+  {
+    "image_path": "emnist/emnist_05849.jpg",
+    "text": "g"
+  },
+  {
+    "image_path": "emnist/emnist_05850.jpg",
+    "text": "t"
+  },
+  {
+    "image_path": "emnist/emnist_05851.jpg",
+    "text": "4"
+  },
+  {
+    "image_path": "emnist/emnist_05852.jpg",
+    "text": "B"
+  },
+  {
+    "image_path": "emnist/emnist_05853.jpg",
+    "text": "5"
+  },
+  {
+    "image_path": "emnist/emnist_05854.jpg",
+    "text": "4"
+  },
+  {
+    "image_path": "emnist/emnist_05855.jpg",
+    "text": "b"
+  },
+  {
+    "image_path": "emnist/emnist_05856.jpg",
+    "text": "Z"
+  },
+  {
+    "image_path": "emnist/emnist_05857.jpg",
+    "text": "r"
+  },
+  {
+    "image_path": "emnist/emnist_05858.jpg",
+    "text": "g"
+  },
+  {
+    "image_path": "emnist/emnist_05859.jpg",
+    "text": "B"
+  },
+  {
+    "image_path": "emnist/emnist_05860.jpg",
+    "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05861.jpg",
+    "text": "e"
+  },
+  {
+    "image_path": "emnist/emnist_05862.jpg",
+    "text": "F"
+  },
+  {
+    "image_path": "emnist/emnist_05863.jpg",
+    "text": "3"
+  },
+  {
+    "image_path": "emnist/emnist_05864.jpg",
+    "text": "H"
+  },
+  {
+    "image_path": "emnist/emnist_05865.jpg",
+    "text": "U"
+  },
+  {
+    "image_path": "emnist/emnist_05866.jpg",
+    "text": "Z"
+  },
+  {
+    "image_path": "emnist/emnist_05867.jpg",
+    "text": "d"
+  },
+  {
+    "image_path": "emnist/emnist_05868.jpg",
+    "text": "K"
+  },
+  {
+    "image_path": "emnist/emnist_05869.jpg",
+    "text": "7"
+  },
+  {
+    "image_path": "emnist/emnist_05870.jpg",
+    "text": "V"
+  },
+  {
     "image_path": "emnist/emnist_05871.jpg",
-    "text": "E"
+    "text": "7"
   },
   {
     "image_path": "emnist/emnist_05872.jpg",
-    "text": "1"
+    "text": "L"
   },
   {
     "image_path": "emnist/emnist_05873.jpg",
@@ -3497,407 +3497,407 @@
   },
   {
     "image_path": "emnist/emnist_05874.jpg",
-    "text": "1"
+    "text": "T"
   },
   {
     "image_path": "emnist/emnist_05875.jpg",
-    "text": "2"
+    "text": "L"
   },
   {
     "image_path": "emnist/emnist_05876.jpg",
-    "text": "l"
-  },
-  {
-    "image_path": "emnist/emnist_05877.jpg",
-    "text": "a"
-  },
-  {
-    "image_path": "emnist/emnist_05878.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05879.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05880.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05881.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05882.jpg",
-    "text": "a"
-  },
-  {
-    "image_path": "emnist/emnist_05883.jpg",
-    "text": "F"
-  },
-  {
-    "image_path": "emnist/emnist_05884.jpg",
-    "text": "r"
-  },
-  {
-    "image_path": "emnist/emnist_05885.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05886.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05887.jpg",
-    "text": "S"
-  },
-  {
-    "image_path": "emnist/emnist_05888.jpg",
-    "text": "C"
-  },
-  {
-    "image_path": "emnist/emnist_05889.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05890.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05891.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05892.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05893.jpg",
-    "text": "X"
-  },
-  {
-    "image_path": "emnist/emnist_05894.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05895.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05896.jpg",
-    "text": "N"
-  },
-  {
-    "image_path": "emnist/emnist_05897.jpg",
-    "text": "X"
-  },
-  {
-    "image_path": "emnist/emnist_05898.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05899.jpg",
-    "text": "F"
-  },
-  {
-    "image_path": "emnist/emnist_05900.jpg",
-    "text": "6"
-  },
-  {
-    "image_path": "emnist/emnist_05901.jpg",
-    "text": "U"
-  },
-  {
-    "image_path": "emnist/emnist_05902.jpg",
-    "text": "v"
-  },
-  {
-    "image_path": "emnist/emnist_05903.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05904.jpg",
-    "text": "S"
-  },
-  {
-    "image_path": "emnist/emnist_05905.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05906.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05907.jpg",
-    "text": "U"
-  },
-  {
-    "image_path": "emnist/emnist_05908.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05909.jpg",
-    "text": "M"
-  },
-  {
-    "image_path": "emnist/emnist_05910.jpg",
-    "text": "N"
-  },
-  {
-    "image_path": "emnist/emnist_05911.jpg",
-    "text": "N"
-  },
-  {
-    "image_path": "emnist/emnist_05912.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05913.jpg",
-    "text": "r"
-  },
-  {
-    "image_path": "emnist/emnist_05914.jpg",
-    "text": "i"
-  },
-  {
-    "image_path": "emnist/emnist_05915.jpg",
-    "text": "r"
-  },
-  {
-    "image_path": "emnist/emnist_05916.jpg",
-    "text": "n"
-  },
-  {
-    "image_path": "emnist/emnist_05917.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05918.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05919.jpg",
-    "text": "S"
-  },
-  {
-    "image_path": "emnist/emnist_05920.jpg",
-    "text": "U"
-  },
-  {
-    "image_path": "emnist/emnist_05921.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05922.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05923.jpg",
     "text": "I"
   },
   {
-    "image_path": "emnist/emnist_05924.jpg",
-    "text": "M"
+    "image_path": "emnist/emnist_05877.jpg",
+    "text": "0"
   },
   {
-    "image_path": "emnist/emnist_05925.jpg",
-    "text": "s"
+    "image_path": "emnist/emnist_05878.jpg",
+    "text": "X"
   },
   {
-    "image_path": "emnist/emnist_05926.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05927.jpg",
-    "text": "H"
-  },
-  {
-    "image_path": "emnist/emnist_05928.jpg",
-    "text": "V"
-  },
-  {
-    "image_path": "emnist/emnist_05929.jpg",
+    "image_path": "emnist/emnist_05879.jpg",
     "text": "9"
   },
   {
-    "image_path": "emnist/emnist_05930.jpg",
-    "text": "0"
+    "image_path": "emnist/emnist_05880.jpg",
+    "text": "S"
   },
   {
-    "image_path": "emnist/emnist_05931.jpg",
-    "text": "M"
+    "image_path": "emnist/emnist_05881.jpg",
+    "text": "Y"
   },
   {
-    "image_path": "emnist/emnist_05932.jpg",
-    "text": "R"
+    "image_path": "emnist/emnist_05882.jpg",
+    "text": "B"
   },
   {
-    "image_path": "emnist/emnist_05933.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05934.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05935.jpg",
-    "text": "a"
-  },
-  {
-    "image_path": "emnist/emnist_05936.jpg",
-    "text": "C"
-  },
-  {
-    "image_path": "emnist/emnist_05937.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05938.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05939.jpg",
-    "text": "7"
-  },
-  {
-    "image_path": "emnist/emnist_05940.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05941.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05942.jpg",
+    "image_path": "emnist/emnist_05883.jpg",
     "text": "3"
   },
   {
-    "image_path": "emnist/emnist_05943.jpg",
-    "text": "n"
-  },
-  {
-    "image_path": "emnist/emnist_05944.jpg",
-    "text": "8"
-  },
-  {
-    "image_path": "emnist/emnist_05945.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05946.jpg",
-    "text": "G"
-  },
-  {
-    "image_path": "emnist/emnist_05947.jpg",
-    "text": "d"
-  },
-  {
-    "image_path": "emnist/emnist_05948.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05949.jpg",
-    "text": "3"
-  },
-  {
-    "image_path": "emnist/emnist_05950.jpg",
-    "text": "9"
-  },
-  {
-    "image_path": "emnist/emnist_05951.jpg",
-    "text": "5"
-  },
-  {
-    "image_path": "emnist/emnist_05952.jpg",
-    "text": "C"
-  },
-  {
-    "image_path": "emnist/emnist_05953.jpg",
-    "text": "J"
-  },
-  {
-    "image_path": "emnist/emnist_05954.jpg",
-    "text": "F"
-  },
-  {
-    "image_path": "emnist/emnist_05955.jpg",
-    "text": "e"
-  },
-  {
-    "image_path": "emnist/emnist_05956.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05957.jpg",
-    "text": "4"
-  },
-  {
-    "image_path": "emnist/emnist_05958.jpg",
-    "text": "0"
-  },
-  {
-    "image_path": "emnist/emnist_05959.jpg",
-    "text": "d"
-  },
-  {
-    "image_path": "emnist/emnist_05960.jpg",
-    "text": "1"
-  },
-  {
-    "image_path": "emnist/emnist_05961.jpg",
+    "image_path": "emnist/emnist_05884.jpg",
     "text": "A"
   },
   {
-    "image_path": "emnist/emnist_05962.jpg",
-    "text": "d"
+    "image_path": "emnist/emnist_05885.jpg",
+    "text": "S"
   },
   {
-    "image_path": "emnist/emnist_05963.jpg",
-    "text": "w"
-  },
-  {
-    "image_path": "emnist/emnist_05964.jpg",
-    "text": "a"
-  },
-  {
-    "image_path": "emnist/emnist_05965.jpg",
-    "text": "O"
-  },
-  {
-    "image_path": "emnist/emnist_05966.jpg",
-    "text": "F"
-  },
-  {
-    "image_path": "emnist/emnist_05967.jpg",
-    "text": "n"
-  },
-  {
-    "image_path": "emnist/emnist_05968.jpg",
+    "image_path": "emnist/emnist_05886.jpg",
     "text": "r"
   },
   {
-    "image_path": "emnist/emnist_05969.jpg",
+    "image_path": "emnist/emnist_05887.jpg",
+    "text": "V"
+  },
+  {
+    "image_path": "emnist/emnist_05888.jpg",
+    "text": "Q"
+  },
+  {
+    "image_path": "emnist/emnist_05889.jpg",
+    "text": "f"
+  },
+  {
+    "image_path": "emnist/emnist_05890.jpg",
+    "text": "4"
+  },
+  {
+    "image_path": "emnist/emnist_05891.jpg",
+    "text": "T"
+  },
+  {
+    "image_path": "emnist/emnist_05892.jpg",
+    "text": "9"
+  },
+  {
+    "image_path": "emnist/emnist_05893.jpg",
+    "text": "J"
+  },
+  {
+    "image_path": "emnist/emnist_05894.jpg",
+    "text": "J"
+  },
+  {
+    "image_path": "emnist/emnist_05895.jpg",
+    "text": "C"
+  },
+  {
+    "image_path": "emnist/emnist_05896.jpg",
+    "text": "J"
+  },
+  {
+    "image_path": "emnist/emnist_05897.jpg",
+    "text": "W"
+  },
+  {
+    "image_path": "emnist/emnist_05898.jpg",
+    "text": "X"
+  },
+  {
+    "image_path": "emnist/emnist_05899.jpg",
+    "text": "5"
+  },
+  {
+    "image_path": "emnist/emnist_05900.jpg",
+    "text": "B"
+  },
+  {
+    "image_path": "emnist/emnist_05901.jpg",
+    "text": "a"
+  },
+  {
+    "image_path": "emnist/emnist_05902.jpg",
+    "text": "O"
+  },
+  {
+    "image_path": "emnist/emnist_05903.jpg",
+    "text": "S"
+  },
+  {
+    "image_path": "emnist/emnist_05904.jpg",
+    "text": "Q"
+  },
+  {
+    "image_path": "emnist/emnist_05905.jpg",
+    "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05906.jpg",
+    "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05907.jpg",
+    "text": "E"
+  },
+  {
+    "image_path": "emnist/emnist_05908.jpg",
+    "text": "q"
+  },
+  {
+    "image_path": "emnist/emnist_05909.jpg",
+    "text": "h"
+  },
+  {
+    "image_path": "emnist/emnist_05910.jpg",
+    "text": "n"
+  },
+  {
+    "image_path": "emnist/emnist_05911.jpg",
+    "text": "P"
+  },
+  {
+    "image_path": "emnist/emnist_05912.jpg",
+    "text": "A"
+  },
+  {
+    "image_path": "emnist/emnist_05913.jpg",
+    "text": "5"
+  },
+  {
+    "image_path": "emnist/emnist_05914.jpg",
     "text": "2"
   },
   {
-    "image_path": "emnist/emnist_05970.jpg",
-    "text": "2"
+    "image_path": "emnist/emnist_05915.jpg",
+    "text": "R"
   },
   {
-    "image_path": "emnist/emnist_05971.jpg",
-    "text": "t"
+    "image_path": "emnist/emnist_05916.jpg",
+    "text": "r"
   },
   {
-    "image_path": "emnist/emnist_05972.jpg",
+    "image_path": "emnist/emnist_05917.jpg",
+    "text": "V"
+  },
+  {
+    "image_path": "emnist/emnist_05918.jpg",
+    "text": "g"
+  },
+  {
+    "image_path": "emnist/emnist_05919.jpg",
+    "text": "5"
+  },
+  {
+    "image_path": "emnist/emnist_05920.jpg",
+    "text": "r"
+  },
+  {
+    "image_path": "emnist/emnist_05921.jpg",
+    "text": "Z"
+  },
+  {
+    "image_path": "emnist/emnist_05922.jpg",
+    "text": "Q"
+  },
+  {
+    "image_path": "emnist/emnist_05923.jpg",
+    "text": "e"
+  },
+  {
+    "image_path": "emnist/emnist_05924.jpg",
+    "text": "J"
+  },
+  {
+    "image_path": "emnist/emnist_05925.jpg",
+    "text": "O"
+  },
+  {
+    "image_path": "emnist/emnist_05926.jpg",
+    "text": "C"
+  },
+  {
+    "image_path": "emnist/emnist_05927.jpg",
     "text": "7"
   },
   {
-    "image_path": "emnist/emnist_05973.jpg",
+    "image_path": "emnist/emnist_05928.jpg",
+    "text": "f"
+  },
+  {
+    "image_path": "emnist/emnist_05929.jpg",
+    "text": "d"
+  },
+  {
+    "image_path": "emnist/emnist_05930.jpg",
+    "text": "H"
+  },
+  {
+    "image_path": "emnist/emnist_05931.jpg",
+    "text": "h"
+  },
+  {
+    "image_path": "emnist/emnist_05932.jpg",
+    "text": "V"
+  },
+  {
+    "image_path": "emnist/emnist_05933.jpg",
+    "text": "I"
+  },
+  {
+    "image_path": "emnist/emnist_05934.jpg",
+    "text": "S"
+  },
+  {
+    "image_path": "emnist/emnist_05935.jpg",
+    "text": "K"
+  },
+  {
+    "image_path": "emnist/emnist_05936.jpg",
+    "text": "B"
+  },
+  {
+    "image_path": "emnist/emnist_05937.jpg",
+    "text": "g"
+  },
+  {
+    "image_path": "emnist/emnist_05938.jpg",
+    "text": "H"
+  },
+  {
+    "image_path": "emnist/emnist_05939.jpg",
+    "text": "N"
+  },
+  {
+    "image_path": "emnist/emnist_05940.jpg",
+    "text": "H"
+  },
+  {
+    "image_path": "emnist/emnist_05941.jpg",
+    "text": "R"
+  },
+  {
+    "image_path": "emnist/emnist_05942.jpg",
+    "text": "h"
+  },
+  {
+    "image_path": "emnist/emnist_05943.jpg",
+    "text": "6"
+  },
+  {
+    "image_path": "emnist/emnist_05944.jpg",
+    "text": "h"
+  },
+  {
+    "image_path": "emnist/emnist_05945.jpg",
+    "text": "1"
+  },
+  {
+    "image_path": "emnist/emnist_05946.jpg",
+    "text": "X"
+  },
+  {
+    "image_path": "emnist/emnist_05947.jpg",
+    "text": "a"
+  },
+  {
+    "image_path": "emnist/emnist_05948.jpg",
+    "text": "R"
+  },
+  {
+    "image_path": "emnist/emnist_05949.jpg",
+    "text": "r"
+  },
+  {
+    "image_path": "emnist/emnist_05950.jpg",
+    "text": "b"
+  },
+  {
+    "image_path": "emnist/emnist_05951.jpg",
+    "text": "8"
+  },
+  {
+    "image_path": "emnist/emnist_05952.jpg",
+    "text": "J"
+  },
+  {
+    "image_path": "emnist/emnist_05953.jpg",
+    "text": "B"
+  },
+  {
+    "image_path": "emnist/emnist_05954.jpg",
+    "text": "X"
+  },
+  {
+    "image_path": "emnist/emnist_05955.jpg",
+    "text": "F"
+  },
+  {
+    "image_path": "emnist/emnist_05956.jpg",
+    "text": "G"
+  },
+  {
+    "image_path": "emnist/emnist_05957.jpg",
+    "text": "g"
+  },
+  {
+    "image_path": "emnist/emnist_05958.jpg",
+    "text": "W"
+  },
+  {
+    "image_path": "emnist/emnist_05959.jpg",
     "text": "3"
   },
   {
-    "image_path": "emnist/emnist_05974.jpg",
+    "image_path": "emnist/emnist_05960.jpg",
+    "text": "E"
+  },
+  {
+    "image_path": "emnist/emnist_05961.jpg",
+    "text": "3"
+  },
+  {
+    "image_path": "emnist/emnist_05962.jpg",
+    "text": "T"
+  },
+  {
+    "image_path": "emnist/emnist_05963.jpg",
+    "text": "5"
+  },
+  {
+    "image_path": "emnist/emnist_05964.jpg",
+    "text": "b"
+  },
+  {
+    "image_path": "emnist/emnist_05965.jpg",
+    "text": "f"
+  },
+  {
+    "image_path": "emnist/emnist_05966.jpg",
+    "text": "f"
+  },
+  {
+    "image_path": "emnist/emnist_05967.jpg",
+    "text": "T"
+  },
+  {
+    "image_path": "emnist/emnist_05968.jpg",
+    "text": "0"
+  },
+  {
+    "image_path": "emnist/emnist_05969.jpg",
+    "text": "V"
+  },
+  {
+    "image_path": "emnist/emnist_05970.jpg",
     "text": "8"
+  },
+  {
+    "image_path": "emnist/emnist_05971.jpg",
+    "text": "J"
+  },
+  {
+    "image_path": "emnist/emnist_05972.jpg",
+    "text": "M"
+  },
+  {
+    "image_path": "emnist/emnist_05973.jpg",
+    "text": "2"
+  },
+  {
+    "image_path": "emnist/emnist_05974.jpg",
+    "text": "6"
   },
   {
     "image_path": "emnist/emnist_05975.jpg",
@@ -3905,11 +3905,11 @@
   },
   {
     "image_path": "emnist/emnist_05976.jpg",
-    "text": "6"
+    "text": "V"
   },
   {
     "image_path": "emnist/emnist_05977.jpg",
-    "text": "O"
+    "text": "H"
   },
   {
     "image_path": "emnist/emnist_05978.jpg",
@@ -3917,67 +3917,67 @@
   },
   {
     "image_path": "emnist/emnist_05979.jpg",
-    "text": "u"
+    "text": "L"
   },
   {
     "image_path": "emnist/emnist_05980.jpg",
-    "text": "x"
+    "text": "Z"
   },
   {
     "image_path": "emnist/emnist_05981.jpg",
-    "text": "I"
+    "text": "Y"
   },
   {
     "image_path": "emnist/emnist_05982.jpg",
-    "text": "5"
+    "text": "Y"
   },
   {
     "image_path": "emnist/emnist_05983.jpg",
-    "text": "9"
+    "text": "e"
   },
   {
     "image_path": "emnist/emnist_05984.jpg",
-    "text": "1"
+    "text": "O"
   },
   {
     "image_path": "emnist/emnist_05985.jpg",
-    "text": "2"
+    "text": "f"
   },
   {
     "image_path": "emnist/emnist_05986.jpg",
-    "text": "r"
+    "text": "q"
   },
   {
     "image_path": "emnist/emnist_05987.jpg",
-    "text": "8"
+    "text": "F"
   },
   {
     "image_path": "emnist/emnist_05988.jpg",
-    "text": "4"
+    "text": "5"
   },
   {
     "image_path": "emnist/emnist_05989.jpg",
-    "text": "l"
+    "text": "K"
   },
   {
     "image_path": "emnist/emnist_05990.jpg",
-    "text": "O"
+    "text": "J"
   },
   {
     "image_path": "emnist/emnist_05991.jpg",
-    "text": "O"
+    "text": "f"
   },
   {
     "image_path": "emnist/emnist_05992.jpg",
-    "text": "3"
+    "text": "t"
   },
   {
     "image_path": "emnist/emnist_05993.jpg",
-    "text": "6"
+    "text": "A"
   },
   {
     "image_path": "emnist/emnist_05994.jpg",
-    "text": "9"
+    "text": "f"
   },
   {
     "image_path": "emnist/emnist_05995.jpg",
@@ -3985,18 +3985,18 @@
   },
   {
     "image_path": "emnist/emnist_05996.jpg",
-    "text": "i"
+    "text": "R"
   },
   {
     "image_path": "emnist/emnist_05997.jpg",
-    "text": "3"
+    "text": "W"
   },
   {
     "image_path": "emnist/emnist_05998.jpg",
-    "text": "9"
+    "text": "U"
   },
   {
     "image_path": "emnist/emnist_05999.jpg",
-    "text": "2"
+    "text": "a"
   }
 ]

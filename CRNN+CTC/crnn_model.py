@@ -8,7 +8,8 @@ import torch.nn as nn
 
 class CRNN_CivilRegistry(nn.Module):
 
-    def __init__(self, img_height=64, num_chars=96, hidden_size=128, num_lstm_layers=1):
+    def __init__(self, img_height=64, num_chars=96, hidden_size=128, num_lstm_layers=1,
+                 dropout=0.3):
         super().__init__()
 
         # CNN — width reductions for 512px input:
@@ -42,6 +43,10 @@ class CRNN_CivilRegistry(nn.Module):
             bidirectional=True,
             batch_first=False,
         )
+        # Dropout before FC — prevents overfitting on small datasets.
+        # Applied after BiLSTM output, before character projection.
+        # p=0.3 is standard for CRNN OCR models (disabled at inference via model.eval()).
+        self.dropout = nn.Dropout(p=dropout)
         self.fc = nn.Linear(hidden_size * 2, num_chars)
 
     def forward(self, x):
@@ -49,7 +54,7 @@ class CRNN_CivilRegistry(nn.Module):
         B, C, h, w = f.size()
         f = f.permute(3, 0, 1, 2).reshape(w, B, C * h)
         f, _ = self.rnn(f)
-        return self.fc(f)
+        return self.fc(self.dropout(f))
 
 
 class CRNN_Ensemble(nn.Module):
@@ -58,7 +63,12 @@ class CRNN_Ensemble(nn.Module):
         self.models = nn.ModuleList([CRNN_CivilRegistry(**kwargs) for _ in range(num_models)])
 
     def forward(self, x):
-        return torch.mean(torch.stack([m(x) for m in self.models]), dim=0)
+        # Apply softmax to each model's logits before averaging.
+        # Averaging raw logits is mathematically incorrect for ensembles —
+        # softmax converts logits to probabilities, then averaging those
+        # probabilities gives a proper ensemble prediction.
+        probs = [torch.nn.functional.softmax(m(x), dim=2) for m in self.models]
+        return torch.mean(torch.stack(probs), dim=0)
 
 
 def get_crnn_model(model_type='standard', **kwargs):
@@ -94,4 +104,5 @@ if __name__ == "__main__":
     out = model(x)
     params = sum(p.numel() for p in model.parameters())
     print(f"Output: {out.shape}  seq_len={out.shape[0]}")
-    print(f"Params: {params:,}")
+    print(f"Params: {params:,}  (unchanged — dropout adds no parameters)")
+    print(f"Dropout p=0.3 active during training, disabled during model.eval()")

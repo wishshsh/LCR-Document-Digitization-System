@@ -84,7 +84,7 @@ def _detect_mode(gray: np.ndarray) -> str:
 
     Logic:
       - If >25% of pixels are dark, text is very large/zoomed → adaptive.
-      - If image size is far from training size (400x64) → adaptive.
+      - If image size is far from training size (512x64) → adaptive.
       - Otherwise → simple (matches training pipeline).
     """
     h, w  = gray.shape
@@ -171,8 +171,8 @@ class AutoNormalizer:
     Automatically picks Simple or Adaptive based on image characteristics.
 
     Examples:
-      demo.jpg  (clean 400x64 PIL)   → Simple   (matches training)
-      name1.jpg (clean 400x64 PIL)   → Simple
+      demo.jpg  (clean 512x64 PIL)   → Simple   (matches training)
+      name1.jpg (clean 512x64 PIL)   → Simple
       shane.jpg (huge zoomed text)   → Adaptive (crop then resize)
       real scan (any size/zoom)      → Adaptive
     """
@@ -248,16 +248,25 @@ class CivilRegistryOCR:
         self.model = get_crnn_model(
             model_type=self.config.get('model_type', 'standard'),
             img_height=img_height,
-            num_chars=len(self.char_to_idx),
-            hidden_size=self.config.get('hidden_size', 256),
-            num_lstm_layers=self.config.get('num_lstm_layers', 2)
+            num_chars=checkpoint['model_state_dict']['fc.weight'].shape[0],
+            hidden_size=self.config.get('hidden_size', 128),
+            num_lstm_layers=self.config.get('num_lstm_layers', 1)
         )
         self.model.load_state_dict(checkpoint['model_state_dict'])
         self.model = self.model.to(self.device)
         self.model.eval()
 
         print(f"Model loaded successfully")
-        print(f"  Val CER  : {checkpoint.get('val_cer', 0):.2f}%")
+        # Support both key names: val_loss (fine-tuned) and val_cer (synthetic baseline)
+        val_loss = checkpoint.get('val_loss', None)
+        val_cer  = checkpoint.get('val_cer',  None)
+        if val_loss is not None:
+            print(f"  Val Loss : {val_loss:.4f}  (fine-tuned checkpoint — run compare_live_cer.py for true CER)")
+        elif val_cer is not None:
+            label = "Val CER" if val_cer < 10 else "Val Loss"
+            print(f"  {label:<8} : {val_cer:.4f}")
+        else:
+            print(f"  Val CER  : N/A (run check_cer.py for true CER)")
         print(f"  Device   : {self.device}")
         print(f"  Mode     : {mode}  ({img_height}x{img_width})")
 

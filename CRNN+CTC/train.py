@@ -1,4 +1,3 @@
-
 # Training Script for CRNN+CTC Civil Registry OCR Includes CTC loss, learning rate scheduling, and model checkpointing
 
 import torch
@@ -94,7 +93,7 @@ class CRNNTrainer:
         self.optimizer = optim.Adam(
             self.model.parameters(),
             lr=config['learning_rate'],
-            weight_decay=config.get('weight_decay', 1e-5)
+            weight_decay=config.get('weight_decay', 1e-4)   # FIXED: fallback was 1e-5
         )
 
         # Warmup scheduler: ramp LR from near-zero to target over first N epochs,
@@ -402,7 +401,7 @@ def main():
         'batch_size': 32,
         'epochs': 100,
         'learning_rate': 0.0001,
-        'weight_decay': 1e-5,
+        'weight_decay': 1e-4,   # FIXED: was 1e-5 — stronger L2 regularisation to reduce overfitting
         'num_workers': 0,
         'warmup_epochs': 5,        # Ramp LR gradually for first 5 epochs
 

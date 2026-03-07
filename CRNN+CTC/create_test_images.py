@@ -3,7 +3,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 os.makedirs('test_images', exist_ok=True)
 
-def load_font(size=20):
+def load_font(size=22):   # FIXED: was 20 — must match fix_data.py FONT_SIZE=22
     """Same font loader as fix_data.py — tries multiple paths."""
     for fp in [
         'arial.ttf', 'Arial.ttf',
@@ -22,7 +22,7 @@ def create_image(text, filename):
     """Render text exactly the same way as fix_data.py training images."""
     img  = Image.new('RGB', (512, 64), color=(255, 255, 255))
     draw = ImageDraw.Draw(img)
-    font = load_font(20)
+    font = load_font(22)
 
     bbox = draw.textbbox((0, 0), text, font=font)
     x = max((512 - (bbox[2] - bbox[0])) // 2, 2)

@@ -228,7 +228,7 @@ if USE_SAVED:
             continue
         try:
             c        = torch.load(path, weights_only=False)
-            cer      = c['val_cer']
+            cer      = c.get('val_cer', c.get('val_loss', 0))
             epoch    = c['epoch']
             history  = c.get('history', {})
             wer_list = history.get('val_wer', [])
@@ -267,14 +267,14 @@ else:
             config      = c.get('config', {})
             img_h       = config.get('img_height', 64)
             img_w       = config.get('img_width', 512)
-            saved_cer   = c.get('val_cer', None)
+            saved_cer   = c.get('val_cer', c.get('val_loss', None))
 
             model = get_crnn_model(
                 model_type=config.get('model_type', 'standard'),
                 img_height=img_h,
                 num_chars=c['model_state_dict']['fc.weight'].shape[0],
-                hidden_size=config.get('hidden_size', 256),
-                num_lstm_layers=config.get('num_lstm_layers', 2)
+                hidden_size=config.get('hidden_size', 128),       # FIXED: was 256
+                num_lstm_layers=config.get('num_lstm_layers', 1)  # FIXED: was 2
             ).to(device)
             model.load_state_dict(c['model_state_dict'])
 

@@ -336,13 +336,13 @@ def demo_inference():
 
     print("\n1. Single Prediction:")
     try:
-        result = ocr.predict('test_images/demo.jpg')
+        result = ocr.predict('test_images/date1.jpg')
         print(f"   Recognized text: {result}")
     except Exception as e:
         print(f"   Error: {e}")
 
     print("\n2. Batch Prediction:")
-    batch_results = ocr.predict_batch([
+    '''batch_results = ocr.predict_batch([
         'test_images/name1.jpg',
         'test_images/shane.jpg',
         'test_images/date1.jpg',
@@ -350,7 +350,7 @@ def demo_inference():
     ])
     for r in batch_results:
         status = r['text'] if r['success'] else f"ERROR - {r['error']}"
-        print(f"   {r['image_path']}: {status}")
+        print(f"   {r['image_path']}: {status}")'''
 
     print("\n3. Form Processing:")
     try:

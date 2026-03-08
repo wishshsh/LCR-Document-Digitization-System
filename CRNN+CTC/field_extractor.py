@@ -18,14 +18,15 @@ import json
 import cv2
 import numpy as np
 from pathlib import Path
-
 import torch
+from dotenv import load_dotenv
 
 # ─────────────────────────────────────────────
-#  POPPLER PATH — adjust if needed
-#  Set to None if poppler is in your system PATH
+#  POPPLER PATH — loaded from .env file
+#  Each team member sets their own path in .env
 # ─────────────────────────────────────────────
-POPPLER_PATH = r"C:\Users\irish\OneDrive\Desktop\poppler-25.12.0\Library\bin"
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+POPPLER_PATH = os.getenv("POPPLER_PATH", None)
 
 # ─────────────────────────────────────────────
 #  DEFAULT CHECKPOINT

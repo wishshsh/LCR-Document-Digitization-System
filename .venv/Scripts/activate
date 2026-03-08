@@ -35,7 +35,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="c:\GitHub\Local-Civil-Registry-Document-Digitization-System\.venv"
+VIRTUAL_ENV="C:\GitHub\LCR-Document-Digitization-System\.venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

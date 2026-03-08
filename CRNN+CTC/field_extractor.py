@@ -20,12 +20,15 @@ import numpy as np
 from pathlib import Path
 
 import torch
+from dotenv import load_dotenv
 
 # ─────────────────────────────────────────────
-#  POPPLER PATH — adjust if needed
-#  Set to None if poppler is in your system PATH
+#  POPPLER PATH — loaded from .env file
+#  Each team member creates their own .env file
+#  in the project root with their own path:
+#  POPPLER_PATH=C:\your\path\to\poppler\Library\bin
 # ─────────────────────────────────────────────
-POPPLER_PATH = r"C:\poppler-25.12.0\Library\bin"
+POPPLER_PATH = r"C:\Program Files\poppler-25.12.0\Library\bin"
 
 # ─────────────────────────────────────────────
 #  DEFAULT CHECKPOINT

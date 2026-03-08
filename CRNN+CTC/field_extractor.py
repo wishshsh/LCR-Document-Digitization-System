@@ -25,7 +25,7 @@ import torch
 #  POPPLER PATH — adjust if needed
 #  Set to None if poppler is in your system PATH
 # ─────────────────────────────────────────────
-POPPLER_PATH = r"C:\Users\irish\OneDrive\Desktop\poppler-25.12.0\Library\bin"
+POPPLER_PATH = r"C:\poppler-25.12.0\Library\bin"
 
 # ─────────────────────────────────────────────
 #  DEFAULT CHECKPOINT
@@ -44,138 +44,127 @@ DEFAULT_CHECKPOINT = "checkpoints/best_model.pth"
 
 BIRTH_FIELDS = {
     # ── Header ────────────────────────────────────────────────
-    "province":               (0.08,  0.060, 0.48,  0.082),
-    "registry_no":            (0.62,  0.060, 0.95,  0.082),
-    "city_municipality":      (0.18,  0.082, 0.48,  0.102),
+    "province":               (0.08,  0.096, 0.48,  0.114),
+    "registry_no":            (0.62,  0.096, 0.95,  0.114),
+    "city_municipality":      (0.18,  0.116, 0.48,  0.132),
 
     # ── Item 1: Child Name ─────────────────────────────────────
-    "child_first_name":       (0.14,  0.108, 0.42,  0.132),
-    "child_middle_name":      (0.42,  0.108, 0.65,  0.132),
-    "child_last_name":        (0.65,  0.108, 0.95,  0.132),
+    "child_first_name":       (0.14,  0.152, 0.42,  0.170),
+    "child_middle_name":      (0.42,  0.152, 0.65,  0.170),
+    "child_last_name":        (0.65,  0.152, 0.95,  0.170),
 
     # ── Items 2-3: Sex / Date of Birth ─────────────────────────
-    "sex":                    (0.15,  0.138, 0.30,  0.162),
-    "dob_day":                (0.42,  0.138, 0.52,  0.162),
-    "dob_month":              (0.52,  0.138, 0.72,  0.162),
-    "dob_year":               (0.72,  0.138, 0.95,  0.162),
+    "sex":                    (0.15,  0.178, 0.30,  0.196),
+    "dob_day":                (0.42,  0.178, 0.52,  0.196),
+    "dob_month":              (0.52,  0.178, 0.72,  0.196),
+    "dob_year":               (0.72,  0.178, 0.95,  0.196),
 
     # ── Item 4: Place of Birth ─────────────────────────────────
-    "place_birth_hospital":   (0.22,  0.165, 0.50,  0.190),
-    "place_birth_city":       (0.50,  0.165, 0.68,  0.190),
-    "place_birth_province":   (0.68,  0.165, 0.88,  0.190),
+    "place_birth_hospital":   (0.22,  0.202, 0.50,  0.220),
+    "place_birth_city":       (0.50,  0.202, 0.68,  0.220),
+    "place_birth_province":   (0.68,  0.202, 0.88,  0.220),
 
     # ── Items 5a / 6: Type of Birth / Weight ──────────────────
-    "type_of_birth":          (0.15,  0.192, 0.32,  0.215),
-    "weight_at_birth":        (0.74,  0.200, 0.95,  0.220),
+    "type_of_birth":          (0.15,  0.228, 0.32,  0.246),
+    "weight_at_birth":        (0.74,  0.228, 0.95,  0.246),
 
     # ── MOTHER section ─────────────────────────────────────────
-    # Item 7: Maiden Name (First / Middle / Last)
-    "mother_first_name":      (0.14,  0.278, 0.40,  0.300),
-    "mother_middle_name":     (0.40,  0.278, 0.63,  0.300),
-    "mother_last_name":       (0.63,  0.278, 0.95,  0.300),
+    "mother_first_name":      (0.14,  0.308, 0.40,  0.326),
+    "mother_middle_name":     (0.40,  0.308, 0.63,  0.326),
+    "mother_last_name":       (0.63,  0.308, 0.95,  0.326),
 
-    # Item 8: Citizenship   Item 9: Religion
-    "mother_citizenship":     (0.15,  0.302, 0.38,  0.325),
-    "mother_religion":        (0.48,  0.302, 0.95,  0.325),
+    "mother_citizenship":     (0.15,  0.332, 0.38,  0.350),
+    "mother_religion":        (0.48,  0.332, 0.95,  0.350),
 
-    # Item 11: Occupation   Item 12: Age at birth
-    "mother_occupation":      (0.42,  0.348, 0.70,  0.370),
-    "mother_age_at_birth":    (0.83,  0.348, 0.95,  0.370),
+    "mother_occupation":      (0.42,  0.372, 0.70,  0.390),
+    "mother_age_at_birth":    (0.83,  0.372, 0.95,  0.390),
 
-    # Item 13: Residence (House / City / Province)
-    "mother_residence_house":    (0.22, 0.375, 0.44, 0.398),
-    "mother_residence_city":     (0.44, 0.375, 0.64, 0.398),
-    "mother_residence_province": (0.64, 0.375, 0.80, 0.398),
+    "mother_residence_house":    (0.22, 0.398, 0.44, 0.416),
+    "mother_residence_city":     (0.44, 0.398, 0.64, 0.416),
+    "mother_residence_province": (0.64, 0.398, 0.80, 0.416),
 
     # ── FATHER section ─────────────────────────────────────────
-    # Item 14: Name (First / Middle / Last)
-    "father_first_name":      (0.14,  0.468, 0.40,  0.492),
-    "father_middle_name":     (0.40,  0.468, 0.63,  0.492),
-    "father_last_name":       (0.63,  0.468, 0.95,  0.492),
+    "father_first_name":      (0.14,  0.462, 0.40,  0.480),
+    "father_middle_name":     (0.40,  0.462, 0.63,  0.480),
+    "father_last_name":       (0.63,  0.462, 0.95,  0.480),
 
-    # Item 15: Citizenship   Item 16: Religion
-    "father_citizenship":     (0.15,  0.495, 0.33,  0.518),
-    "father_religion":        (0.33,  0.495, 0.58,  0.518),
+    "father_citizenship":     (0.15,  0.488, 0.33,  0.506),
+    "father_religion":        (0.33,  0.488, 0.58,  0.506),
 
-    # Item 17: Occupation   Item 18: Age
-    "father_occupation":      (0.42,  0.520, 0.70,  0.542),
-    "father_age_at_birth":    (0.83,  0.520, 0.95,  0.542),
+    "father_occupation":      (0.42,  0.512, 0.70,  0.530),
+    "father_age_at_birth":    (0.83,  0.512, 0.95,  0.530),
 
-    # Item 19: Residence (House / City / Province)
-    "father_residence_house":    (0.22, 0.545, 0.44, 0.568),
-    "father_residence_city":     (0.44, 0.545, 0.64, 0.568),
-    "father_residence_province": (0.64, 0.545, 0.80, 0.568),
+    "father_residence_house":    (0.22, 0.538, 0.44, 0.556),
+    "father_residence_city":     (0.44, 0.538, 0.64, 0.556),
+    "father_residence_province": (0.64, 0.538, 0.80, 0.556),
 
     # ── Item 20: Marriage of Parents ───────────────────────────
-    "parents_marriage_month":    (0.14, 0.608, 0.26, 0.628),
-    "parents_marriage_day":      (0.26, 0.608, 0.36, 0.628),
-    "parents_marriage_year":     (0.36, 0.608, 0.46, 0.628),
-    "parents_marriage_city":     (0.52, 0.608, 0.68, 0.628),
-    "parents_marriage_province": (0.68, 0.608, 0.82, 0.628),
+    "parents_marriage_month":    (0.14, 0.580, 0.26, 0.596),
+    "parents_marriage_day":      (0.26, 0.580, 0.36, 0.596),
+    "parents_marriage_year":     (0.36, 0.580, 0.46, 0.596),
+    "parents_marriage_city":     (0.52, 0.580, 0.68, 0.596),
+    "parents_marriage_province": (0.68, 0.580, 0.82, 0.596),
 
     # ── Item 22: Informant ─────────────────────────────────────
-    "informant_name":         (0.04,  0.748, 0.42,  0.768),
-    "informant_date":         (0.04,  0.790, 0.22,  0.808),
+    "informant_name":         (0.04,  0.750, 0.42,  0.766),
+    "informant_date":         (0.04,  0.786, 0.22,  0.802),
 }
 
 
 DEATH_FIELDS = {
     # ── Header ────────────────────────────────────────────────
-    "province":               (0.10,  0.127, 0.48,  0.150),
-    "registry_no":            (0.58,  0.116, 0.78,  0.145),
-    "city_municipality":      (0.18,  0.150, 0.50,  0.172),
+    "province":               (0.10,  0.148, 0.48,  0.166),
+    "registry_no":            (0.58,  0.140, 0.78,  0.160),
+    "city_municipality":      (0.18,  0.168, 0.50,  0.184),
 
     # ── Item 1: Name (First / Middle / Last) ──────────────────
-    "deceased_first_name":    (0.12,  0.172, 0.36,  0.200),
-    "deceased_middle_name":   (0.36,  0.172, 0.58,  0.200),
-    "deceased_last_name":     (0.58,  0.172, 0.78,  0.200),
+    "deceased_first_name":    (0.12,  0.188, 0.36,  0.206),
+    "deceased_middle_name":   (0.36,  0.188, 0.58,  0.206),
+    "deceased_last_name":     (0.58,  0.188, 0.78,  0.206),
 
     # ── Items 2-4: Sex / Religion / Age ───────────────────────
-    "sex":                    (0.08,  0.202, 0.18,  0.228),
-    "religion":               (0.22,  0.202, 0.42,  0.228),
-    "age_years":              (0.43,  0.202, 0.52,  0.228),
+    "sex":                    (0.08,  0.210, 0.18,  0.232),
+    "religion":               (0.22,  0.210, 0.42,  0.232),
+    "age_years":              (0.43,  0.210, 0.52,  0.232),
 
     # ── Item 5: Place of Death ────────────────────────────────
-    "place_death_hospital":   (0.22,  0.228, 0.48,  0.255),
-    "place_death_city":       (0.48,  0.228, 0.63,  0.255),
-    "place_death_province":   (0.63,  0.228, 0.78,  0.255),
+    "place_death_hospital":   (0.22,  0.238, 0.48,  0.258),
+    "place_death_city":       (0.48,  0.238, 0.63,  0.258),
+    "place_death_province":   (0.63,  0.238, 0.78,  0.258),
 
     # ── Item 6: Date of Death   Item 7: Citizenship ───────────
-    "dod_day":                (0.20,  0.258, 0.30,  0.282),
-    "dod_month":              (0.30,  0.258, 0.46,  0.282),
-    "dod_year":               (0.46,  0.258, 0.60,  0.282),
-    "citizenship":            (0.62,  0.258, 0.78,  0.282),
+    "dod_day":                (0.20,  0.262, 0.30,  0.282),
+    "dod_month":              (0.30,  0.262, 0.46,  0.282),
+    "dod_year":               (0.46,  0.262, 0.60,  0.282),
+    "citizenship":            (0.62,  0.262, 0.78,  0.282),
 
     # ── Item 8: Residence ─────────────────────────────────────
-    "residence_house":        (0.22,  0.285, 0.46,  0.308),
-    "residence_city":         (0.46,  0.285, 0.63,  0.308),
-    "residence_province":     (0.63,  0.285, 0.78,  0.308),
+    "residence_house":        (0.22,  0.288, 0.46,  0.308),
+    "residence_city":         (0.46,  0.288, 0.63,  0.308),
+    "residence_province":     (0.63,  0.288, 0.78,  0.308),
 
     # ── Items 9-10: Civil Status / Occupation ─────────────────
-    "civil_status":           (0.04,  0.315, 0.32,  0.348),
-    "occupation":             (0.50,  0.315, 0.78,  0.348),
+    "civil_status":           (0.04,  0.318, 0.32,  0.352),
+    "occupation":             (0.50,  0.318, 0.78,  0.352),
 
     # ── Item 17: Causes of Death ──────────────────────────────
-    # Boxes sit on the actual fill underlines below each label (a, b, c, II)
-    "cause_immediate":        (0.25,  0.411, 0.63,  0.420),
-    "cause_antecedent":       (0.25,  0.431, 0.63,  0.441),
-    "cause_underlying":       (0.25,  0.451, 0.63,  0.460),
-    "cause_other":            (0.25,  0.471, 0.63,  0.481),
+    "cause_immediate":        (0.25,  0.422, 0.63,  0.432),
+    "cause_antecedent":       (0.25,  0.444, 0.63,  0.454),
+    "cause_underlying":       (0.25,  0.464, 0.63,  0.474),
+    "cause_other":            (0.25,  0.484, 0.63,  0.494),
 
     # ── Item 25: Informant ────────────────────────────────────
-    # Left col:  Signature / Name in Print / Relationship
-    # Right col: Address   / (2nd line)    / Date
-    "informant_name":         (0.04,  0.823, 0.38,  0.829),
-    "informant_address":      (0.42,  0.817, 0.78,  0.823),
-    "informant_date":         (0.42,  0.830, 0.62,  0.836),
+    "informant_name":         (0.04,  0.824, 0.38,  0.832),
+    "informant_address":      (0.42,  0.818, 0.78,  0.826),
+    "informant_date":         (0.42,  0.832, 0.62,  0.840),
 }
 
 
 MARRIAGE_FIELDS = {
     # ── Header ────────────────────────────────────────────────
-    "province":               (0.08,  0.076, 0.44,  0.098),
-    "registry_no":            (0.62,  0.076, 0.96,  0.098),
-    "city_municipality":      (0.18,  0.098, 0.46,  0.118),
+    "province":               (0.08,  0.096, 0.44,  0.114),
+    "registry_no":            (0.62,  0.096, 0.96,  0.114),
+    "city_municipality":      (0.18,  0.116, 0.46,  0.133),
 
     # ── Item 1: Names of Contracting Parties ──────────────────
     # First names (HUSBAND left half / WIFE right half)
@@ -247,6 +236,139 @@ MARRIAGE_FIELDS = {
     "date_marriage_day":      (0.14,  0.643, 0.24,  0.662),
     "date_marriage_month":    (0.24,  0.643, 0.38,  0.662),
     "date_marriage_year":     (0.38,  0.643, 0.48,  0.662),
+}
+
+
+MARRIAGE_LICENSE_FIELDS = {
+    # ── Header ────────────────────────────────────────────────
+    # Calibrated against Form 90 (Municipal Form No. 2, Revised January 2007)
+    # at 200 DPI. The form has a large boilerplate text block (~16–25% height)
+    # for the "May I apply for a license..." paragraph before Item 1 begins.
+    "province":                     (0.10,  0.108, 0.44,  0.122),
+    "registry_no":                  (0.60,  0.108, 0.96,  0.122),
+    "city_municipality":            (0.22,  0.124, 0.46,  0.138),
+    "received_by":                  (0.10,  0.140, 0.44,  0.154),
+    "date_of_receipt":              (0.10,  0.156, 0.44,  0.170),
+    "marriage_license_no":          (0.52,  0.140, 0.96,  0.154),
+    "date_of_issuance":             (0.52,  0.156, 0.96,  0.170),
+
+    # ── Item 1: Name of Applicant ─────────────────────────────
+    # Rows: (First) / (Middle) / (Last) — below boilerplate block at ~26%
+    "groom_first_name":             (0.04,  0.262, 0.44,  0.278),
+    "groom_middle_name":            (0.04,  0.280, 0.44,  0.296),
+    "groom_last_name":              (0.04,  0.298, 0.44,  0.314),
+    "bride_first_name":             (0.52,  0.262, 0.96,  0.278),
+    "bride_middle_name":            (0.52,  0.280, 0.96,  0.296),
+    "bride_last_name":              (0.52,  0.298, 0.96,  0.314),
+
+    # ── Item 2: Date of Birth / Age ───────────────────────────
+    "groom_dob_day":                (0.04,  0.318, 0.14,  0.338),
+    "groom_dob_month":              (0.14,  0.318, 0.26,  0.338),
+    "groom_dob_year":               (0.26,  0.318, 0.36,  0.338),
+    "groom_age":                    (0.36,  0.318, 0.44,  0.338),
+    "bride_dob_day":                (0.52,  0.318, 0.62,  0.338),
+    "bride_dob_month":              (0.62,  0.318, 0.74,  0.338),
+    "bride_dob_year":               (0.74,  0.318, 0.84,  0.338),
+    "bride_age":                    (0.84,  0.318, 0.96,  0.338),
+
+    # ── Item 3: Place of Birth ────────────────────────────────
+    "groom_place_birth_city":       (0.04,  0.342, 0.20,  0.360),
+    "groom_place_birth_province":   (0.20,  0.342, 0.34,  0.360),
+    "groom_place_birth_country":    (0.34,  0.342, 0.44,  0.360),
+    "bride_place_birth_city":       (0.52,  0.342, 0.68,  0.360),
+    "bride_place_birth_province":   (0.68,  0.342, 0.82,  0.360),
+    "bride_place_birth_country":    (0.82,  0.342, 0.96,  0.360),
+
+    # ── Item 4: Sex / Citizenship ─────────────────────────────
+    "groom_sex":                    (0.04,  0.365, 0.18,  0.383),
+    "groom_citizenship":            (0.18,  0.365, 0.44,  0.383),
+    "bride_sex":                    (0.52,  0.365, 0.66,  0.383),
+    "bride_citizenship":            (0.66,  0.365, 0.96,  0.383),
+
+    # ── Item 5: Residence ─────────────────────────────────────
+    "groom_residence":              (0.04,  0.388, 0.44,  0.408),
+    "bride_residence":              (0.52,  0.388, 0.96,  0.408),
+
+    # ── Item 6: Religion / Religious Sect ─────────────────────
+    "groom_religion":               (0.04,  0.412, 0.44,  0.430),
+    "bride_religion":               (0.52,  0.412, 0.96,  0.430),
+
+    # ── Item 7: Civil Status ──────────────────────────────────
+    "groom_civil_status":           (0.04,  0.435, 0.44,  0.453),
+    "bride_civil_status":           (0.52,  0.435, 0.96,  0.453),
+
+    # ── Item 8: IF PREVIOUSLY MARRIED — how dissolved ─────────
+    # (free-text answer line, not sub-items)
+    "groom_how_dissolved":          (0.04,  0.458, 0.44,  0.475),
+    "bride_how_dissolved":          (0.52,  0.458, 0.96,  0.475),
+
+    # ── Item 9: Place where dissolved ────────────────────────
+    "groom_dissolution_city":       (0.04,  0.498, 0.18,  0.516),
+    "groom_dissolution_province":   (0.18,  0.498, 0.32,  0.516),
+    "groom_dissolution_country":    (0.32,  0.498, 0.44,  0.516),
+    "bride_dissolution_city":       (0.52,  0.498, 0.66,  0.516),
+    "bride_dissolution_province":   (0.66,  0.498, 0.80,  0.516),
+    "bride_dissolution_country":    (0.80,  0.498, 0.96,  0.516),
+
+    # ── Item 10: Date when dissolved ─────────────────────────
+    "groom_dissolution_day":        (0.04,  0.520, 0.14,  0.538),
+    "groom_dissolution_month":      (0.14,  0.520, 0.26,  0.538),
+    "groom_dissolution_year":       (0.26,  0.520, 0.36,  0.538),
+    "bride_dissolution_day":        (0.52,  0.520, 0.62,  0.538),
+    "bride_dissolution_month":      (0.62,  0.520, 0.74,  0.538),
+    "bride_dissolution_year":       (0.74,  0.520, 0.84,  0.538),
+
+    # ── Item 11: Degree of relationship of contracting parties ─
+    "groom_relationship_degree":    (0.04,  0.542, 0.44,  0.560),
+    "bride_relationship_degree":    (0.52,  0.542, 0.96,  0.560),
+
+    # ── Item 12: Name of Father ───────────────────────────────
+    "groom_father_first":           (0.04,  0.572, 0.18,  0.590),
+    "groom_father_middle":          (0.18,  0.572, 0.30,  0.590),
+    "groom_father_last":            (0.30,  0.572, 0.44,  0.590),
+    "bride_father_first":           (0.52,  0.572, 0.66,  0.590),
+    "bride_father_middle":          (0.66,  0.572, 0.78,  0.590),
+    "bride_father_last":            (0.78,  0.572, 0.96,  0.590),
+
+    # ── Item 13: Citizenship of Father ───────────────────────
+    "groom_father_citizenship":     (0.04,  0.595, 0.44,  0.613),
+    "bride_father_citizenship":     (0.52,  0.595, 0.96,  0.613),
+
+    # ── Item 14: Residence of Father ─────────────────────────
+    "groom_father_residence":       (0.04,  0.618, 0.44,  0.636),
+    "bride_father_residence":       (0.52,  0.618, 0.96,  0.636),
+
+    # ── Item 15: Maiden Name of Mother ───────────────────────
+    "groom_mother_first":           (0.04,  0.648, 0.18,  0.666),
+    "groom_mother_middle":          (0.18,  0.648, 0.30,  0.666),
+    "groom_mother_last":            (0.30,  0.648, 0.44,  0.666),
+    "bride_mother_first":           (0.52,  0.648, 0.66,  0.666),
+    "bride_mother_middle":          (0.66,  0.648, 0.78,  0.666),
+    "bride_mother_last":            (0.78,  0.648, 0.96,  0.666),
+
+    # ── Item 16: Citizenship of Mother ───────────────────────
+    "groom_mother_citizenship":     (0.04,  0.670, 0.44,  0.688),
+    "bride_mother_citizenship":     (0.52,  0.670, 0.96,  0.688),
+
+    # ── Item 17: Residence of Mother ─────────────────────────
+    "groom_mother_residence":       (0.04,  0.693, 0.44,  0.711),
+    "bride_mother_residence":       (0.52,  0.693, 0.96,  0.711),
+
+    # ── Item 18: Person who gave consent / advice ─────────────
+    "groom_consent_person":         (0.04,  0.723, 0.44,  0.741),
+    "bride_consent_person":         (0.52,  0.723, 0.96,  0.741),
+
+    # ── Item 19: Relationship ─────────────────────────────────
+    "groom_consent_relationship":   (0.04,  0.745, 0.44,  0.763),
+    "bride_consent_relationship":   (0.52,  0.745, 0.96,  0.763),
+
+    # ── Item 20: Citizenship ──────────────────────────────────
+    "groom_consent_citizenship":    (0.04,  0.768, 0.44,  0.786),
+    "bride_consent_citizenship":    (0.52,  0.768, 0.96,  0.786),
+
+    # ── Item 21: Residence ────────────────────────────────────
+    "groom_consent_residence":      (0.04,  0.792, 0.44,  0.810),
+    "bride_consent_residence":      (0.52,  0.792, 0.96,  0.810),
 }
 
 
@@ -464,7 +586,7 @@ def main():
     parser.add_argument("--pdf",        required=True,
                         help="Path to the scanned PDF")
     parser.add_argument("--form",       required=True,
-                        choices=["birth", "death", "marriage"],
+                        choices=["birth", "death", "marriage", "marriage_license"],
                         help="Form type")
     parser.add_argument("--checkpoint", default=DEFAULT_CHECKPOINT,
                         help=f"CRNN checkpoint path (default: {DEFAULT_CHECKPOINT})")
@@ -483,9 +605,10 @@ def main():
         POPPLER_PATH = args.poppler
 
     form_map = {
-        "birth":    ("Form 102 — Certificate of Live Birth", BIRTH_FIELDS),
-        "death":    ("Form 103 — Certificate of Death",      DEATH_FIELDS),
-        "marriage": ("Form 97 — Certificate of Marriage",    MARRIAGE_FIELDS),
+        "birth":            ("Form 102 — Certificate of Live Birth",       BIRTH_FIELDS),
+        "death":            ("Form 103 — Certificate of Death",             DEATH_FIELDS),
+        "marriage":         ("Form 97 — Certificate of Marriage",           MARRIAGE_FIELDS),
+        "marriage_license": ("Form 90 — Application for Marriage License",  MARRIAGE_LICENSE_FIELDS),
     }
     form_label, fields = form_map[args.form]
 

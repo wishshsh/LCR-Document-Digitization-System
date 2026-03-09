@@ -1,53 +1,58 @@
-// Records Management
+// =============================================================
+//  js/records.js — loadRecords (DB fetch), displayRecords,
+//                  search, filter, clearFilters, formatType
+//  Requires: globals.js, navigation.js
+// =============================================================
+
 function displayRecords(recordsToDisplay) {
     const tbody = document.getElementById('recordsTableBody');
     tbody.innerHTML = '';
-
     if (recordsToDisplay.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="no-records">No records found</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="no-records">No records found</td></tr>';
         return;
     }
-
     recordsToDisplay.forEach(record => {
         const row = document.createElement('tr');
-        row.style.cursor = 'pointer';
-        row.onclick = () => viewRecord(record);
         row.innerHTML = `
             <td>${record.id}</td>
             <td>${formatType(record.type)}</td>
             <td>${record.name}</td>
             <td>${record.date}</td>
             <td>${record.status}</td>
+            <td><button class="btn-edit-record" onclick="viewRecord(records.find(r => r.id === '${record.id}'))">&#9998; Edit</button></td>
         `;
         tbody.appendChild(row);
     });
 }
 
-function viewRecord(record) {
-    alert(`Record Details:\n\nID: ${record.id}\nType: ${formatType(record.type)}\nName: ${record.name}\nDate: ${record.date}\nStatus: ${record.status}`);
-}
-
 // Fetch Records from PHP Backend
 function loadRecords() {
+    const tbody = document.getElementById('recordsTableBody');
+    if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#888;">Loading records...</td></tr>';
+
     fetch('php/get_records.php')
-    .then(response => response.json())
+    .then(r => r.json())
     .then(data => {
         if (data.error) {
-            console.error('Database error:', data.error);
+            showNotification('Database error: ' + data.error, 'error');
+            if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="no-records">Failed to load records.</td></tr>';
             return;
         }
-        
-        records = data.map(dbRow => ({
-            id: 'DOC-' + dbRow.doc_id,
-            type: dbRow.type_name.toLowerCase().replace(' ', '-'),
-            name: dbRow.uploader_name,
-            date: dbRow.upload_date.split(' ')[0],
-            status: dbRow.status || 'Pending'
+        records = data.map(row => ({
+            id:       row.id,
+            doc_id:   row.doc_id,
+            type:     row.type,
+            name:     row.name,
+            date:     row.date,
+            status:   row.status,
+            formData: row.formData || {}
         }));
-
         displayRecords(records);
     })
-    .catch(error => console.error('Error loading records:', error));
+    .catch(() => {
+        showNotification('Cannot reach server. Check that XAMPP is running.', 'error');
+        if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="no-records">Server not reachable.</td></tr>';
+    });
 }
 
 function formatType(type) {
@@ -77,13 +82,18 @@ function filterRecords() {
     const dateFilter = document.getElementById('dateFilter').value;
 
     let filtered = records.filter(record => {
+        // Search filter
         const matchesSearch = searchTerm === '' || 
             record.name.toLowerCase().includes(searchTerm) ||
             record.id.toLowerCase().includes(searchTerm);
         
+        // Type filter
         const matchesType = !typeFilter || record.type === typeFilter;
+        
+        // Status filter
         const matchesStatus = !statusFilter || record.status === statusFilter;
         
+        // Date filter
         let matchesDate = true;
         if (dateFilter) {
             const recordDate = new Date(record.date);
@@ -92,7 +102,8 @@ function filterRecords() {
 
             switch(dateFilter) {
                 case 'today':
-                    matchesDate = recordDate >= new Date(today);
+                    const todayStart = new Date(today);
+                    matchesDate = recordDate >= todayStart;
                     break;
                 case 'week':
                     const weekStart = new Date(today);

@@ -1,3 +1,7 @@
+// =============================================================
+//  js/globals.js — Shared state, loaded FIRST before all others
+// =============================================================
+
 // Global variables
 let uploadedFiles = {
     cert: [],
@@ -32,3 +36,5 @@ const pageUrls = {
     'records': 'https://localcivilregistry.gov.ph/records',
     'profile': 'https://localcivilregistry.gov.ph/profile'
 };
+
+// Update back button visibility

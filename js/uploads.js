@@ -1,4 +1,9 @@
-// File Upload
+// =============================================================
+//  js/uploads.js — file upload, drag-and-drop,
+//                  process/save certification & marriage license
+//  Requires: globals.js, navigation.js
+// =============================================================
+
 function handleFileUpload(event, type) {
     const files = Array.from(event.target.files);
     uploadedFiles[type] = uploadedFiles[type].concat(files);
@@ -34,10 +39,19 @@ function processCertification() {
     showPage('certTemplateView');
 }
 
+// Switch which form variant is visible (called by MNB classify result)
+function showCertForm(cls) {
+    const map = { '1A': 'form1A', '2A': 'form2A', '3A': 'form3A' };
+    document.querySelectorAll('.lcr-form-variant').forEach(el => el.classList.remove('active-form'));
+    const el = document.getElementById(map[cls] || 'form1A');
+    if (el) el.classList.add('active-form');
+}
+
 function saveCertification() {
     if (confirm('Save certification and return to services?')) {
         alert('Certification saved successfully!');
         
+        // Add record
         const newRecord = {
             id: 'BC-' + String(records.length + 1).padStart(3, '0'),
             type: 'birth',
@@ -47,6 +61,7 @@ function saveCertification() {
         };
         records.push(newRecord);
         
+        // Clear files and inputs
         uploadedFiles.cert = [];
         displayUploadedFiles('cert');
         document.getElementById('certFileInput').value = '';
@@ -67,6 +82,7 @@ function saveMarriage() {
     if (confirm('Save marriage license application and return to services?')) {
         alert('Marriage license application saved successfully!');
         
+        // Add record
         const newRecord = {
             id: 'ML-' + String(records.length + 1).padStart(3, '0'),
             type: 'marriage-license',
@@ -76,6 +92,7 @@ function saveMarriage() {
         };
         records.push(newRecord);
         
+        // Clear files and inputs
         uploadedFiles.marriage = [];
         displayUploadedFiles('marriage');
         document.getElementById('marriageFileInput').value = '';
@@ -83,3 +100,5 @@ function saveMarriage() {
         showPage('services');
     }
 }
+
+// Records Management

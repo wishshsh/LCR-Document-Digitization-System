@@ -29,7 +29,7 @@ from dynamic_field_extractor import extract_field_images_dynamic
 #  in the project root with their own path:
 #  POPPLER_PATH=C:\your\path\to\poppler\Library\bin
 # ─────────────────────────────────────────────
-POPPLER_PATH = r"C:\Program Files\poppler-25.12.0\Library\bin"
+POPPLER_PATH = r"C:\Program Files\poppler-25.12.0\Library\bin"  # default value (can be overridden by .env)
 
 # ─────────────────────────────────────────────
 #  DEFAULT CHECKPOINT

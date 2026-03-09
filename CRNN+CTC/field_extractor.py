@@ -21,6 +21,7 @@ from pathlib import Path
 
 import torch
 from dotenv import load_dotenv
+from dynamic_field_extractor import extract_field_images_dynamic
 
 # ─────────────────────────────────────────────
 #  POPPLER PATH — loaded from .env file
@@ -661,7 +662,7 @@ If you see 'Unable to get page count' or 'pdftoppm not found':
 
     # ── 4. Crop fields ────────────────────────────────────────
     print(f"\n  Cropping {len(fields)} fields...")
-    crops = extract_field_images(page_image, fields)
+    crops = extract_field_images_dynamic(page_image, form_type=args.form)
     print(f"  ✓ {len(crops)} field crops extracted")
 
     # ── 5. Run CRNN OCR ───────────────────────────────────────

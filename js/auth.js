@@ -1,4 +1,9 @@
-// Login via PHP Backend
+// =============================================================
+//  js/auth.js — login, logout, user menu, profile,
+//               edit profile modal, change password modal
+//  Requires: globals.js, navigation.js
+// =============================================================
+
 function login(event) {
     event.preventDefault();
     const usernameInput = document.getElementById('username').value;
@@ -9,32 +14,41 @@ function login(event) {
         return;
     }
 
+    const loginBtn = document.querySelector('#loginForm button[type="submit"]') || document.getElementById('loginBtn');
+    if (loginBtn) loginBtn.disabled = true;
+
     fetch('php/login.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: usernameInput, password: passwordInput })
     })
-    .then(response => response.json())
+    .then(r => r.json())
     .then(data => {
+        if (loginBtn) loginBtn.disabled = false;
         if (data.status === 'success') {
             isLoggedIn = true;
-            
             currentUser.username = data.user.name;
-            currentUser.name = data.user.name; 
-            currentUser.role = data.user.role;
-            
+            currentUser.name     = data.user.name;
+            currentUser.role     = data.user.role;
             document.getElementById('headerButtons').style.display = 'flex';
             showPage('services');
             updateBackButton();
             showNotification('Login successful!', 'success');
         } else {
-            showNotification(data.message || 'Invalid credentials', 'error');
+            showNotification(data.message || 'Invalid username or password', 'error');
         }
     })
-    .catch(error => {
-        console.error('Error:', error);
-        showNotification('Server connection failed.', 'error');
+    .catch(() => {
+        if (loginBtn) loginBtn.disabled = false;
+        showNotification('Cannot connect to server. Check that XAMPP is running.', 'error');
     });
+}
+
+
+function goHome() {
+    if (isLoggedIn) {
+        showPage('services');
+    }
 }
 
 // Logout function

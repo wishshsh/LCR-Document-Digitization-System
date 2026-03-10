@@ -880,8 +880,8 @@ body {
 .modal-content {
     background: var(--white);
     border-radius: 12px;
-    width: 90%;
-    max-width: 480px;
+    width: 96%;
+    max-width: 960px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     animation: slideUp 0.3s ease;
 }
@@ -1119,4 +1119,561 @@ body {
     .filter-select {
         width: 100%;
     }
+}
+
+/* ── Template action buttons (Edit / Save Changes / Print) ── */
+.template-btn-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn-template-action {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity 0.2s;
+}
+.btn-template-action:hover { opacity: 0.85; }
+
+.btn-edit-tpl       { background: var(--navy); color: #fff; }
+.btn-savechanges-tpl{ background: #e67e22;     color: #fff; }
+.btn-print-tpl      { background: var(--blue); color: #fff; }
+
+/* ── Record Detail Modal ── */
+.record-modal-actions {
+    display: flex;
+    gap: 10px;
+    padding: 14px 20px 0;
+    flex-wrap: wrap;
+}
+
+.record-modal-body {
+    padding: 16px 20px 24px;
+    max-height: 78vh;
+    overflow-y: auto;
+}
+
+.rec-row {
+    display: flex;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+.rec-row:last-child { border-bottom: none; }
+
+.rec-label {
+    min-width: 130px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+}
+
+.rec-val {
+    font-size: 14px;
+    color: #222;
+}
+
+.rec-input {
+    flex: 1;
+    padding: 6px 10px;
+    border: 2px solid #1ec77c;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+}
+.rec-input:focus { border-color: #17a364; }
+
+/* Record detail modal — full wide */
+
+/* Hover highlight on records table rows */
+.records-table tbody tr:hover {
+    background: #f0fdf7;
+    cursor: pointer;
+}
+
+/* ================================================================
+   DIGITAL FORMS — LCR 1A / 2A / 3A  and  Form 90
+   These styles only affect the template-box content.
+   They do NOT override any existing layout or component styles.
+   ================================================================ */
+
+/* Form variant visibility */
+.lcr-form-variant { display: none; }
+.lcr-form-variant.active-form { display: block; }
+
+/* Outer form wrapper */
+.lcr-form {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 13px;
+    color: #111;
+    text-align: left;
+    width: 100%;
+}
+
+/* Header row */
+.lcr-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid #111;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+    gap: 12px;
+}
+
+.lcr-form-tag {
+    font-size: 12px;
+    font-weight: bold;
+    min-width: 130px;
+}
+.lcr-form-tag span { font-weight: normal; font-style: italic; }
+
+.lcr-title-block {
+    text-align: center;
+    flex: 1;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.lcr-date-block {
+    font-size: 12px;
+    text-align: right;
+    min-width: 110px;
+}
+
+/* TO WHOM IT MAY CONCERN */
+.lcr-concern {
+    font-weight: bold;
+    margin: 8px 0 6px;
+}
+
+.lcr-body-text {
+    margin-bottom: 12px;
+    line-height: 1.8;
+}
+
+/* Field rows */
+.lcr-fields { margin: 0 0 12px; }
+
+.lcr-field-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    margin-bottom: 4px;
+    min-height: 24px;
+}
+
+.lcr-field-row label {
+    min-width: 220px;
+    font-size: 12px;
+    flex-shrink: 0;
+    padding-bottom: 2px;
+}
+
+.lcr-field-row.small label { min-width: 100px; }
+
+/* Underline fields */
+.lcr-field-line {
+    display: inline-block;
+    flex: 1;
+    min-width: 140px;
+    border-bottom: 1px solid #555;
+    min-height: 18px;
+    padding: 0 4px 1px;
+    font-size: 13px;
+    color: #1a5c35;
+    font-style: italic;
+}
+
+.lcr-field-short {
+    display: inline-block;
+    min-width: 60px;
+    border-bottom: 1px solid #555;
+    min-height: 18px;
+    padding: 0 4px 1px;
+    font-size: 13px;
+    color: #1a5c35;
+    font-style: italic;
+}
+
+/* Edit mode — inputs replace spans */
+.lcr-form.editing .lcr-field-line,
+.lcr-form.editing .lcr-field-short {
+    border: 1px solid #1ec77c;
+    border-radius: 3px;
+    background: #f0fff8;
+    outline: none;
+    color: #111;
+    font-style: normal;
+}
+
+/* Issued to line */
+.lcr-issued-to {
+    margin: 12px 0;
+    line-height: 1.8;
+}
+.lcr-issued-line {
+    min-width: 260px;
+}
+
+/* Footer: verified + payment */
+.lcr-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 16px 0 10px;
+    gap: 20px;
+}
+
+.lcr-verified { font-size: 12px; }
+
+.lcr-sig-line {
+    border-bottom: 1px solid #555;
+    min-width: 160px;
+    margin: 18px 0 4px;
+}
+
+.lcr-payment { font-size: 12px; }
+
+.lcr-note {
+    font-size: 11px;
+    font-style: italic;
+    color: #555;
+    border-top: 1px solid #ddd;
+    padding-top: 6px;
+    margin-top: 8px;
+}
+
+/* ── Form 3A two-column grid ── */
+.lcr-3a-grid {
+    display: flex;
+    gap: 0;
+    border: 1px solid #aaa;
+    margin-bottom: 12px;
+}
+
+.lcr-3a-col {
+    flex: 1;
+    padding: 8px;
+    border-right: 1px solid #aaa;
+}
+.lcr-3a-col:last-child { border-right: none; }
+
+.lcr-3a-colhead {
+    font-weight: bold;
+    font-size: 13px;
+    text-align: center;
+    border-bottom: 1px solid #aaa;
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.lcr-3a-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    margin-bottom: 5px;
+    min-height: 22px;
+}
+
+.lcr-3a-row label {
+    min-width: 140px;
+    font-size: 11px;
+    flex-shrink: 0;
+}
+
+.lcr-3a-footer-fields { margin-top: 4px; }
+
+/* ── Form 90 styles ── */
+.f90-form {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+}
+
+.f90-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid #111;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    gap: 10px;
+}
+
+.f90-top-left { font-size: 10px; min-width: 130px; }
+.f90-top-right { font-size: 11px; text-align: right; min-width: 100px; border: 1px solid #aaa; padding: 4px 8px; }
+
+.f90-top-center {
+    text-align: center;
+    flex: 1;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.f90-main-title {
+    font-size: 17px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+}
+
+.f90-location-row,
+.f90-received-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 4px;
+}
+
+.f90-location-row > div,
+.f90-received-row > div { flex: 1; }
+
+/* Groom / Bride column heads */
+.f90-applicants {
+    display: flex;
+    border: 1px solid #aaa;
+    margin: 8px 0 0;
+}
+
+.f90-col { flex: 1; padding: 6px 10px; border-right: 1px solid #aaa; }
+.f90-col:last-child { border-right: none; }
+
+.f90-col-head {
+    font-weight: bold;
+    font-size: 13px;
+    text-align: center;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.f90-salutation { font-size: 10px; color: #444; }
+
+/* Main numbered fields table */
+.f90-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0;
+    border: 1px solid #aaa;
+}
+
+.f90-table td,
+.f90-table th {
+    border: 1px solid #aaa;
+    padding: 5px 8px;
+    vertical-align: top;
+    font-size: 11px;
+}
+
+.f90-label-cell {
+    font-weight: bold;
+    text-align: center;
+    width: 160px;
+    font-size: 11px;
+    vertical-align: middle !important;
+}
+
+.f90-subrow {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 3px;
+}
+
+.sub-label {
+    font-size: 9px;
+    color: #666;
+    flex-shrink: 0;
+}
+
+/* Signature row */
+.f90-sig-row {
+    display: flex;
+    gap: 0;
+    border: 1px solid #aaa;
+    border-top: none;
+    margin-top: 0;
+}
+
+.f90-sig-block {
+    flex: 1;
+    padding: 10px 12px;
+    border-right: 1px solid #aaa;
+}
+.f90-sig-block:last-child { border-right: none; }
+
+.f90-exempt-box {
+    width: 100px;
+    flex-shrink: 0;
+    text-align: center;
+    font-size: 10px;
+    padding: 10px 6px;
+    border-right: 1px solid #aaa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.f90-sig-label {
+    font-size: 10px;
+    text-align: center;
+    margin-top: 4px;
+}
+
+.f90-sworn-text {
+    font-size: 9px;
+    color: #555;
+    margin-top: 6px;
+    font-style: italic;
+}
+
+.f90-civil-reg-sig {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border: 1px solid #aaa;
+    border-top: none;
+    font-size: 10px;
+}
+
+.f90-civil-reg-sig .f90-sig-label { min-width: 200px; text-align: center; }
+
+/* ── Edit button ────────────────────────────────────────── */
+.btn-edit-record { background:var(--navy); color:#fff; border:none; padding:6px 14px; border-radius:5px; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.2s; font-family:var(--font-main); }
+.btn-edit-record:hover { background:var(--primary-green); transform:translateY(-1px); }
+
+/* ── LCR Form inside modal ──────────────────────────────── */
+/* record-modal-body defined above */
+.lcr-official-form { border:2px solid #1a7a4a; font-family:Arial,sans-serif; font-size:12px; color:#111; background:#fff; }
+.lf-header-band { display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #1a7a4a; padding:10px 12px; gap:10px; }
+.lf-title-center { text-align:center; font-size:12px; flex:1; line-height:1.6; }
+.lf-title-center strong { font-size:15px; display:block; margin-top:4px; }
+.lf-form-ref { font-size:10px; color:#555; min-width:130px; }
+.lf-reg-no { text-align:right; font-size:11px; border:1.5px solid #1a7a4a; padding:4px 10px; min-width:100px; }
+.lf-loc-row { display:flex; border-bottom:1.5px solid #1a7a4a; }
+.lf-loc-cell { flex:1; padding:5px 10px; font-size:12px; border-right:1px solid #1a7a4a; }
+.lf-loc-cell:last-child { border-right:none; }
+.lf-section-label { background:#1a7a4a; color:#fff; padding:4px 10px; font-size:11px; font-weight:bold; letter-spacing:0.5px; }
+.lf-table { width:100%; border-collapse:collapse; }
+.lf-table td,.lf-table th { border:1px solid #1a7a4a; padding:6px 8px; vertical-align:top; font-size:12px; }
+.lf-table th { background:#e8f5f0; font-weight:bold; font-size:11px; text-align:center; color:#1a7a4a; }
+.lf-fn { font-weight:bold; font-size:10px; color:#1a7a4a; display:block; margin-bottom:3px; }
+.lf-sub { font-size:9px; color:#666; margin-right:2px; }
+.lf-name-row { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+.lf-side-label { font-weight:bold; width:70px; font-size:11px; vertical-align:top; padding-top:8px; color:#1a7a4a; }
+.lf-val { font-size:12px; display:inline-block; min-width:60px; border-bottom:1px solid #999; padding-bottom:1px; }
+.lf-input { border:none; border-bottom:1.5px solid #1a7a4a; background:#f0fdf7; padding:2px 5px; font-size:12px; font-family:Arial,sans-serif; min-width:60px; outline:none; border-radius:2px; }
+.lf-input:focus { border-bottom-color:#0f5c33; background:#e0fbf0; }
+.lf-input-wide { width:100%; box-sizing:border-box; }
+.lf-select { border:1.5px solid #1a7a4a; border-radius:4px; background:#f0fdf7; padding:3px 6px; font-size:12px; cursor:pointer; }
+.lf-status { padding:2px 10px; border-radius:3px; font-size:11px; font-weight:bold; display:inline-block; }
+.lf-status-pending   { background:#fff3cd; color:#856404; }
+.lf-status-approved  { background:#d1e7dd; color:#0a3622; }
+.lf-status-rejected  { background:#f8d7da; color:#58151c; }
+.lf-status-processed { background:#cfe2ff; color:#084298; }
+
+-birth forms use plain black borders */
+.lcr-official-form.lf-plain { border-color: #333; }
+.lf-plain .lf-header-band   { border-bottom-color: #333; }
+.lf-plain .lf-reg-no        { border-color: #333; }
+.lf-plain .lf-loc-row       { border-bottom-color: #333; }
+.lf-plain .lf-loc-cell      { border-right-color: #333; }
+.lf-plain .lf-section-label { background: #2c3e50; }
+.lf-plain .lf-table td,
+.lf-plain .lf-table th      { border-color: #333; }
+.lf-plain .lf-table th      { background: #f0f0f0; color: #333; }
+.lf-plain .lf-two-party th  { background: #2c3e50; color: #fff; }
+.lf-plain .lf-fn            { color: #333; }
+.lf-plain .lf-side-label    { color: #333; }
+.lf-plain .lf-input         { border-bottom-color: #555; background: #f9f9f9; }
+.lf-plain .lf-input:focus   { border-bottom-color: #111; background: #f0f0f0; }
+.lf-plain .lf-select        { border-color: #555; background: #f9f9f9; }
+/* ── Non-birth forms: plain black borders (no green) ───── */
+.lcr-official-form.lf-plain { border-color: #333; }
+.lf-plain .lf-header-band   { border-bottom-color: #333; }
+.lf-plain .lf-reg-no        { border-color: #333; }
+.lf-plain .lf-loc-row       { border-bottom-color: #333; }
+.lf-plain .lf-loc-cell      { border-right-color: #333; }
+.lf-plain .lf-section-label { background: #2c3e50; }
+.lf-plain .lf-table td,
+.lf-plain .lf-table th      { border-color: #333; }
+.lf-plain .lf-table th      { background: #f0f0f0; color: #333; }
+.lf-plain .lf-two-party th  { background: #2c3e50; color: #fff; }
+.lf-plain .lf-fn            { color: #333; }
+.lf-plain .lf-side-label    { color: #333; }
+.lf-plain .lf-input         { border-bottom-color: #555; background: #f9f9f9; }
+.lf-plain .lf-input:focus   { border-bottom-color: #111; background: #f0f0f0; }
+.lf-plain .lf-select        { border-color: #555; background: #f9f9f9; }
+
+/* ── 3-column date/age grouping (no overflow) ────────────── */
+.lf-3col {
+    display: flex;
+    gap: 8px;
+    flex-wrap: nowrap;
+    align-items: center;
+    margin-top: 3px;
+}
+.lf-3col .lf-input,
+.lf-3col .lf-val {
+    flex: 1;
+    min-width: 0;
+    width: 0;
+}
+/* Ensure inputs never overflow their cell */
+.lf-table td { overflow: hidden; word-break: break-word; }
+.lf-input    { max-width: 100%; min-width: 0; }
+.lf-val      { max-width: 100%; word-break: break-word; }
+
+/* ── Record detail modal — guaranteed wide sizing ─────────── */
+#recordDetailModal {
+    padding: 12px;
+}
+#recordDetailModal .modal-content {
+    width: 96%;
+    max-width: 980px;
+    min-width: 320px;
+}
+#recordDetailModal .record-modal-body {
+    max-height: 75vh;
+    overflow-y: auto;
+    padding: 12px 18px 20px;
+}
+
+/* ── LCR form table: prevent squeezing ───────────────────── */
+.lcr-official-form .lf-table {
+    table-layout: fixed;
+    width: 100%;
+}
+.lcr-official-form .lf-table td {
+    vertical-align: top;
+    padding: 7px 9px;
+    word-break: break-word;
+    overflow: hidden;
+}
+.lcr-official-form .lf-input,
+.lcr-official-form .lf-val {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
+}
+.lcr-official-form .lf-3col {
+    display: flex;
+    gap: 6px;
+}
+.lcr-official-form .lf-3col .lf-input,
+.lcr-official-form .lf-3col .lf-val {
+    flex: 1;
+    min-width: 0;
+    width: 0;
 }

@@ -1,4 +1,11 @@
-// Drag and Drop functionality + Global Event Listeners
+// =============================================================
+//  js/events.js — DOMContentLoaded: drag-drop wiring,
+//                 click-outside handlers, keyboard shortcuts
+//  Requires: all other modules (load this LAST)
+// =============================================================
+
+
+// Drag and Drop functionality
 document.addEventListener('DOMContentLoaded', function() {
     const uploadAreas = document.querySelectorAll('.upload-area');
     
@@ -30,14 +37,17 @@ document.addEventListener('DOMContentLoaded', function() {
         area.addEventListener('drop', function(e) {
             const files = e.dataTransfer.files;
             
+            // Determine type based on ID
             let type = 'cert';
             if (this.id.includes('marriage') || this.parentElement.id.includes('marriage')) {
                 type = 'marriage';
             }
             
+            // Add files to array
             uploadedFiles[type] = uploadedFiles[type].concat(Array.from(files));
             displayUploadedFiles(type);
             
+            // Update the file input
             const fileInput = document.getElementById(type + 'FileInput');
             if (fileInput) {
                 const dt = new DataTransfer();
@@ -85,6 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             showPage('profile');
         }
+        // Backspace or browser back for back button
         if (e.key === 'Backspace' && isLoggedIn && 
             !['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
             e.preventDefault();
@@ -92,3 +103,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// ============================================================
+//  TEMPLATE EDIT / SAVE CHANGES / PRINT
+// ============================================================
+const _tplEditing = { cert: false, marriage: false };

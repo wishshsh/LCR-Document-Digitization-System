@@ -26,9 +26,14 @@ from dotenv import load_dotenv
 #  POPPLER PATH — loaded from .env file
 #  Each team member creates their own .env file
 #  in the project root with their own path:
-#  POPPLER_PATH=C:\your\path\to\poppler\Library\bin
+#
+#    POPPLER_PATH=C:\your\path\to\poppler\Library\bin
+#
+#  On Linux/Mac poppler is usually on $PATH already,
+#  so POPPLER_PATH can be left unset in .env.
 # ─────────────────────────────────────────────
-POPPLER_PATH = r"C:\Program Files\poppler-25.12.0\Library\bin"
+load_dotenv()  # reads .env from project root into os.environ
+POPPLER_PATH = os.environ.get("POPPLER_PATH", None)  # None → pdf2image uses system PATH
 
 # ─────────────────────────────────────────────
 #  DEFAULT CHECKPOINT
@@ -486,9 +491,16 @@ def load_crnn_model(checkpoint_path: str, device: torch.device):
     model.load_state_dict(c["model_state_dict"])
     model.eval()
 
-    val_cer = c.get("val_cer", None)
-    cer_str = f"{val_cer:.2f}%" if val_cer is not None else "N/A"
-    print(f"  Model loaded  |  val_cer={cer_str}  |  chars={num_chars}")
+    # Synthetic checkpoints save val_cer; fine-tuned (EMNIST/IAM) save val_loss
+    val_cer  = c.get("val_cer",  None)
+    val_loss = c.get("val_loss", None)
+    if val_cer is not None:
+        metric_str = f"val_cer={val_cer:.2f}%"
+    elif val_loss is not None:
+        metric_str = f"val_loss={val_loss:.4f} (run compare_live_cer.py for true CER)"
+    else:
+        metric_str = "no metric saved"
+    print(f"  Model loaded  |  {metric_str}  |  chars={num_chars}")
     return model, idx_to_char, img_h, img_w
 
 

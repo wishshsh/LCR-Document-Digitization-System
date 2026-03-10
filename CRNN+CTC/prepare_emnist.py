@@ -8,6 +8,16 @@ import json
 print("Preparing EMNIST data for CRNN training...")
 print("Using 'balanced' split (47 classes — digits, uppercase, selected lowercase)")
 
+# MAX_SAMPLES: how many EMNIST images to use out of 112,800 available.
+# 50,000 chosen deliberately:
+#   - ~1,064 images per class (47 classes) — enough for solid character recognition
+#   - Keeps a healthy ~3:1 ratio vs synthetic data (16,000) in mixed training
+#   - Going higher (e.g. full 112,800) would drown out synthetic Filipino-specific
+#     patterns since EMNIST would be 88% of the mixed dataset
+#   - IAM fine-tuning and physical scans handle remaining handwriting gaps
+MAX_SAMPLES = 50000
+VAL_RATIO   = 0.10   # 90% train, 10% val — proper percentage split
+
 train_data = torchvision.datasets.EMNIST(
     root='datasets/emnist',
     split='balanced',       # balanced split — already downloaded
@@ -32,14 +42,19 @@ os.makedirs('data/val/emnist', exist_ok=True)
 annotations_train = []
 annotations_val   = []
 
-print(f"Dataset size: {len(train_data)} images")
+val_cutoff = int(MAX_SAMPLES * (1 - VAL_RATIO))  # 45,000 train / 5,000 val
+
+print(f"Dataset size : {len(train_data)} images available")
+print(f"Using        : {MAX_SAMPLES} ({MAX_SAMPLES/len(train_data)*100:.1f}% of full dataset)")
+print(f"Train / Val  : {val_cutoff} / {MAX_SAMPLES - val_cutoff} (90/10 split)")
 print("Saving images...")
 
+saved = 0   # count of successfully saved images (skips bad label indices)
 for i, (img_tensor, label_idx) in enumerate(train_data):
-    if i >= 6000:
+    if saved >= MAX_SAMPLES:
         break
 
-    # Safety check — skip if label out of range
+    # Safety check — skip if label index is out of range for our LABELS list
     if label_idx >= len(LABELS):
         continue
 
@@ -54,17 +69,19 @@ for i, (img_tensor, label_idx) in enumerate(train_data):
     pil_img = Image.fromarray(img).convert('RGB')
     pil_img = pil_img.resize((512, 64))   # must match IMG_WIDTH=512
 
-    fname = f'emnist_{i:05d}.jpg'
+    fname = f'emnist_{saved:05d}.jpg'   # sequential filenames based on saved count
 
-    if i < 5000:
+    # FIXED: proper percentage-based split (was hardcoded `if i < 5000`)
+    if saved < val_cutoff:
         pil_img.save(f'data/train/emnist/{fname}')
         annotations_train.append({'image_path': f'emnist/{fname}', 'text': char})
     else:
         pil_img.save(f'data/val/emnist/{fname}')
         annotations_val.append({'image_path': f'emnist/{fname}', 'text': char})
 
-    if i % 1000 == 0:
-        print(f"  Processed {i}/6000 images...")
+    saved += 1
+    if saved % 5000 == 0:
+        print(f"  Processed {saved}/{MAX_SAMPLES} images...")
 
 with open('data/emnist_train_annotations.json', 'w') as f:
     json.dump(annotations_train, f, indent=2)
@@ -72,7 +89,9 @@ with open('data/emnist_val_annotations.json', 'w') as f:
     json.dump(annotations_val, f, indent=2)
 
 print(f"\nDone!")
-print(f"  Train : {len(annotations_train)} images")
+print(f"  Train : {len(annotations_train)} images  (~{len(annotations_train)//47} per class)")
 print(f"  Val   : {len(annotations_val)} images")
+print(f"  Total : {len(annotations_train) + len(annotations_val)} / {len(train_data)} used")
 print(f"  Labels: {sorted(set(a['text'] for a in annotations_train))}")
+print(f"\nClass coverage: {len(set(a['text'] for a in annotations_train))}/47 classes in train")
 print("\nNext step: python train_with_emnist.py")

@@ -49,7 +49,8 @@ IAM_WORDS_TXT = f"{IAM_ROOT}/words.txt"
 IAM_WORDS_DIR = f"{IAM_ROOT}/words"
 
 TRAIN_ANN     = "data/iam_train_annotations.json"
-VAL_ANN       = "data/val_annotations.json"       # FIXED: was iam_val — must match real task
+IAM_VAL_ANN   = "data/iam_val_annotations.json"   # written by --prepare (IAM word images)
+SYNTH_VAL_ANN = "data/val_annotations.json"       # real civil registry val set — never overwritten
 TRAIN_IMG_DIR = "data/train/iam"
 VAL_IMG_DIR   = "data/val/iam"
 
@@ -151,11 +152,11 @@ def prepare_iam():
 
     with open(TRAIN_ANN, "w") as f:
         json.dump(train_ann, f, indent=2)
-    with open(VAL_ANN, "w") as f:
+    with open(IAM_VAL_ANN, "w") as f:
         json.dump(val_ann, f, indent=2)
 
     print(f"\n  Train annotations -> {TRAIN_ANN} ({len(train_ann)} entries)")
-    print(f"  Val annotations   -> {VAL_ANN} ({len(val_ann)} entries)")
+    print(f"  Val annotations   -> {IAM_VAL_ANN} ({len(val_ann)} entries)")
     print("\n  Done! Now run: python IAM_train.py --train")
 
 
@@ -168,7 +169,7 @@ def train_iam():
     print("=" * 55)
     print(f"  Device : {DEVICE}")
 
-    for ann_file in [TRAIN_ANN, VAL_ANN]:
+    for ann_file in [TRAIN_ANN, SYNTH_VAL_ANN]:
         if not os.path.exists(ann_file):
             print(f"ERROR: {ann_file} not found! Run --prepare first.")
             sys.exit(1)
@@ -184,7 +185,7 @@ def train_iam():
     )
     mixed_train = ConcatDataset([train_dataset, synth_dataset])
     val_dataset = CivilRegistryDataset(
-        data_dir="data/val", annotations_file=VAL_ANN,
+        data_dir="data/val", annotations_file=SYNTH_VAL_ANN,
         img_height=IMG_HEIGHT, img_width=IMG_WIDTH, augment=False
     )
     print(f"  IAM train     : {len(train_dataset)}")

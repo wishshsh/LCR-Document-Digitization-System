@@ -166,10 +166,14 @@ class CRNNTrainer:
         
         pbar = tqdm(self.train_loader, desc=f"Epoch {epoch}/{self.config['epochs']}")
         
+        nan_count = 0
         for batch_idx, (images, targets, target_lengths, _) in enumerate(pbar):
             images = images.to(self.device)
             targets = targets.to(self.device)
-            
+
+            # FIXED: zero_grad before forward pass (was incorrectly placed after loss)
+            self.optimizer.zero_grad()
+
             # Forward pass
             outputs = self.model(images)  # [seq_len, batch, num_chars]
             
@@ -191,9 +195,13 @@ class CRNNTrainer:
                 input_lengths,
                 target_lengths
             )
-            
+
+            # FIXED: skip NaN/Inf batches — accumulating them corrupts gradients
+            if torch.isnan(loss) or torch.isinf(loss):
+                nan_count += 1
+                continue
+
             # Backward pass
-            self.optimizer.zero_grad()
             loss.backward()
             
             # Gradient clipping to prevent exploding gradients
@@ -208,6 +216,8 @@ class CRNNTrainer:
                 'loss': f'{loss.item():.4f}',
                 'avg_loss': f'{total_loss / (batch_idx + 1):.4f}'
             })
+        if nan_count > 0:
+            print(f"  [WARNING] {nan_count} NaN/Inf batches skipped this epoch.")
         
         avg_loss = total_loss / len(self.train_loader)
         return avg_loss
@@ -297,14 +307,14 @@ class CRNNTrainer:
             print(f"  Val WER:    {val_wer:.2f}%")
             print(f"  LR:         {current_lr:.6f}")
             
-         # Print sample predictions
+            # Print sample predictions
             print(f"\nSample Predictions:")
             for i in range(min(3, len(predictions))):
                 print(f"  GT:   {ground_truths[i]}")
                 print(f"  Pred: {predictions[i]}")
                 print()
 
-            #  show raw model output
+            # show raw model output
             with torch.no_grad():
                 sample_img = self.val_dataset[0][0].unsqueeze(0).to(self.device)
                 raw_out    = self.model(sample_img)
@@ -365,10 +375,11 @@ class CRNNTrainer:
             torch.save(checkpoint, best_path)
             print(f"  ✓ Best model saved (Val Loss: {val_loss:.4f}, CER: {val_cer:.2f}%)")
         
-        # Save epoch checkpoint
+        # Save epoch checkpoint (history omitted to save disk space — it's in latest_checkpoint.pth)
         if epoch % self.config.get('save_freq', 10) == 0:
             epoch_path = self.checkpoint_dir / f'checkpoint_epoch_{epoch}.pth'
-            torch.save(checkpoint, epoch_path)
+            epoch_ckpt = {k: v for k, v in checkpoint.items() if k != 'history'}
+            torch.save(epoch_ckpt, epoch_path)
     
     def save_history(self):
         """Save training history"""

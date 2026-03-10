@@ -92,7 +92,7 @@ class ImageNormalizer:
                 cv2.THRESH_BINARY, 11, 2)
         return otsu
 
-    def normalize(self, img: np.ndarray) -> np.ndarray:
+    def normalize(self, img: np.ndarray, augmenter=None) -> np.ndarray:
         gray = self._to_gray(img)
         # NOTE: fastNlMeansDenoising intentionally removed from training pipeline.
         # It is slow (~200ms/image) and pointless on clean synthetic images.
@@ -100,6 +100,10 @@ class ImageNormalizer:
         # which runs on real scanned documents where denoising actually helps.
         gray = self._crop_to_text(gray)
         gray = self._aspect_resize(gray)
+        # FIXED Bug 3: augment on grayscale BEFORE binarize.
+        # Brightness/contrast augmentation has zero effect on binary (0/255) pixels.
+        if augmenter is not None:
+            gray = augmenter(gray)
         return self._binarize(gray)
 
     def to_tensor(self, img: np.ndarray) -> torch.Tensor:
@@ -225,11 +229,15 @@ class CivilRegistryDataset(Dataset):
         img_width:        int  = 512,
         augment:          bool = False,
         form_type:        str  = 'all',
+        seed:             Optional[int] = None,   # Rec 2: reproducible augmentation
     ):
         self.data_dir   = Path(data_dir)
         self.augment    = augment
         self.normalizer = ImageNormalizer(img_height, img_width)
         self.augmenter  = Augmenter()
+        if seed is not None:                       # Rec 2: seed random for reproducibility
+            random.seed(seed)
+            np.random.seed(seed)
 
         self.char_to_idx, self.idx_to_char, self.num_chars = build_char_maps()
 
@@ -273,9 +281,10 @@ class CivilRegistryDataset(Dataset):
         if img is None:
             img = np.ones((64, 512, 3), dtype=np.uint8) * 255
 
-        normalized   = self.normalizer.normalize(img)
-        if self.augment:
-            normalized = self.augmenter(normalized)
+        # FIXED Bug 3: pass augmenter into normalize() so it runs on grayscale
+        # (before binarization), not on the binary output where it has no effect.
+        aug = self.augmenter if self.augment else None
+        normalized = self.normalizer.normalize(img, augmenter=aug)
 
         image_tensor = self.normalizer.to_tensor(normalized)  # [1, H, W]
 

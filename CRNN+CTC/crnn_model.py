@@ -33,7 +33,12 @@ class CRNN_CivilRegistry(nn.Module):
             nn.BatchNorm2d(256), nn.ReLU(inplace=True),
         )
 
-        cnn_out_h = (img_height // 16) - 1   # = 3 for img_height=64
+        # FIXED Bug 4: derive cnn_out_h from a real forward pass instead of
+        # a hardcoded formula — safer if architecture or img_height ever changes.
+        with torch.no_grad():
+            _dummy = torch.zeros(1, 1, img_height, 32)
+            _out   = self.cnn(_dummy)
+            cnn_out_h = _out.shape[2]   # actual height after all CNN layers
         rnn_input = 256 * cnn_out_h
 
         self.rnn = nn.LSTM(
@@ -63,12 +68,13 @@ class CRNN_Ensemble(nn.Module):
         self.models = nn.ModuleList([CRNN_CivilRegistry(**kwargs) for _ in range(num_models)])
 
     def forward(self, x):
-        # Apply softmax to each model's logits before averaging.
-        # Averaging raw logits is mathematically incorrect for ensembles —
-        # softmax converts logits to probabilities, then averaging those
-        # probabilities gives a proper ensemble prediction.
+        # FIXED Rec 3: average softmax probabilities across models (correct ensemble),
+        # then return log of the average so CTCLoss receives log-probabilities —
+        # the same contract as CRNN_CivilRegistry (raw logits + log_softmax in trainer).
+        # Returning raw averaged probabilities caused CTCLoss to receive un-logged values.
         probs = [torch.nn.functional.softmax(m(x), dim=2) for m in self.models]
-        return torch.mean(torch.stack(probs), dim=0)
+        avg_probs = torch.mean(torch.stack(probs), dim=0)
+        return torch.log(avg_probs.clamp(min=1e-9))  # log-probs, safe clamp avoids log(0)
 
 
 def get_crnn_model(model_type='standard', **kwargs):
@@ -95,6 +101,11 @@ def initialize_weights(model):
                     nn.init.orthogonal_(param)
                 elif 'bias' in name:
                     nn.init.constant_(param, 0)
+                    # Rec 1: set forget gate bias to 1.0 — helps the model
+                    # remember across long sequences at the start of training.
+                    # LSTM gate order: [input | forget | cell | output]
+                    n = param.size(0)
+                    param.data[n // 4 : n // 2].fill_(1.0)
 
 
 if __name__ == "__main__":

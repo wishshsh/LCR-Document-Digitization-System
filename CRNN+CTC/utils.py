@@ -58,51 +58,55 @@ def greedy_decode(outputs, idx_to_char):
 
 def beam_search_decode(outputs, idx_to_char, beam_width=10):
     """
-    Beam search CTC decoding - slower but more accurate
+    Beam search CTC decoding - slower but more accurate.
+
+    FIXED Bug 6: previous code mixed list-of-chars and string representations.
+    After sorting new_beams (a dict keyed by strings), it did `list(seq)` on the
+    string key — which splits a string like "AB" into ['A','B'] accidentally works
+    for ASCII but is fragile and confusing. Rewritten to use strings throughout:
+    beams are now List[Tuple[str, float]] with the sequence always kept as a plain
+    string, eliminating the list/string ambiguity entirely.
     """
     outputs = torch.nn.functional.softmax(outputs, dim=2)
     outputs = outputs.permute(1, 0, 2).cpu().numpy()  # [batch, seq_len, num_chars]
-    
+
     decoded_texts = []
-    
+
     for output in outputs:
-        # Initialize beam
-        beams = [([''], 1.0)]  # (sequence, probability)
-        
+        # Each beam is (sequence_string, cumulative_probability)
+        beams: list = [('', 1.0)]
+
         for timestep in output:
-            new_beams = {}
-            
+            new_beams: dict = {}
+
             for sequence, prob in beams:
                 for idx, char_prob in enumerate(timestep):
-                    if idx == 0:  # blank
+                    if idx == 0:  # blank token — sequence unchanged
                         new_seq = sequence
-                    else:
-                        if idx in idx_to_char:
-                            char = idx_to_char[idx]
-                            # Merge consecutive duplicates
-                            if len(sequence) > 0 and sequence[-1] == char:
-                                new_seq = sequence
-                            else:
-                                new_seq = sequence + [char]
+                    elif idx in idx_to_char:
+                        char = idx_to_char[idx]
+                        # CTC rule: merge consecutive duplicate characters
+                        if sequence and sequence[-1] == char:
+                            new_seq = sequence        # duplicate — stay the same
                         else:
-                            continue
-                    
-                    new_prob = prob * char_prob
-                    seq_key = ''.join(new_seq)
-                    
-                    if seq_key in new_beams:
-                        new_beams[seq_key] = max(new_beams[seq_key], new_prob)
+                            new_seq = sequence + char # append directly to string
                     else:
-                        new_beams[seq_key] = new_prob
-            
-            # Keep top beam_width beams
+                        continue
+
+                    new_prob = prob * char_prob
+                    # Merge beams that produce the same string
+                    if new_seq in new_beams:
+                        new_beams[new_seq] = max(new_beams[new_seq], new_prob)
+                    else:
+                        new_beams[new_seq] = new_prob
+
+            # Keep top-k beams; keys are already strings — no list() conversion needed
             beams = sorted(new_beams.items(), key=lambda x: x[1], reverse=True)[:beam_width]
-            beams = [(list(seq), prob) for seq, prob in beams]
-        
-        # Get best sequence
+
+        # Best sequence is the string with highest probability
         best_sequence = max(beams, key=lambda x: x[1])[0]
-        decoded_texts.append(''.join(best_sequence))
-    
+        decoded_texts.append(best_sequence)
+
     return decoded_texts
 
 

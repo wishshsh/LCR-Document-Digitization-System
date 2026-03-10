@@ -258,13 +258,16 @@ class CivilRegistryOCR:
 
         print(f"Model loaded successfully")
         # Support both key names: val_loss (fine-tuned) and val_cer (synthetic baseline)
+        # FIXED Bug 5: removed incorrect `val_cer < 10` heuristic that mislabelled
+        # the metric. The key name alone is the reliable indicator.
         val_loss = checkpoint.get('val_loss', None)
         val_cer  = checkpoint.get('val_cer',  None)
-        if val_loss is not None:
+        if val_loss is not None and val_cer is not None:
+            print(f"  Val Loss : {val_loss:.4f} | Val CER: {val_cer:.2f}%")
+        elif val_loss is not None:
             print(f"  Val Loss : {val_loss:.4f}  (fine-tuned checkpoint — run compare_live_cer.py for true CER)")
         elif val_cer is not None:
-            label = "Val CER" if val_cer < 10 else "Val Loss"
-            print(f"  {label:<8} : {val_cer:.4f}")
+            print(f"  Val CER  : {val_cer:.2f}%")
         else:
             print(f"  Val CER  : N/A (run check_cer.py for true CER)")
         print(f"  Device   : {self.device}")

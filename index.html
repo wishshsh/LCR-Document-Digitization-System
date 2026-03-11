@@ -33,7 +33,7 @@
                     </div>
                     <div class="user-info">
                         <div class="user-name" id="userName">Admin User</div>
-                        <div class="user-email" id="userEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d5b4b1b8bcbb95b9bab6b4b9a7b0b2bca6a1a7acfbb2baa3fba5bd">[email&#160;protected]</a></div>
+                        <div class="user-email" id="userEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1372777e7a7d537f7c70727f6176747a6067616a3d747c653d637b">[email&#160;protected]</a></div>
                     </div>
                 </div>
                 <div class="user-menu-divider"></div>
@@ -118,7 +118,7 @@
                                 <div class="lcr-title-block">
                                     <div>Republic of the Philippines</div>
                                     <div>Office of the City Registrar</div>
-                                    <div>Biringan City</div>
+                                    <div><span class="lcr-field-line" id="f1a_city"></span></div>
                                 </div>
                                 <div class="lcr-date-block">Date: <span class="lcr-field-line" id="f1a_date"></span></div>
                             </div>
@@ -166,7 +166,7 @@
                                 <div class="lcr-title-block">
                                     <div>Republic of the Philippines</div>
                                     <div>Office of the City Registrar</div>
-                                    <div>Biringan City</div>
+                                    <div><span class="lcr-field-line" id="f2a_city"></span></div>
                                 </div>
                                 <div class="lcr-date-block">Date: <span class="lcr-field-line" id="f2a_date"></span></div>
                             </div>
@@ -212,7 +212,7 @@
                                 <div class="lcr-title-block">
                                     <div>Republic of the Philippines</div>
                                     <div>Office of the City Registrar</div>
-                                    <div>Biringan City</div>
+                                    <div><span class="lcr-field-line" id="f3a_city"></span></div>
                                 </div>
                                 <div class="lcr-date-block">Date: <span class="lcr-field-line" id="f3a_date"></span></div>
                             </div>
@@ -514,7 +514,7 @@
                         </thead>
                         <tbody id="recordsTableBody">
                             <tr>
-                                <td colspan="5" class="no-records">No records found</td>
+                                <td colspan="6" class="no-records">No records found</td>
                             </tr>
                         </tbody>
                     </table>
@@ -631,11 +631,10 @@
                 <div class="modal-actions">
                     <button type="button" class="btn-cancel" onclick="closeChangePasswordModal()">Cancel</button>
                     <button type="submit" class="btn-save-modal">Change Password</button>
-   
-            </div>
-        </form>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
     <!-- Record Detail Modal -->
     <div id="recordDetailModal" class="modal" onclick="closeRecordModal(event)">
@@ -650,27 +649,26 @@
                 <button class="btn-template-action btn-print-tpl" onclick="printRecordModal()">🖨️ PRINT</button>
             </div>
             <div id="recordModalBody" class="record-modal-body">
-                <!-- filled by JS -->
+         
             </div>
         </div>
     </div>
 
-  <!-- Core (load first) -->
-<script src="js/globals.js"></script>
-<script src="js/navigation.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/uploads.js"></script>
-<script src="js/records.js"></script>
-<script src="js/templates.js"></script>
+    <!-- Core (load first) -->
+    <script src="js/globals.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/uploads.js"></script>
+    <script src="js/records.js"></script>
+    <script src="js/templates.js"></script>
 
-<!-- Record modal + form renderers -->
-<script src="js/record-modal.js"></script>
-<script src="js/forms/form-102.js"></script>
-<script src="js/forms/form-103.js"></script>
-<script src="js/forms/form-97.js"></script>
-<script src="js/forms/form-90.js"></script>
+    <!-- Record modal + LCR form renderers -->
+    <script src="js/record-modal.js"></script>
+    <script src="js/forms/form-1a.js"></script>
+    <script src="js/forms/form-2a.js"></script>
+    <script src="js/forms/form-3a.js"></script>
 
-<!-- Event listeners (load last) -->
-<script src="js/events.js"></script>
+    <!-- Event listeners (load last) -->
+    <script src="js/events.js"></script>
 </body>
 </html>

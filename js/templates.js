@@ -1,12 +1,8 @@
-// =============================================================
-//  js/templates.js — toggleTemplateEdit, saveTemplateChanges,
-//                    printTemplate (cert / marriage views)
-//  Requires: globals.js, navigation.js
-// =============================================================
+// ============================================================
+//  TEMPLATES — Upload-preview form edit / save / print
+//  Depends on: globals.js, navigation.js
+// ============================================================
 
-// ============================================================
-//  TEMPLATE EDIT / SAVE CHANGES / PRINT
-// ============================================================
 const _tplEditing = { cert: false, marriage: false };
 
 function toggleTemplateEdit(ctx) {
@@ -16,9 +12,9 @@ function toggleTemplateEdit(ctx) {
     const saveBtn = document.getElementById(ctx + 'SaveChangesBtn');
 
     if (_tplEditing[ctx]) {
-        box.contentEditable = 'true';
-        box.style.outline   = '2px dashed #1ec77c';
-        box.style.minHeight = '80px';
+        box.contentEditable      = 'true';
+        box.style.outline        = '2px dashed #1ec77c';
+        box.style.minHeight      = '80px';
         editBtn.textContent      = '✖ CANCEL';
         editBtn.style.background = '#aaa';
         saveBtn.style.display    = 'inline-flex';
@@ -58,5 +54,3 @@ function printTemplate(boxId) {
     win.document.close();
     setTimeout(() => { win.print(); win.close(); }, 300);
 }
-
-// ============================================================

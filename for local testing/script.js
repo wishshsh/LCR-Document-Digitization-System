@@ -708,401 +708,230 @@ function viewRecord(record) {
 function renderRecordBody(editMode) {
     const type = _currentRecord.type;
     let html = '';
-    if      (type === 'birth')            html = renderForm102(editMode);
-    else if (type === 'death')            html = renderForm103(editMode);
-    else if (type === 'marriage-cert')    html = renderForm97(editMode);
-    else if (type === 'marriage-license') html = renderForm90(editMode);
+    if      (type === 'birth')            html = renderForm1A(editMode);
+    else if (type === 'death')            html = renderForm2A(editMode);
+    else if (type === 'marriage-cert')    html = renderForm3A(editMode);
+    else if (type === 'marriage-license') html = renderForm3A(editMode);
     document.getElementById('recordModalBody').innerHTML = html;
 }
 
-// ── FORM 102 — CERTIFICATE OF LIVE BIRTH ─────────────────────
-// ── FORM 102 — CERTIFICATE OF LIVE BIRTH ─────────────────────
-function renderForm102(e) {
-    const f = (k, p) => _field(k, p, e, false);
+// ============================================================
+//  RECORD MODAL FORM RENDERERS — LCR Forms 1A / 2A / 3A
+// ============================================================
+
+// ── Shared helpers ────────────────────────────────────────────
+// _field() and _statusField() defined above
+
+// ── FORM 1A — CERTIFICATION OF BIRTH FACTS ───────────────────
+function renderForm1A(e) {
+    const f  = (k, p) => _field(k, p, e, false);
     const fw = (k, p) => _field(k, p, e, true);
-    const hdr = '<div class="lcr-official-form">' +
-        '<div class="lf-header-band">' +
-            '<div class="lf-form-ref">Municipal Form No. 102<br><small>(Revised January 2007)</small></div>' +
-            '<div class="lf-title-center">Republic of the Philippines<br>OFFICE OF THE CIVIL REGISTRAR GENERAL<br><strong>CERTIFICATE OF LIVE BIRTH</strong></div>' +
-            '<div class="lf-reg-no">Registry No.<br>' + fw('registry_no','') + '</div>' +
-        '</div>' +
-        '<div class="lf-loc-row">' +
-            '<div class="lf-loc-cell"><span class="lf-fn">Province</span>' + fw('province','') + '</div>' +
-            '<div class="lf-loc-cell"><span class="lf-fn">City/Municipality</span>' + fw('city_municipality','') + '</div>' +
-        '</div>';
 
-    const child =
-        '<div class="lf-section-label">CHILD</div>' +
-        '<table class="lf-table">' +
-        '<tr>' +
-            '<td><span class="lf-fn">1. NAME — First</span>' + fw('child_first','') + '</td>' +
-            '<td><span class="lf-fn">Middle</span>' + fw('child_middle','') + '</td>' +
-            '<td><span class="lf-fn">Last</span>' + fw('child_last','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">2. SEX</span>' + f('sex','Male/Female') + '</td>' +
-            '<td><span class="lf-fn">3. DATE OF BIRTH<br><small>Day / Month / Year</small></span>' +
-                '<div class="lf-3col">' + f('dob_day','Day') + f('dob_month','Month') + f('dob_year','Year') + '</div></td>' +
-            '<td><span class="lf-fn">6. WEIGHT AT BIRTH</span>' + f('weight','') + ' <small>grams</small></td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">4. PLACE OF BIRTH<br><small>Hospital/Clinic/Barangay</small></span>' + fw('pob_hospital','') + '</td>' +
-            '<td><span class="lf-fn">City/Municipality</span>' + fw('pob_city','') + '</td>' +
-            '<td><span class="lf-fn">Province</span>' + fw('pob_province','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">5a. TYPE OF BIRTH</span>' + f('type_of_birth','Single/Twin/etc.') + '</td>' +
-            '<td><span class="lf-fn">5b. IF MULTIPLE BIRTH, CHILD WAS</span>' + f('birth_order','First/Second/etc.') + '</td>' +
-            '<td><span class="lf-fn">5c. BIRTH ORDER</span>' + f('birth_order_total','e.g. First') + '</td>' +
-        '</tr>' +
-        '</table>';
-
-    const mother =
-        '<div class="lf-section-label">MOTHER</div>' +
-        '<table class="lf-table">' +
-        '<tr>' +
-            '<td><span class="lf-fn">7. MAIDEN NAME — First</span>' + fw('mother_first','') + '</td>' +
-            '<td><span class="lf-fn">Middle</span>' + fw('mother_middle','') + '</td>' +
-            '<td><span class="lf-fn">Last</span>' + fw('mother_last','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">8. CITIZENSHIP</span>' + f('mother_citizenship','') + '</td>' +
-            '<td><span class="lf-fn">9. RELIGION</span>' + f('mother_religion','') + '</td>' +
-            '<td><span class="lf-fn">12. AGE AT TIME OF BIRTH</span>' + f('mother_age','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td colspan="2"><span class="lf-fn">13. RESIDENCE — House No., St., Barangay</span>' + fw('mother_address','') + '</td>' +
-            '<td><span class="lf-fn">City/Municipality</span>' + fw('mother_city','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">Province</span>' + fw('mother_province','') + '</td>' +
-            '<td><span class="lf-fn">10a. Total children born alive</span>' + f('mother_children_alive','') + '</td>' +
-            '<td><span class="lf-fn">10b. Children still living</span>' + f('mother_children_living','') + '</td>' +
-        '</tr>' +
-        '</table>';
-
-    const father =
-        '<div class="lf-section-label">FATHER</div>' +
-        '<table class="lf-table">' +
-        '<tr>' +
-            '<td><span class="lf-fn">14. NAME — First</span>' + fw('father_first','') + '</td>' +
-            '<td><span class="lf-fn">Middle</span>' + fw('father_middle','') + '</td>' +
-            '<td><span class="lf-fn">Last</span>' + fw('father_last','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">15. CITIZENSHIP</span>' + f('father_citizenship','') + '</td>' +
-            '<td><span class="lf-fn">16. RELIGION</span>' + f('father_religion','') + '</td>' +
-            '<td><span class="lf-fn">18. AGE AT TIME OF BIRTH</span>' + f('father_age','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td colspan="2"><span class="lf-fn">19. RESIDENCE — House No., St., Barangay</span>' + fw('father_address','') + '</td>' +
-            '<td><span class="lf-fn">City/Municipality</span>' + fw('father_city','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">Province</span>' + fw('father_province','') + '</td>' +
-            '<td><span class="lf-fn">17. OCCUPATION</span>' + f('father_occupation','') + '</td>' +
-            '<td></td>' +
-        '</tr>' +
-        '</table>';
-
-    const parents =
-        '<div class="lf-section-label">MARRIAGE OF PARENTS</div>' +
-        '<table class="lf-table">' +
-        '<tr>' +
-            '<td><span class="lf-fn">20a. DATE — Month</span>' + f('parents_marriage_month','') + '</td>' +
-            '<td><span class="lf-fn">Day</span>' + f('parents_marriage_day','') + '</td>' +
-            '<td><span class="lf-fn">Year</span>' + f('parents_marriage_year','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">20b. PLACE — City/Municipality</span>' + fw('parents_marriage_city','') + '</td>' +
-            '<td><span class="lf-fn">Province</span>' + fw('parents_marriage_province','') + '</td>' +
-            '<td><span class="lf-fn">Country</span>' + fw('parents_marriage_country','') + '</td>' +
-        '</tr>' +
-        '</table>';
-
-    const status =
-        '<div class="lf-section-label">RECORD STATUS</div>' +
-        '<table class="lf-table"><tr>' +
-            '<td><span class="lf-fn">Status</span>' + _statusField(e) + '</td>' +
-            '<td><span class="lf-fn">Date Submitted</span>' + f('date_submitted','YYYY-MM-DD') + '</td>' +
-            '<td><span class="lf-fn">Prepared By</span>' + f('prepared_by','') + '</td>' +
-        '</tr></table></div>';
-
-    return hdr + child + mother + father + parents + status;
+    return `
+    <div class="lcr-official-form lcr-form-1a">
+        <div class="lf-cert-header">
+            <div class="lf-cert-form-ref">LCR Form No. 1A<br><small>(Birth available)</small></div>
+            <div class="lf-cert-title">
+                <div>Republic of the Philippines</div>
+                <div>Office of the City Registrar</div>
+                <div>${fw('city', 'City/Municipality')}</div>
+            </div>
+            <div class="lf-cert-date-box">
+                <span class="lf-fn">Date</span>
+                ${fw('date', 'YYYY-MM-DD')}
+            </div>
+        </div>
+        <div class="lf-cert-salutation">
+            <strong>TO WHOM IT MAY CONCERN:</strong>
+            <p>&emsp;We certify that, among others, the following facts of birth appear in our Registry of Births of this office:</p>
+        </div>
+        <div class="lf-cert-fields">
+            <div class="lf-cert-row"><span class="lf-cert-label">Registry Number</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${fw('registry_number', '')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Date of Registration</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${fw('date_of_registration', '')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Name of Child</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${fw('child_name', '')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Sex</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${f('sex', 'Male / Female')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Date of Birth</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${fw('date_of_birth', '')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Place of Birth</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${fw('place_of_birth', '')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Name of Mother</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${fw('mother_name', '')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Nationality of Mother</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${f('mother_nationality', '')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Name of Father</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${fw('father_name', '')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Nationality of Father</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${f('father_nationality', '')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Date of Marriage of Parents</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${fw('parents_marriage_date', '')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Place of Marriage of Parents</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${fw('parents_marriage_place', '')}</span></div>
+        </div>
+        <div class="lf-cert-issuance">
+            This certification is issued to ${fw('issued_to', 'Name of requesting party')} upon his/her request.
+        </div>
+        <div class="lf-cert-bottom">
+            <div class="lf-cert-verified">
+                <div class="lf-fn">Verified by:</div>
+                <div class="lf-cert-sig-line">${fw('verified_by', '')}</div>
+                <div class="lf-cert-sig-line">${fw('verified_position', '')}</div>
+            </div>
+            <div class="lf-cert-payment">
+                <div class="lf-cert-pay-row"><span>Amount Paid</span><span>: ${f('amount_paid', '')}</span></div>
+                <div class="lf-cert-pay-row"><span>OR Number</span><span>: ${f('or_number', '')}</span></div>
+                <div class="lf-cert-pay-row"><span>Date Paid</span><span>: ${f('date_paid', '')}</span></div>
+            </div>
+        </div>
+        <div class="lf-section-label">RECORD STATUS</div>
+        <table class="lf-table"><tr>
+            <td><span class="lf-fn">Status</span>${_statusField(e)}</td>
+        </tr></table>
+        <div class="lf-cert-note"><em>Note: A Mark, erasure or alteration of any entry invalidates this certification.</em></div>
+    </div>`;
 }
 
-// ── FORM 103 — CERTIFICATE OF DEATH ──────────────────────────
-function renderForm103(e) {
-    const f = (k, p) => _field(k, p, e, false);
+// ── FORM 2A — CERTIFICATION OF DEATH FACTS ───────────────────
+function renderForm2A(e) {
+    const f  = (k, p) => _field(k, p, e, false);
     const fw = (k, p) => _field(k, p, e, true);
-    const hdr =
-        '<div class="lcr-official-form lf-plain">' +
-        '<div class="lf-header-band">' +
-            '<div class="lf-form-ref">Municipal Form No. 103<br><small>(Revised January 1993)</small></div>' +
-            '<div class="lf-title-center">Republic of the Philippines<br>OFFICE OF THE CIVIL REGISTRAR GENERAL<br><strong>CERTIFICATE OF DEATH</strong></div>' +
-            '<div class="lf-reg-no">Registry No.<br>' + fw('registry_no','') + '</div>' +
-        '</div>' +
-        '<div class="lf-loc-row">' +
-            '<div class="lf-loc-cell"><span class="lf-fn">Province</span>' + fw('province','') + '</div>' +
-            '<div class="lf-loc-cell"><span class="lf-fn">City/Municipality</span>' + fw('city_municipality','') + '</div>' +
-        '</div>';
 
-    const main =
-        '<table class="lf-table">' +
-        '<tr>' +
-            '<td><span class="lf-fn">1. NAME — First</span>' + fw('deceased_first','') + '</td>' +
-            '<td><span class="lf-fn">Middle</span>' + fw('deceased_middle','') + '</td>' +
-            '<td><span class="lf-fn">Last</span>' + fw('deceased_last','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">2. SEX</span>' + f('sex','Male/Female') + '</td>' +
-            '<td><span class="lf-fn">3. RELIGION</span>' + f('religion','') + '</td>' +
-            '<td><span class="lf-fn">4. AGE — Years / Months / Days</span>' +
-                '<div class="lf-3col">' + f('age_years','Yrs') + f('age_months','Mo') + f('age_days','Days') + '</div></td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td colspan="2"><span class="lf-fn">5. PLACE OF DEATH — Hospital/Barangay</span>' + fw('pod_hospital','') + '</td>' +
-            '<td><span class="lf-fn">City/Municipality</span>' + fw('pod_city','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">Province</span>' + fw('pod_province','') + '</td>' +
-            '<td><span class="lf-fn">6. DATE OF DEATH — Day / Month / Year</span>' +
-                '<div class="lf-3col">' + f('dod_day','Day') + f('dod_month','Month') + f('dod_year','Year') + '</div></td>' +
-            '<td><span class="lf-fn">7. CITIZENSHIP</span>' + f('citizenship','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td colspan="2"><span class="lf-fn">8. RESIDENCE — House No., St., Barangay</span>' + fw('residence_address','') + '</td>' +
-            '<td><span class="lf-fn">City/Municipality</span>' + fw('residence_city','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">Province</span>' + fw('residence_province','') + '</td>' +
-            '<td><span class="lf-fn">9. CIVIL STATUS</span>' + f('civil_status','Single/Married/etc.') + '</td>' +
-            '<td><span class="lf-fn">10. OCCUPATION</span>' + f('occupation','') + '</td>' +
-        '</tr>' +
-        '</table>';
-
-    const causes =
-        '<div class="lf-section-label">MEDICAL CERTIFICATE — CAUSES OF DEATH</div>' +
-        '<table class="lf-table">' +
-        '<tr><td><span class="lf-fn">17a. Immediate Cause</span>' + fw('cause_immediate','') + '</td></tr>' +
-        '<tr><td><span class="lf-fn">17b. Antecedent Cause</span>' + fw('cause_antecedent','') + '</td></tr>' +
-        '<tr><td><span class="lf-fn">17c. Underlying Cause</span>' + fw('cause_underlying','') + '</td></tr>' +
-        '<tr><td><span class="lf-fn">17d. Other Significant Conditions Contributing to Death</span>' + fw('cause_other','') + '</td></tr>' +
-        '</table>';
-
-    const disposal =
-        '<div class="lf-section-label">DISPOSAL</div>' +
-        '<table class="lf-table">' +
-        '<tr>' +
-            '<td><span class="lf-fn">21. CORPSE DISPOSAL</span>' + f('corpse_disposal','Burial/Cremation') + '</td>' +
-            '<td><span class="lf-fn">22. BURIAL/CREMATION PERMIT No.</span>' + f('burial_permit_no','') + '</td>' +
-            '<td><span class="lf-fn">Date Issued</span>' + f('burial_permit_date','YYYY-MM-DD') + '</td>' +
-            '<td><span class="lf-fn">23. AUTOPSY</span>' + f('autopsy','Yes/No') + '</td>' +
-        '</tr>' +
-        '<tr><td colspan="4"><span class="lf-fn">24. NAME AND ADDRESS OF CEMETERY/CREMATORY</span>' + fw('cemetery_address','') + '</td></tr>' +
-        '</table>';
-
-    const informant =
-        '<div class="lf-section-label">INFORMANT</div>' +
-        '<table class="lf-table"><tr>' +
-            '<td><span class="lf-fn">Name in Print</span>' + fw('informant_name','') + '</td>' +
-            '<td><span class="lf-fn">Relationship to Deceased</span>' + f('informant_relationship','') + '</td>' +
-            '<td><span class="lf-fn">Address</span>' + fw('informant_address','') + '</td>' +
-            '<td><span class="lf-fn">Date</span>' + f('informant_date','YYYY-MM-DD') + '</td>' +
-        '</tr></table>';
-
-    const status =
-        '<div class="lf-section-label">RECORD STATUS</div>' +
-        '<table class="lf-table"><tr>' +
-            '<td><span class="lf-fn">Status</span>' + _statusField(e) + '</td>' +
-            '<td><span class="lf-fn">Prepared By</span>' + f('prepared_by','') + '</td>' +
-            '<td><span class="lf-fn">Date Received</span>' + f('date_received','YYYY-MM-DD') + '</td>' +
-        '</tr></table></div>';
-
-    return hdr + main + causes + disposal + informant + status;
+    return `
+    <div class="lcr-official-form lcr-form-2a">
+        <div class="lf-cert-header">
+            <div class="lf-cert-form-ref">LCR Form No. 2A<br><small>(Death available)</small></div>
+            <div class="lf-cert-title">
+                <div>Republic of the Philippines</div>
+                <div>Office of the City Registrar</div>
+                <div>${fw('city', 'City/Municipality')}</div>
+            </div>
+            <div class="lf-cert-date-box">
+                <span class="lf-fn">Date</span>
+                ${fw('date', 'YYYY-MM-DD')}
+            </div>
+        </div>
+        <div class="lf-cert-salutation">
+            <strong>TO WHOM IT MAY CONCERN:</strong>
+            <p>&emsp;We certify that, among others, the following facts of death appear in our Registry of Deaths of this office:</p>
+        </div>
+        <div class="lf-cert-fields">
+            <div class="lf-cert-row"><span class="lf-cert-label">Registry Number</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${fw('registry_number', '')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Date of Registration</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${fw('date_of_registration', '')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Name of Deceased</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${fw('deceased_name', '')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Sex</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${f('sex', 'Male / Female')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Age</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${f('age', '')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Civil Status</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${f('civil_status', 'Single / Married / etc.')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Nationality</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${f('nationality', '')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Date of Death</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${fw('date_of_death', '')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Place of Death</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${fw('place_of_death', '')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Cause of Death</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${fw('cause_of_death', '')}</span></div>
+        </div>
+        <div class="lf-cert-issuance">
+            This certification is issued to ${fw('issued_to', 'Name of requesting party')} upon his/her request.
+        </div>
+        <div class="lf-cert-bottom">
+            <div class="lf-cert-verified">
+                <div class="lf-fn">Verified by:</div>
+                <div class="lf-cert-sig-line">${fw('verified_by', '')}</div>
+                <div class="lf-cert-sig-line">${fw('verified_position', '')}</div>
+            </div>
+            <div class="lf-cert-payment">
+                <div class="lf-cert-pay-row"><span>Amount Paid</span><span>: ${f('amount_paid', '')}</span></div>
+                <div class="lf-cert-pay-row"><span>OR Number</span><span>: ${f('or_number', '')}</span></div>
+                <div class="lf-cert-pay-row"><span>Date Paid</span><span>: ${f('date_paid', '')}</span></div>
+            </div>
+        </div>
+        <div class="lf-section-label">RECORD STATUS</div>
+        <table class="lf-table"><tr>
+            <td><span class="lf-fn">Status</span>${_statusField(e)}</td>
+        </tr></table>
+        <div class="lf-cert-note"><em>Note: A Mark, erasure or alteration of any entry invalidates this certification.</em></div>
+    </div>`;
 }
 
-// ── FORM 97 — CERTIFICATE OF MARRIAGE ────────────────────────
-function renderForm97(e) {
-    const f = (k, p) => _field(k, p, e, false);
+// ── FORM 3A — CERTIFICATION OF MARRIAGE FACTS ────────────────
+function renderForm3A(e) {
+    const f  = (k, p) => _field(k, p, e, false);
     const fw = (k, p) => _field(k, p, e, true);
 
-    const party = (label, px) =>
-        '<div class="lf-section-label">' + label + '</div>' +
-        '<table class="lf-table">' +
-        '<tr>' +
-            '<td><span class="lf-fn">1. NAME — First</span>' + fw(px+'_first','') + '</td>' +
-            '<td><span class="lf-fn">Middle</span>' + fw(px+'_middle','') + '</td>' +
-            '<td><span class="lf-fn">Last</span>' + fw(px+'_last','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">2a. Date of Birth — Day/Month/Year</span>' +
-                '<div class="lf-3col">' + f(px+'_dob_day','Day') + f(px+'_dob_month','Month') + f(px+'_dob_year','Year') + '</div></td>' +
-            '<td><span class="lf-fn">2b. Age</span>' + f(px+'_age','') + '</td>' +
-            '<td><span class="lf-fn">3. Place of Birth — City/Municipality</span>' + fw(px+'_pob_city','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">Province</span>' + fw(px+'_pob_province','') + '</td>' +
-            '<td><span class="lf-fn">4a. Sex</span>' + f(px+'_sex','Male/Female') + '</td>' +
-            '<td><span class="lf-fn">4b. Citizenship</span>' + f(px+'_citizenship','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td colspan="2"><span class="lf-fn">5. Residence</span>' + fw(px+'_residence','') + '</td>' +
-            '<td><span class="lf-fn">6. Religion</span>' + f(px+'_religion','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">7. Civil Status</span>' + f(px+'_civil_status','') + '</td>' +
-            '<td><span class="lf-fn">8. Name of Father — First</span>' + fw(px+'_father_first','') + '</td>' +
-            '<td><span class="lf-fn">Last</span>' + fw(px+'_father_last','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">9. Father\'s Citizenship</span>' + f(px+'_father_citizenship','') + '</td>' +
-            '<td><span class="lf-fn">10. Maiden Name of Mother — First</span>' + fw(px+'_mother_first','') + '</td>' +
-            '<td><span class="lf-fn">Last</span>' + fw(px+'_mother_last','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">11. Mother\'s Citizenship</span>' + f(px+'_mother_citizenship','') + '</td>' +
-            '<td colspan="2"><span class="lf-fn">12. Name of Person Who Gave Consent — First</span>' + fw(px+'_consent_first','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">13. Relationship</span>' + f(px+'_consent_relationship','') + '</td>' +
-            '<td colspan="2"><span class="lf-fn">14. Residence</span>' + fw(px+'_consent_residence','') + '</td>' +
-        '</tr>' +
-        '</table>';
-
-    const hdr =
-        '<div class="lcr-official-form lf-plain">' +
-        '<div class="lf-header-band">' +
-            '<div class="lf-form-ref">Municipal Form No. 97<br><small>(Revised January 2007)</small></div>' +
-            '<div class="lf-title-center">Republic of the Philippines<br>OFFICE OF THE CIVIL REGISTRAR GENERAL<br><strong>CERTIFICATE OF MARRIAGE</strong></div>' +
-            '<div class="lf-reg-no">Registry No.<br>' + fw('registry_no','') + '</div>' +
-        '</div>' +
-        '<div class="lf-loc-row">' +
-            '<div class="lf-loc-cell"><span class="lf-fn">Province</span>' + fw('province','') + '</div>' +
-            '<div class="lf-loc-cell"><span class="lf-fn">City/Municipality</span>' + fw('city_municipality','') + '</div>' +
-        '</div>';
-
-    const details =
-        '<div class="lf-section-label">MARRIAGE DETAILS</div>' +
-        '<table class="lf-table">' +
-        '<tr>' +
-            '<td><span class="lf-fn">15. Place of Marriage — Office/Church/Mosque</span>' + fw('marriage_venue','') + '</td>' +
-            '<td><span class="lf-fn">City/Municipality</span>' + fw('marriage_city','') + '</td>' +
-            '<td><span class="lf-fn">Province</span>' + fw('marriage_province','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">16. Date of Marriage — Day/Month/Year</span>' +
-                '<div class="lf-3col">' + f('marriage_day','Day') + f('marriage_month','Month') + f('marriage_year','Year') + '</div></td>' +
-            '<td><span class="lf-fn">17. Time of Marriage</span>' + f('marriage_time','e.g. 10:00 AM') + '</td>' +
-            '<td></td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">Marriage License No.</span>' + f('license_no','') + '</td>' +
-            '<td><span class="lf-fn">Date Issued</span>' + f('license_date_issued','YYYY-MM-DD') + '</td>' +
-            '<td><span class="lf-fn">Place Issued</span>' + f('license_place_issued','') + '</td>' +
-        '</tr>' +
-        '</table>';
-
-    const status =
-        '<div class="lf-section-label">RECORD STATUS</div>' +
-        '<table class="lf-table"><tr>' +
-            '<td><span class="lf-fn">Status</span>' + _statusField(e) + '</td>' +
-            '<td><span class="lf-fn">Received By</span>' + f('received_by','') + '</td>' +
-            '<td><span class="lf-fn">Date Received</span>' + f('date_received','YYYY-MM-DD') + '</td>' +
-        '</tr></table></div>';
-
-    return hdr + party('HUSBAND', 'husband') + party('WIFE', 'wife') + details + status;
-}
-
-// ── FORM 90 — APPLICATION FOR MARRIAGE LICENSE ────────────────
-function renderForm90(e) {
-    const f = (k, p) => _field(k, p, e, false);
-    const fw = (k, p) => _field(k, p, e, true);
-
-    const applicant = (label, px) =>
-        '<div class="lf-section-label">' + label + '</div>' +
-        '<table class="lf-table">' +
-        '<tr>' +
-            '<td><span class="lf-fn">1. Name — First</span>' + fw(px+'_first','') + '</td>' +
-            '<td><span class="lf-fn">Middle</span>' + fw(px+'_middle','') + '</td>' +
-            '<td><span class="lf-fn">Last</span>' + fw(px+'_last','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">2. Date of Birth — Day/Month/Year</span>' +
-                '<div class="lf-3col">' + f(px+'_dob_day','Day') + f(px+'_dob_month','Month') + f(px+'_dob_year','Year') + '</div></td>' +
-            '<td><span class="lf-fn">Age</span>' + f(px+'_age','') + '</td>' +
-            '<td><span class="lf-fn">3. Place of Birth — City/Municipality</span>' + fw(px+'_pob_city','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">Province</span>' + fw(px+'_pob_province','') + '</td>' +
-            '<td><span class="lf-fn">4. Sex</span>' + f(px+'_sex','Male/Female') + '</td>' +
-            '<td><span class="lf-fn">Citizenship</span>' + f(px+'_citizenship','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td colspan="2"><span class="lf-fn">5. Residence</span>' + fw(px+'_residence','') + '</td>' +
-            '<td><span class="lf-fn">6. Religion</span>' + f(px+'_religion','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">7. Civil Status</span>' + f(px+'_civil_status','') + '</td>' +
-            '<td><span class="lf-fn">8. If Previously Married — How Dissolved</span>' + f(px+'_prev_marriage','') + '</td>' +
-            '<td><span class="lf-fn">11. Degree of Relationship</span>' + f(px+'_relationship_degree','None') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">12. Name of Father — First</span>' + fw(px+'_father_first','') + '</td>' +
-            '<td><span class="lf-fn">Middle</span>' + fw(px+'_father_middle','') + '</td>' +
-            '<td><span class="lf-fn">Last</span>' + fw(px+'_father_last','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">13. Father\'s Citizenship</span>' + f(px+'_father_citizenship','') + '</td>' +
-            '<td colspan="2"><span class="lf-fn">14. Father\'s Residence</span>' + fw(px+'_father_residence','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">15. Maiden Name of Mother — First</span>' + fw(px+'_mother_first','') + '</td>' +
-            '<td><span class="lf-fn">Middle</span>' + fw(px+'_mother_middle','') + '</td>' +
-            '<td><span class="lf-fn">Last</span>' + fw(px+'_mother_last','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">16. Mother\'s Citizenship</span>' + f(px+'_mother_citizenship','') + '</td>' +
-            '<td colspan="2"><span class="lf-fn">17. Mother\'s Residence</span>' + fw(px+'_mother_residence','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td colspan="3"><span class="lf-fn">18. Person Who Gave Consent/Advice</span>' + fw(px+'_consent_person','') + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td><span class="lf-fn">19. Relationship</span>' + f(px+'_consent_relationship','') + '</td>' +
-            '<td><span class="lf-fn">20. Citizenship</span>' + f(px+'_consent_citizenship','') + '</td>' +
-            '<td><span class="lf-fn">21. Residence</span>' + fw(px+'_consent_residence','') + '</td>' +
-        '</tr>' +
-        '</table>';
-
-    const hdr =
-        '<div class="lcr-official-form lf-plain">' +
-        '<div class="lf-header-band">' +
-            '<div class="lf-form-ref">Municipal Form 90 (Form No. 2)<br><small>(Revised January 2007)</small></div>' +
-            '<div class="lf-title-center">Republic of the Philippines<br>OFFICE OF THE CIVIL REGISTRAR GENERAL<br><strong>APPLICATION FOR MARRIAGE LICENSE</strong></div>' +
-            '<div class="lf-reg-no">Registry No.<br>' + fw('registry_no','') + '</div>' +
-        '</div>' +
-        '<div class="lf-loc-row">' +
-            '<div class="lf-loc-cell"><span class="lf-fn">Province</span>' + fw('province','') + '</div>' +
-            '<div class="lf-loc-cell"><span class="lf-fn">City/Municipality</span>' + fw('city_municipality','') + '</div>' +
-        '</div>' +
-        '<table class="lf-table"><tr>' +
-            '<td><span class="lf-fn">Received by</span>' + fw('received_by','') + '</td>' +
-            '<td><span class="lf-fn">Marriage License No.</span>' + f('license_no','') + '</td>' +
-        '</tr><tr>' +
-            '<td><span class="lf-fn">Date of Receipt</span>' + f('date_receipt','YYYY-MM-DD') + '</td>' +
-            '<td><span class="lf-fn">Date of Issuance of Marriage License</span>' + f('date_issuance','YYYY-MM-DD') + '</td>' +
-        '</tr></table>';
-
-    const status =
-        '<div class="lf-section-label">RECORD STATUS</div>' +
-        '<table class="lf-table"><tr>' +
-            '<td><span class="lf-fn">Status</span>' + _statusField(e) + '</td>' +
-            '<td><span class="lf-fn">Processed By</span>' + f('processed_by','') + '</td>' +
-            '<td><span class="lf-fn">Date Processed</span>' + f('date_processed','YYYY-MM-DD') + '</td>' +
-        '</tr></table></div>';
-
-    return hdr + applicant('GROOM', 'groom') + applicant('BRIDE', 'bride') + status;
+    return `
+    <div class="lcr-official-form lcr-form-3a">
+        <div class="lf-cert-header">
+            <div class="lf-cert-form-ref">LCR Form No. 3A<br><small>(Marriage available)</small></div>
+            <div class="lf-cert-title">
+                <div>Republic of the Philippines</div>
+                <div>Office of the City Registrar</div>
+                <div>${fw('city', 'City/Municipality')}</div>
+            </div>
+            <div class="lf-cert-date-box">
+                <span class="lf-fn">Date</span>
+                ${fw('date', 'YYYY-MM-DD')}
+            </div>
+        </div>
+        <div class="lf-cert-salutation">
+            <strong>TO WHOM IT MAY CONCERN:</strong>
+            <p>&emsp;We certify that, among others, the following facts of marriage appear in our Registry of Marriages of this office:</p>
+        </div>
+        <div class="lf-cert-fields">
+            <div class="lf-cert-row"><span class="lf-cert-label">Registry Number</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${fw('registry_number', '')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Date of Registration</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${fw('date_of_registration', '')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Date of Marriage</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${fw('date_of_marriage', '')}</span></div>
+            <div class="lf-cert-row"><span class="lf-cert-label">Place of Marriage</span><span class="lf-cert-colon">:</span><span class="lf-cert-value">${fw('place_of_marriage', '')}</span></div>
+        </div>
+        <table class="lf-table lf-cert-parties">
+            <thead>
+                <tr><th></th><th>HUSBAND</th><th>WIFE</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="lf-cert-row-label">Name</td>
+                    <td>${fw('husband_name', '')}</td>
+                    <td>${fw('wife_name', '')}</td>
+                </tr>
+                <tr>
+                    <td class="lf-cert-row-label">Age</td>
+                    <td>${f('husband_age', '')}</td>
+                    <td>${f('wife_age', '')}</td>
+                </tr>
+                <tr>
+                    <td class="lf-cert-row-label">Nationality</td>
+                    <td>${f('husband_nationality', '')}</td>
+                    <td>${f('wife_nationality', '')}</td>
+                </tr>
+                <tr>
+                    <td class="lf-cert-row-label">Name of Mother</td>
+                    <td>${fw('husband_mother_name', '')}</td>
+                    <td>${fw('wife_mother_name', '')}</td>
+                </tr>
+                <tr>
+                    <td class="lf-cert-row-label">Nationality of Mother</td>
+                    <td>${f('husband_mother_nationality', '')}</td>
+                    <td>${f('wife_mother_nationality', '')}</td>
+                </tr>
+                <tr>
+                    <td class="lf-cert-row-label">Name of Father</td>
+                    <td>${fw('husband_father_name', '')}</td>
+                    <td>${fw('wife_father_name', '')}</td>
+                </tr>
+                <tr>
+                    <td class="lf-cert-row-label">Nationality of Father</td>
+                    <td>${f('husband_father_nationality', '')}</td>
+                    <td>${f('wife_father_nationality', '')}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="lf-cert-issuance">
+            This certification is issued to ${fw('issued_to', 'Name of requesting party')} upon his/her request.
+        </div>
+        <div class="lf-cert-bottom">
+            <div class="lf-cert-verified">
+                <div class="lf-fn">Verified by:</div>
+                <div class="lf-cert-sig-line">${fw('verified_by', '')}</div>
+                <div class="lf-cert-sig-line">${fw('verified_position', '')}</div>
+            </div>
+            <div class="lf-cert-payment">
+                <div class="lf-cert-pay-row"><span>Amount Paid</span><span>: ${f('amount_paid', '')}</span></div>
+                <div class="lf-cert-pay-row"><span>OR Number</span><span>: ${f('or_number', '')}</span></div>
+                <div class="lf-cert-pay-row"><span>Date Paid</span><span>: ${f('date_paid', '')}</span></div>
+            </div>
+        </div>
+        <div class="lf-section-label">RECORD STATUS</div>
+        <table class="lf-table"><tr>
+            <td><span class="lf-fn">Status</span>${_statusField(e)}</td>
+        </tr></table>
+        <div class="lf-cert-note"><em>Note: A Mark, erasure or alteration of any entry invalidates this certification.</em></div>
+    </div>`;
 }
 
 function toggleRecordEdit() {
@@ -1139,48 +968,229 @@ function printRecordModal() {
     const title   = document.getElementById('recordModalTitle').textContent;
     const content = document.getElementById('recordModalBody').innerHTML;
     const win = window.open('', '_blank');
-    win.document.write('<!DOCTYPE html><html><head><title>' + title + '</title><style>' +
-        '* { margin:0; padding:0; box-sizing:border-box; }' +
-        'body { font-family: Arial, sans-serif; background:#fff; color:#111; padding:24px 32px; font-size:12px; }' +
-        '.lf-input,.lf-select { display:none !important; }' +
-        '.lf-val { display:inline-block; min-width:60px; border-bottom:1px solid #666; padding-bottom:1px; font-size:12px; }' +
-        '.lf-status { padding:2px 8px; border-radius:3px; font-size:11px; font-weight:bold; display:inline-block; }' +
-        '.lf-status-pending  { background:#fff3cd; color:#856404; }' +
-        '.lf-status-approved { background:#d1e7dd; color:#0a3622; }' +
-        '.lf-status-rejected { background:#f8d7da; color:#58151c; }' +
-        '.lf-status-processed{ background:#cfe2ff; color:#084298; }' +
-        '.lcr-official-form { border:2px solid #1a7a4a; width:100%; }' +
-        '.lcr-official-form.lf-plain { border:2px solid #333; }' +
-        '.lf-plain .lf-header-band { border-bottom:2px solid #333; }' +
-        '.lf-plain .lf-reg-no { border:1.5px solid #333; }' +
-        '.lf-plain .lf-loc-row { border-bottom:1.5px solid #333; }' +
-        '.lf-plain .lf-loc-cell { border-right:1px solid #333; }' +
-        '.lf-plain .lf-section-label { background:#2c3e50; }' +
-        '.lf-plain .lf-table td,.lf-plain .lf-table th { border:1px solid #333; }' +
-        '.lf-plain .lf-table th { background:#f0f0f0; color:#333; }' +
-        '.lf-plain .lf-fn { color:#333; }' +
-        '.lf-plain .lf-side-label { color:#333; }' +
-        '.lf-header-band { display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #1a7a4a; padding:10px 12px; gap:10px; background:#fff; }' +
-        '.lf-title-center { text-align:center; font-size:12px; flex:1; line-height:1.6; }' +
-        '.lf-title-center strong { font-size:16px; display:block; margin-top:4px; letter-spacing:0.5px; }' +
-        '.lf-form-ref { font-size:10px; color:#555; min-width:130px; }' +
-        '.lf-reg-no { text-align:right; font-size:11px; border:1.5px solid #1a7a4a; padding:4px 10px; min-width:100px; }' +
-        '.lf-loc-row { display:flex; border-bottom:1.5px solid #1a7a4a; }' +
-        '.lf-loc-cell { flex:1; padding:5px 10px; font-size:12px; border-right:1px solid #1a7a4a; }' +
-        '.lf-loc-cell:last-child { border-right:none; }' +
-        '.lf-section-label { background:#1a7a4a; color:#fff; padding:4px 10px; font-size:11px; font-weight:bold; letter-spacing:0.5px; }' +
-        '.lf-table { width:100%; border-collapse:collapse; }' +
-        '.lf-table td,.lf-table th { border:1px solid #1a7a4a; padding:6px 8px; vertical-align:top; font-size:12px; }' +
-        '.lf-table th { background:#e8f5f0; font-weight:bold; font-size:11px; text-align:center; color:#1a7a4a; }' +
-        '.lf-fn { font-weight:bold; font-size:10px; color:#1a7a4a; display:block; margin-bottom:3px; }' +
-        '.lf-sub { font-size:9px; color:#666; margin-right:2px; }' +
-        '.lf-name-row { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }' +
-        '.lf-side-label { font-weight:bold; width:70px; font-size:11px; color:#1a7a4a; }' +
-        '.lf-3col { display:flex; gap:8px; flex-wrap:nowrap; align-items:center; margin-top:3px; }' +
-        '.lf-3col .lf-val { flex:1; min-width:0; }' +
-        '.lf-table td { overflow:hidden; word-break:break-word; }' +
-        '.lf-val { max-width:100%; word-break:break-word; }' +
-        '</style></head><body>' + content + '</body></html>');
+    win.document.write(`<!DOCTYPE html><html><head><title>${title}</title>
+<style>
+/* ── Reset & page ─────────────────────────────────────────── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #fff;
+    color: #111;
+    padding: 32px 48px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+@page { margin: 15mm 18mm; }
+
+/* ── Hide inputs, show values as underlines ──────────────── */
+.lf-input, .lf-select { display: none !important; }
+.lf-val {
+    display: inline-block;
+    min-width: 120px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 1px;
+    font-size: 13px;
+    word-break: break-word;
+    vertical-align: bottom;
+}
+
+/* ── Status — plain text, no badge box ───────────────────── */
+.lf-status { font-weight: bold; font-size: 13px; }
+.lf-status-pending   { color: #856404; }
+.lf-status-approved  { color: #0a3622; }
+.lf-status-rejected  { color: #58151c; }
+.lf-status-processed { color: #084298; }
+
+/* ── Strip all box borders & backgrounds ─────────────────── */
+.lcr-official-form,
+.lcr-form-1a, .lcr-form-2a, .lcr-form-3a {
+    border: none !important;
+    background: transparent !important;
+    width: 100%;
+}
+
+/* ── Hide RECORD STATUS section entirely ─────────────────── */
+.lf-section-label,
+.lf-table { display: none !important; }
+
+/* ── Header: form ref top-left, title center, date top-right */
+.lf-cert-header {
+    display: block;
+    border: none !important;
+    padding: 0 0 18px 0;
+    position: relative;
+}
+.lf-cert-form-ref {
+    font-size: 11px;
+    color: #333;
+    line-height: 1.5;
+    position: absolute;
+    top: 0; left: 0;
+}
+.lf-cert-title {
+    text-align: center;
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 1.8;
+    padding: 0 130px;
+}
+.lf-cert-title div:nth-child(2) {
+    font-size: 20px;
+    font-weight: bold;
+}
+.lf-cert-date-box {
+    position: absolute;
+    top: 0; right: 0;
+    font-size: 13px;
+    text-align: right;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+.lf-cert-date-box .lf-fn {
+    display: inline;
+    font-weight: normal;
+    font-size: 13px;
+    color: #111;
+    margin: 0;
+}
+.lf-cert-date-box .lf-val { min-width: 120px; }
+
+/* ── Salutation ──────────────────────────────────────────── */
+.lf-cert-salutation {
+    padding: 20px 0 10px 0;
+    font-size: 13px;
+    line-height: 1.7;
+}
+.lf-cert-salutation strong { font-size: 13px; }
+.lf-cert-salutation p { margin-top: 6px; text-indent: 2em; }
+
+/* ── Field rows ──────────────────────────────────────────── */
+.lf-cert-fields { padding: 8px 0 16px 0; }
+.lf-cert-row {
+    display: flex;
+    align-items: baseline;
+    padding: 3px 0;
+    border-bottom: none;
+    gap: 0;
+}
+.lf-cert-label {
+    min-width: 220px;
+    flex-shrink: 0;
+    font-size: 13px;
+}
+.lf-cert-colon {
+    flex-shrink: 0;
+    padding: 0 10px 0 4px;
+}
+.lf-cert-value {
+    flex: 1;
+}
+.lf-cert-value .lf-val {
+    width: 100%;
+    min-width: 0;
+    border-bottom: 1px solid #333;
+    display: block;
+}
+
+/* ── Husband/Wife table (Form 3A) — plain grid ───────────── */
+.lf-cert-parties {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 16px;
+    table-layout: fixed;
+}
+.lf-cert-parties th {
+    background: none !important;
+    color: #111;
+    text-align: center;
+    padding: 5px 10px;
+    font-size: 13px;
+    font-weight: bold;
+    border: 1px solid #999;
+}
+.lf-cert-parties td {
+    border: 1px solid #999;
+    padding: 5px 10px;
+    font-size: 13px;
+    vertical-align: middle;
+}
+.lf-cert-row-label {
+    font-size: 12px;
+    color: #333;
+    background: none !important;
+    width: 160px;
+}
+.lf-cert-parties .lf-val {
+    display: block;
+    width: 100%;
+    border-bottom: 1px solid #555;
+    min-width: 0;
+}
+
+/* ── Issuance line ───────────────────────────────────────── */
+.lf-cert-issuance {
+    padding: 16px 0;
+    font-size: 13px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px;
+    line-height: 2;
+}
+.lf-cert-issuance .lf-val {
+    flex: 1;
+    min-width: 200px;
+    border-bottom: 1px solid #333;
+}
+
+/* ── Bottom: verified (left) + payment (left below) ─────── */
+.lf-cert-bottom {
+    display: block;
+    padding: 16px 0;
+    border-top: none;
+}
+.lf-cert-verified {
+    font-size: 13px;
+    margin-bottom: 32px;
+}
+.lf-cert-sig-line {
+    display: inline-block;
+    margin-top: 28px;
+    border-bottom: 1px solid #333;
+    min-width: 180px;
+    padding-bottom: 1px;
+}
+.lf-cert-sig-line .lf-val {
+    border-bottom: none;
+    display: inline-block;
+    min-width: 160px;
+}
+.lf-cert-payment {
+    font-size: 13px;
+    text-align: left;
+    margin-top: 12px;
+}
+.lf-cert-pay-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0;
+    padding: 3px 0;
+}
+.lf-cert-pay-row span:first-child { min-width: 110px; }
+.lf-cert-pay-row span:nth-child(2) { padding: 0 8px; }
+.lf-cert-pay-row .lf-val { min-width: 100px; border-bottom: 1px solid #333; }
+
+/* ── Note ────────────────────────────────────────────────── */
+.lf-cert-note {
+    padding: 20px 0 0 0;
+    font-size: 12px;
+    color: #333;
+    border-top: none;
+    font-style: italic;
+}
+</style>
+</head><body>${content}</body></html>`);
     win.document.close();
     setTimeout(() => { win.print(); win.close(); }, 500);
 }

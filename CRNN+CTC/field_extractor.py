@@ -70,45 +70,31 @@ BIRTH_FIELDS = {
     "place_birth_city":           (0.47, 0.169, 0.70, 0.199),
     "place_birth_province":       (0.71, 0.169, 0.99, 0.199),
 
-    # Items 5-6 — Type / Order / Weight
-    "type_of_birth":              (0.14, 0.222, 0.40, 0.240),
-    "birth_order":                (0.55, 0.222, 0.75, 0.240),
-    "weight_at_birth":            (0.82, 0.222, 0.97, 0.240),
+  
 
     # Mother section
-    "mother_first_name":          (0.14, 0.272, 0.41, 0.288),
-    "mother_middle_name":         (0.41, 0.272, 0.64, 0.288),
-    "mother_last_name":           (0.64, 0.272, 0.97, 0.288),
-    "mother_citizenship":         (0.14, 0.296, 0.38, 0.312),
-    "mother_religion":            (0.50, 0.296, 0.85, 0.312),
-    "mother_total_children":      (0.14, 0.324, 0.26, 0.340),
-    "mother_children_living":     (0.26, 0.324, 0.42, 0.340),
-    "mother_children_dead":       (0.42, 0.324, 0.56, 0.340),
-    "mother_occupation":          (0.56, 0.324, 0.80, 0.340),
-    "mother_age_at_birth":        (0.84, 0.324, 0.97, 0.340),
-    "mother_residence":           (0.20, 0.356, 0.90, 0.372),
+    "mother_first_name":          (0.03, 0.248, 0.40, 0.276),
+    "mother_middle_name":         (0.40, 0.248, 0.64, 0.276),
+    "mother_last_name":           (0.64, 0.248, 0.99, 0.276),
+    "mother_citizenship":         (0.03, 0.277, 0.50, 0.305),
+    
 
     # Father section
-    "father_first_name":          (0.14, 0.394, 0.41, 0.410),
-    "father_middle_name":         (0.41, 0.394, 0.64, 0.410),
-    "father_last_name":           (0.64, 0.394, 0.97, 0.410),
-    "father_citizenship":         (0.14, 0.420, 0.33, 0.436),
-    "father_religion":            (0.33, 0.420, 0.58, 0.436),
-    "father_occupation":          (0.38, 0.444, 0.70, 0.460),
-    "father_age_at_birth":        (0.84, 0.444, 0.97, 0.460),
-    "father_residence":           (0.20, 0.464, 0.90, 0.480),
+    "father_first_name":          (0.03, 0.380, 0.40, 0.410),
+    "father_middle_name":         (0.40, 0.380, 0.64, 0.410),
+    "father_last_name":           (0.64, 0.380, 0.99, 0.410),
+    "father_citizenship":         (0.03, 0.411, 0.28, 0.445),
+   
 
     # Item 20 — Marriage of Parents
-    "parents_marriage_month":     (0.14, 0.496, 0.27, 0.512),
-    "parents_marriage_day":       (0.27, 0.496, 0.36, 0.512),
-    "parents_marriage_year":      (0.36, 0.496, 0.46, 0.512),
-    "parents_marriage_city":      (0.48, 0.496, 0.68, 0.512),
-    "parents_marriage_province":  (0.68, 0.496, 0.84, 0.512),
+    "parents_marriage_month":     (0.03, 0.496, 0.19, 0.526),
+    "parents_marriage_day":       (0.19, 0.496, 0.27, 0.526),
+    "parents_marriage_year":      (0.27, 0.496, 0.38, 0.526),
+    
+    "parents_marriage_city":      (0.41, 0.496, 0.68, 0.526),
+    "parents_marriage_province":  (0.68, 0.496, 0.84, 0.526),
 
-    # Item 22 — Informant
-    "informant_name":             (0.14, 0.668, 0.50, 0.682),
-    "informant_relationship":     (0.14, 0.682, 0.50, 0.696),
-    "informant_date":             (0.14, 0.710, 0.30, 0.724),
+   
 }
 
 # Form 103 → Certificate of Death (Form 2A)

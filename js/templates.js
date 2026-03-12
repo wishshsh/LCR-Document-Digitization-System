@@ -3,7 +3,8 @@
 //  Depends on: globals.js, navigation.js
 // ============================================================
 
-const _tplEditing = { cert: false, marriage: false };
+// _tplEditing is declared in globals.js
+
 
 function toggleTemplateEdit(ctx) {
     _tplEditing[ctx] = !_tplEditing[ctx];

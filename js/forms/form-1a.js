@@ -10,11 +10,11 @@ function renderForm1A(e) {
     return `
     <div class="lcr-official-form lcr-form-1a">
         <div class="lf-cert-header">
-            <div class="lf-cert-form-ref">LCR Form No. 1A<br><small>(Birth available)</small></div>
+            <div class="lf-cert-form-ref">LCR Form No. 1A<br><small>Certification of Birth</small></div>
             <div class="lf-cert-title">
                 <div>Republic of the Philippines</div>
-                <div>Office of the City Registrar</div>
-                <div>${fw('city', 'City/Municipality')}</div>
+                <div>Office of the Municipal Registrar</div>
+                <div>${_field('city', 'City/Municipality', true, true)}</div>
             </div>
             <div class="lf-cert-date-box">
                 <span class="lf-fn">Date</span>

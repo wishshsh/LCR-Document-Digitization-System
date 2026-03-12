@@ -101,7 +101,7 @@
                 
                 <div id="certFiles" class="uploaded-files"></div>
                 
-                <button class="btn-proceed" onclick="processCertification()">PROCEED</button>
+                <button class="btn-proceed" id="certProceedBtn" onclick="processCertification()">PROCEED</button>
             </div>
         </div>
 
@@ -147,12 +147,12 @@
                             <div class="lcr-footer">
                                 <div class="lcr-verified">
                                     <div>Verified by:</div>
-                                    <div class="lcr-sig-line"></div>
-                                    <div class="lcr-sig-line"></div>
+                                    <div class="lcr-sig-line" id="f1a_verified_by"></div>
+                                    <div class="lcr-sig-line" id="f1a_verified_pos"></div>
                                 </div>
                                 <div class="lcr-payment">
                                     <div class="lcr-field-row small"><label>Amount Paid</label><span class="lcr-field-short" id="f1a_amount"></span></div>
-                                    <div class="lcr-field-row small"><label>OR Number</label><span class="lcr-field-short" id="f1a_or"></span></div>
+                                    <div class="lcr-field-row small"><label>OR Number</label><span class="lcr-field-short" id="f1a_or_number"></span></div>
                                     <div class="lcr-field-row small"><label>Date Paid</label><span class="lcr-field-short" id="f1a_date_paid"></span></div>
                                 </div>
                             </div>
@@ -193,12 +193,12 @@
                             <div class="lcr-footer">
                                 <div class="lcr-verified">
                                     <div>Verified by:</div>
-                                    <div class="lcr-sig-line"></div>
-                                    <div class="lcr-sig-line"></div>
+                                    <div class="lcr-sig-line" id="f2a_verified_by"></div>
+                                    <div class="lcr-sig-line" id="f2a_verified_pos"></div>
                                 </div>
                                 <div class="lcr-payment">
                                     <div class="lcr-field-row small"><label>Amount Paid</label><span class="lcr-field-short" id="f2a_amount"></span></div>
-                                    <div class="lcr-field-row small"><label>OR Number</label><span class="lcr-field-short" id="f2a_or"></span></div>
+                                    <div class="lcr-field-row small"><label>OR Number</label><span class="lcr-field-short" id="f2a_or_number"></span></div>
                                     <div class="lcr-field-row small"><label>Date Paid</label><span class="lcr-field-short" id="f2a_date_paid"></span></div>
                                 </div>
                             </div>
@@ -255,12 +255,12 @@
                             <div class="lcr-footer">
                                 <div class="lcr-verified">
                                     <div>Verified by:</div>
-                                    <div class="lcr-sig-line"></div>
-                                    <div class="lcr-sig-line"></div>
+                                    <div class="lcr-sig-line" id="f3a_verified_by"></div>
+                                    <div class="lcr-sig-line" id="f3a_verified_pos"></div>
                                 </div>
                                 <div class="lcr-payment">
                                     <div class="lcr-field-row small"><label>Amount Paid</label><span class="lcr-field-short" id="f3a_amount"></span></div>
-                                    <div class="lcr-field-row small"><label>OR Number</label><span class="lcr-field-short" id="f3a_or"></span></div>
+                                    <div class="lcr-field-row small"><label>OR Number</label><span class="lcr-field-short" id="f3a_or_number"></span></div>
                                     <div class="lcr-field-row small"><label>Date Paid</label><span class="lcr-field-short" id="f3a_date_paid"></span></div>
                                 </div>
                             </div>
@@ -297,7 +297,7 @@
                 
                 <div id="marriageFiles" class="uploaded-files"></div>
                 
-                <button class="btn-proceed" onclick="processMarriage()">PROCEED</button>
+                <button class="btn-proceed" id="marriageProceedBtn" onclick="processMarriage()">PROCEED</button>
             </div>
         </div>
 

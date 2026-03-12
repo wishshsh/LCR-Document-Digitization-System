@@ -1,44 +1,16 @@
-// ============================================================
-//  RECORDS — Load, display, search, filter
-//  Depends on: globals.js, navigation.js
-// ============================================================
+// =============================================================
+//  js/records.js — loadRecords (DB fetch), displayRecords,
+//                  search, filter, clearFilters, formatType
+//  Requires: globals.js, navigation.js
+// =============================================================
 
-// ── Load records from DB → php/get_records.php ───────────────
-function loadRecords() {
-    const tbody = document.getElementById('recordsTableBody');
-    tbody.innerHTML = '<tr><td colspan="6" class="no-records">Loading records...</td></tr>';
-
-    fetch('php/get_records.php')
-        .then(res => {
-            if (!res.ok) throw new Error('Server returned ' + res.status);
-            return res.json();
-        })
-        .then(data => {
-            if (data.error) {
-                showNotification('DB error: ' + data.error, 'error');
-                tbody.innerHTML = '<tr><td colspan="6" class="no-records">Failed to load records.</td></tr>';
-                return;
-            }
-            records = data;
-            displayRecords(records);
-        })
-        .catch(err => {
-            showNotification('Could not load records. Is XAMPP running?', 'error');
-            tbody.innerHTML = '<tr><td colspan="6" class="no-records">Could not connect to database.</td></tr>';
-            console.error('loadRecords error:', err);
-        });
-}
-
-// ── Display ───────────────────────────────────────────────────
 function displayRecords(recordsToDisplay) {
     const tbody = document.getElementById('recordsTableBody');
     tbody.innerHTML = '';
-
-    if (!recordsToDisplay || recordsToDisplay.length === 0) {
+    if (recordsToDisplay.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6" class="no-records">No records found</td></tr>';
         return;
     }
-
     recordsToDisplay.forEach(record => {
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -53,53 +25,115 @@ function displayRecords(recordsToDisplay) {
     });
 }
 
-// ── Helpers ───────────────────────────────────────────────────
+// Fetch Records from PHP Backend
+function loadRecords() {
+    const tbody = document.getElementById('recordsTableBody');
+    if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#888;">Loading records...</td></tr>';
+
+    fetch('php/get_records.php')
+    .then(r => {
+        if (!r.ok) throw new Error('HTTP ' + r.status + ' ' + r.statusText);
+        return r.text();
+    })
+    .then(text => {
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch(e) {
+            console.error('get_records.php raw output:', text);
+            if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="no-records" style="color:#c00;text-align:left;padding:12px;">PHP Error: ' + text.substring(0, 300) + '</td></tr>';
+            return;
+        }
+        if (data.error) {
+            showNotification('Database error: ' + data.error, 'error');
+            if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="no-records">DB error: ' + data.error + '</td></tr>';
+            return;
+        }
+        records = data.map(row => ({
+            id:       row.id,
+            doc_id:   row.doc_id,
+            type:     row.type,
+            name:     row.name,
+            date:     row.date,
+            status:   row.status,
+            formData: row.formData || {}
+        }));
+        displayRecords(records);
+    })
+    .catch(err => {
+        showNotification('Cannot reach server: ' + err.message, 'error');
+        if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="no-records">Error: ' + err.message + '</td></tr>';
+    });
+}
+
 function formatType(type) {
-    const map = {
-        'birth':            'Birth Certificate',
-        'death':            'Death Certificate',
-        'marriage-cert':    'Marriage Certificate',
+    const types = {
+        'birth': 'Birth Certificate',
+        'death': 'Death Certificate',
+        'marriage-cert': 'Marriage Certificate',
         'marriage-license': 'Marriage License'
     };
-    return map[type] || type;
+    return types[type] || type;
 }
 
 function handleSearchKeypress(event) {
-    if (event.key === 'Enter') filterRecords();
+    if (event.key === 'Enter') {
+        searchRecords();
+    }
 }
 
 function searchRecords() {
     filterRecords();
 }
 
-// ── Filter (client-side against the loaded records array) ─────
 function filterRecords() {
-    const search     = document.getElementById('searchInput').value.toLowerCase();
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
     const typeFilter = document.getElementById('typeSelect').value;
-    const statusFilt = document.getElementById('statusSelect').value;
-    const dateFilt   = document.getElementById('dateFilter').value;
+    const statusFilter = document.getElementById('statusSelect').value;
+    const dateFilter = document.getElementById('dateFilter').value;
 
-    const filtered = records.filter(record => {
-        const matchesSearch = !search ||
-            record.name.toLowerCase().includes(search) ||
-            record.id.toLowerCase().includes(search);
-
-        const matchesType   = !typeFilter || record.type   === typeFilter;
-        const matchesStatus = !statusFilt || record.status === statusFilt;
-
+    let filtered = records.filter(record => {
+        // Search filter
+        const matchesSearch = searchTerm === '' || 
+            record.name.toLowerCase().includes(searchTerm) ||
+            record.id.toLowerCase().includes(searchTerm);
+        
+        // Type filter
+        const matchesType = !typeFilter || record.type === typeFilter;
+        
+        // Status filter
+        const matchesStatus = !statusFilter || record.status === statusFilter;
+        
+        // Date filter
         let matchesDate = true;
-        if (dateFilt) {
+        if (dateFilter) {
             const recordDate = new Date(record.date);
-            const today      = new Date();
+            const today = new Date();
             today.setHours(0, 0, 0, 0);
-            switch (dateFilt) {
-                case 'today': { matchesDate = recordDate >= today; break; }
-                case 'week':  { const w = new Date(today); w.setDate(today.getDate() - 7);  matchesDate = recordDate >= w; break; }
-                case 'month': { const m = new Date(today); m.setDate(today.getDate() - 30); matchesDate = recordDate >= m; break; }
-                case 'year':  { const y = new Date(today); y.setFullYear(today.getFullYear() - 1); matchesDate = recordDate >= y; break; }
+
+            switch(dateFilter) {
+                case 'today':
+                    const todayStart = new Date(today);
+                    matchesDate = recordDate >= todayStart;
+                    break;
+                case 'week':
+                    const weekStart = new Date(today);
+                    weekStart.setDate(today.getDate() - 7);
+                    matchesDate = recordDate >= weekStart;
+                    break;
+                case 'month':
+                    const monthStart = new Date(today);
+                    monthStart.setDate(today.getDate() - 30);
+                    matchesDate = recordDate >= monthStart;
+                    break;
+                case 'year':
+                    const yearStart = new Date(today);
+                    yearStart.setFullYear(today.getFullYear() - 1);
+                    matchesDate = recordDate >= yearStart;
+                    break;
             }
         }
-
+        
         return matchesSearch && matchesType && matchesStatus && matchesDate;
     });
 
@@ -107,9 +141,9 @@ function filterRecords() {
 }
 
 function clearFilters() {
-    document.getElementById('searchInput').value  = '';
-    document.getElementById('typeSelect').value   = '';
+    document.getElementById('searchInput').value = '';
+    document.getElementById('typeSelect').value = '';
     document.getElementById('statusSelect').value = '';
-    document.getElementById('dateFilter').value   = '';
+    document.getElementById('dateFilter').value = '';
     displayRecords(records);
 }

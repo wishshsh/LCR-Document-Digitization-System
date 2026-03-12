@@ -154,15 +154,22 @@ DEATH_FIELDS = {
 MARRIAGE_FIELDS = {
     # ── Header ───────────────────────────────────────────────────────────────
     "registry_number":            (0.62, 0.088, 0.97, 0.104),  # → Form3A.registry_number
-    "date_of_registration":       (0.14, 0.088, 0.52, 0.104),  # → Form3A.date_of_registration
+    
 
     # ── Item 1 — Name (HUSBAND left / WIFE right) ────────────────────────────
-    "husband_first_name":         (0.14, 0.138, 0.47, 0.156),
-    "husband_middle_name":        (0.14, 0.156, 0.47, 0.174),
-    "husband_last_name":          (0.14, 0.174, 0.47, 0.192),
-    "wife_first_name":            (0.53, 0.138, 0.86, 0.156),
-    "wife_middle_name":           (0.53, 0.156, 0.86, 0.174),
-    "wife_last_name":             (0.53, 0.174, 0.86, 0.192),
+    "husband_first_name":         (0.23, 0.121, 0.56, 0.139),
+    "husband_middle_name":        (0.23, 0.141, 0.56, 0.159),
+    "husband_last_name":          (0.23, 0.160, 0.56, 0.178),
+    "wife_first_name":            (0.65, 0.121, 0.98, 0.139),
+    "wife_middle_name":           (0.65, 0.141, 0.98, 0.159),
+    "wife_last_name":             (0.65, 0.160, 0.98, 0.178),
+
+   # "husband_first_name":         (0.14, 0.138, 0.47, 0.156),
+   # "husband_middle_name":        (0.14, 0.156, 0.47, 0.174),
+   # "husband_last_name":          (0.14, 0.174, 0.47, 0.192),
+   # "wife_first_name":            (0.53, 0.138, 0.86, 0.156),
+   # "wife_middle_name":           (0.53, 0.156, 0.86, 0.174),
+   # "wife_last_name":             (0.53, 0.174, 0.86, 0.192),
 
     # ── Item 2b — Age ────────────────────────────────────────────────────────
     "husband_age":                (0.40, 0.198, 0.47, 0.216),  # → husband.age

@@ -32,11 +32,12 @@ from pathlib import Path
 import torch
 from dotenv import load_dotenv
 
-# Load .env first — must happen before POPPLER_PATH is read
-load_dotenv()
+# Load .env from same folder as this script (works regardless of cwd)
+_script_dir = Path(__file__).parent.resolve()
+load_dotenv(dotenv_path=_script_dir / ".env")
 
-# Poppler path from .env, falls back to None (Linux/Mac works without it)
-POPPLER_PATH    = os.environ.get("POPPLER_PATH", None)
+# Poppler path — from .env or None (Linux/Mac auto-detects)
+POPPLER_PATH = os.environ.get("POPPLER_PATH", None)
 DEFAULT_CHECKPOINT = "checkpoints/best_model.pth"
 
 
@@ -50,7 +51,7 @@ DEFAULT_CHECKPOINT = "checkpoints/best_model.pth"
 # Form 102 → Certificate of Live Birth (Form 1A)
 BIRTH_FIELDS = {
     # Header
-    "province":                   (0.02, 0.068, 0.65, 0.088),
+    "province":                   (0.02, 0.068, 0.30, 0.088),
     "registry_number":            (0.66, 0.068, 0.99, 0.108),
     "city_municipality":          (0.02, 0.090, 0.65, 0.108),
 
@@ -100,7 +101,7 @@ BIRTH_FIELDS = {
 # Form 103 → Certificate of Death (Form 2A)
 DEATH_FIELDS = {
     # Header
-    "province":                   (0.04, 0.128, 0.45, 0.144),
+    "province":                   (0.04, 0.128, 0.40, 0.144),
     "registry_number":            (0.52, 0.128, 0.75, 0.144),
     "city_municipality":          (0.04, 0.145, 0.45, 0.160),
 
@@ -111,7 +112,6 @@ DEATH_FIELDS = {
 
     # Items 2-4 — Sex / Religion / Age
     "sex":                        (0.04, 0.182, 0.13, 0.220),
-    "religion":                   (0.13, 0.182, 0.28, 0.220),
     "age_years":                  (0.28, 0.182, 0.38, 0.202),
 
     # Item 5 — Place of Death
@@ -596,9 +596,11 @@ def greedy_decode(outputs: torch.Tensor, idx_to_char: dict) -> str:
 
 def pdf_to_image(pdf_path: str, dpi: int = 200):
     from pdf2image import convert_from_path
+    # Resolve to absolute path — fixes "Unable to get page count" on Windows
+    pdf_path = str(Path(pdf_path).resolve())
     kwargs = {"dpi": dpi, "first_page": 1, "last_page": 1}
     if POPPLER_PATH:
-        kwargs["poppler_path"] = POPPLER_PATH
+        kwargs["poppler_path"] = str(Path(POPPLER_PATH).resolve())
     return convert_from_path(pdf_path, **kwargs)[0]
 
 

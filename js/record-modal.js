@@ -115,91 +115,51 @@ function printRecordModal() {
     win.document.write(`<!DOCTYPE html><html><head><title>${title}</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #fff;
-    color: #111;
-    padding: 32px 48px;
-    font-size: 13px;
-    line-height: 1.5;
-}
+body { font-family: Arial, Helvetica, sans-serif; background: #fff; color: #111; padding: 32px 48px; font-size: 13px; line-height: 1.5; }
 @page { margin: 15mm 18mm; }
 .lf-input, .lf-select { display: none !important; }
-.lf-val {
-    display: inline-block;
-    min-width: 120px;
-    border-bottom: 1px solid #333;
-    padding-bottom: 1px;
-    font-size: 13px;
-    word-break: break-word;
-    vertical-align: bottom;
-}
-.lf-status { font-weight: bold; font-size: 13px; }
-.lf-status-pending   { color: #856404; }
-.lf-status-approved  { color: #0a3622; }
-.lf-status-rejected  { color: #58151c; }
-.lf-status-processed { color: #084298; }
-.lcr-official-form,
-.lcr-form-1a, .lcr-form-2a, .lcr-form-3a {
-    border: none !important;
-    background: transparent !important;
-    width: 100%;
-}
+.lf-val { display: inline-block; min-width: 120px; border-bottom: 1px solid #333; padding-bottom: 1px; font-size: 13px; word-break: break-word; vertical-align: bottom; }
 .lf-section-label, .lf-table { display: none !important; }
-.lf-cert-header {
-    display: block;
-    border: none !important;
-    padding: 0 0 18px 0;
-    position: relative;
-}
-.lf-cert-form-ref {
-    font-size: 11px; color: #333; line-height: 1.5;
-    position: absolute; top: 0; left: 0;
-}
-.lf-cert-title {
-    text-align: center; font-size: 13px;
-    font-weight: normal; line-height: 1.8; padding: 0 130px;
-}
+.lf-fn { display: none !important; }
+.lcr-official-form, .lcr-form-1a, .lcr-form-2a, .lcr-form-3a { border: none !important; background: transparent !important; width: 100%; padding: 0 !important; }
+.lf-cert-header { display: flex !important; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #333 !important; padding-bottom: 14px !important; margin-bottom: 18px; }
+.lf-cert-form-ref { font-size: 11px; color: #333; line-height: 1.5; min-width: 110px; }
+.lf-cert-title { flex: 1; text-align: center; font-size: 13px; line-height: 1.8; padding: 0 16px; }
 .lf-cert-title div:nth-child(2) { font-size: 20px; font-weight: bold; }
-.lf-cert-date-box {
-    position: absolute; top: 0; right: 0;
-    font-size: 13px; display: flex; align-items: baseline; gap: 6px;
-}
-.lf-cert-date-box .lf-fn { display: inline; font-weight: normal; font-size: 13px; color: #111; margin: 0; }
-.lf-cert-date-box .lf-val { min-width: 120px; }
-.lf-cert-salutation { padding: 20px 0 10px 0; font-size: 13px; line-height: 1.7; }
-.lf-cert-salutation strong { font-size: 13px; }
+.lf-cert-title div:nth-child(3) .lf-val { border-bottom: 1px solid #333; min-width: 160px; display: inline-block; }
+.lf-cert-date-box { font-size: 13px; text-align: right; min-width: 110px; display: flex !important; align-items: baseline; gap: 6px; justify-content: flex-end; }
+.lf-cert-date-box .lf-val { min-width: 110px; }
+.lf-cert-salutation { padding: 0 0 12px 0; font-size: 13px; line-height: 1.7; }
 .lf-cert-salutation p { margin-top: 6px; text-indent: 2em; }
-.lf-cert-fields { padding: 8px 0 16px 0; }
-.lf-cert-row { display: flex; align-items: baseline; padding: 3px 0; border-bottom: none; gap: 0; }
-.lf-cert-label { min-width: 220px; flex-shrink: 0; font-size: 13px; }
-.lf-cert-colon { flex-shrink: 0; padding: 0 10px 0 4px; }
+.lf-cert-fields { padding: 4px 0 14px 0; }
+.lf-cert-row { display: flex !important; align-items: baseline; padding: 3px 0; border-bottom: none !important; }
+.lf-cert-label { min-width: 200px; flex-shrink: 0; font-size: 13px; }
+.lf-cert-colon { flex-shrink: 0; padding: 0 8px; }
 .lf-cert-value { flex: 1; }
 .lf-cert-value .lf-val { width: 100%; min-width: 0; border-bottom: 1px solid #333; display: block; }
-.lf-cert-parties { width: 100%; border-collapse: collapse; margin: 10px 0 16px; table-layout: fixed; }
-.lf-cert-parties th { background: none !important; color: #111; text-align: center; padding: 5px 10px; font-size: 13px; font-weight: bold; border: 1px solid #999; }
+.lf-cert-parties { width: 100%; border-collapse: collapse; margin: 10px 0 14px; table-layout: fixed; }
+.lf-cert-parties th { background: none !important; color: #111; text-align: center; padding: 5px 10px; font-weight: bold; border: 1px solid #999; font-size: 13px; }
 .lf-cert-parties td { border: 1px solid #999; padding: 5px 10px; font-size: 13px; vertical-align: middle; }
 .lf-cert-row-label { font-size: 12px; color: #333; background: none !important; width: 160px; }
 .lf-cert-parties .lf-val { display: block; width: 100%; border-bottom: 1px solid #555; min-width: 0; }
-.lf-cert-issuance { padding: 16px 0; font-size: 13px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; line-height: 2; }
-.lf-cert-issuance .lf-val { flex: 1; min-width: 200px; border-bottom: 1px solid #333; }
-.lf-cert-bottom { display: block; padding: 16px 0; border-top: none; }
-.lf-cert-verified { font-size: 13px; margin-bottom: 32px; }
-.lf-cert-sig-line { display: inline-block; margin-top: 28px; border-bottom: 1px solid #333; min-width: 180px; padding-bottom: 1px; }
-.lf-cert-sig-line .lf-val { border-bottom: none; display: inline-block; min-width: 160px; }
-.lf-cert-payment { font-size: 13px; text-align: left; margin-top: 12px; }
+.lf-cert-issuance { padding: 14px 0; font-size: 13px; }
+.lf-cert-issuance .lf-val { min-width: 220px; border-bottom: 1px solid #333; }
+.lf-cert-bottom { display: flex !important; justify-content: space-between; align-items: flex-start; padding: 16px 0; border-top: 1px solid #ddd !important; gap: 40px; }
+.lf-cert-verified { flex: 1; font-size: 13px; }
+.lf-cert-sig-line { display: block; margin-top: 26px; border-bottom: 1px solid #333; min-width: 200px; max-width: 260px; padding-bottom: 2px; }
+.lf-cert-sig-line .lf-val { border-bottom: none; display: inline-block; min-width: 180px; font-weight: 600; }
+.lf-cert-payment { font-size: 13px; text-align: left; min-width: 180px; }
 .lf-cert-pay-row { display: flex; align-items: baseline; gap: 0; padding: 3px 0; }
-.lf-cert-pay-row span:first-child { min-width: 110px; }
+.lf-cert-pay-row span:first-child { min-width: 90px; }
 .lf-cert-pay-row span:nth-child(2) { padding: 0 8px; }
-.lf-cert-pay-row .lf-val { min-width: 100px; border-bottom: 1px solid #333; }
-.lf-cert-note { padding: 20px 0 0 0; font-size: 12px; color: #333; border-top: none; font-style: italic; }
+.lf-cert-pay-row .lf-val { min-width: 90px; border-bottom: 1px solid #333; }
+.lf-cert-note { padding: 18px 0 0 0; font-size: 12px; color: #555; font-style: italic; }
 </style>
 </head><body>${content}</body></html>`);
     win.document.close();
     setTimeout(() => { win.print(); win.close(); }, 500);
 }
 
-// ── Close modal ───────────────────────────────────────────────
 function closeRecordModal(e) {
     if (e && e.target !== document.getElementById('recordDetailModal')) return;
     document.getElementById('recordDetailModal').style.display = 'none';

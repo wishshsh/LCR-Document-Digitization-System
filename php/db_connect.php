@@ -1,16 +1,15 @@
 <?php
-$servername = "localhost";
-$username = "root"; // Default XAMPP username
-$password = "";     // Default XAMPP password
-$dbname = "thesis";    // Matches your SQL Dump
+$host = '127.0.0.1';
+$db   = 'main_database';
+$user = 'root';
+$pass = '';
 
 try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    // Set the PDO error mode to exception
+    $conn = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch(PDOException $e) {
-    // Return error as JSON if connection fails
-    echo json_encode(["status" => "error", "message" => "Connection failed: " . $e->getMessage()]);
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode(['error' => 'DB connection failed: ' . $e->getMessage()]);
     exit();
 }
 ?>

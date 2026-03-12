@@ -8,7 +8,11 @@ let uploadedFiles = {
     marriage: []
 };
 
+// Records loaded from DB — empty until loadRecords() is called
 let records = [];
+
+// Template editing state — declared here to avoid duplicate declaration errors
+let _tplEditing = { cert: false, marriage: false };
 
 // Navigation
 let navigationHistory    = ['login'];

@@ -147,57 +147,39 @@ DEATH_FIELDS = {
 }
 
 # Form 97 → Certificate of Marriage (Form 3A)
+# Only the fields that flow through bridge.py → spaCy NER → SpouseOutput/Form3A.
+# Removed: province, city_municipality, dob_day/month/year (×2),
+#   place_birth_city/prov/country (×2), sex (×2), residence (×2),
+#   religion (×2), civil_status (×2).
 MARRIAGE_FIELDS = {
-    # Header
-    "province":                   (0.14, 0.088, 0.52, 0.104),
-    "registry_number":            (0.62, 0.088, 0.97, 0.104),
-    "city_municipality":          (0.14, 0.104, 0.52, 0.120),
+    # ── Header ───────────────────────────────────────────────────────────────
+    "registry_number":            (0.62, 0.088, 0.97, 0.104),  # → Form3A.registry_number
+    
 
-    # Item 1 — Names (HUSBAND left / WIFE right)
-    "husband_first_name":         (0.14, 0.138, 0.47, 0.156),
-    "wife_first_name":            (0.53, 0.138, 0.86, 0.156),
-    "husband_middle_name":        (0.14, 0.156, 0.47, 0.174),
-    "wife_middle_name":           (0.53, 0.156, 0.86, 0.174),
-    "husband_last_name":          (0.14, 0.174, 0.47, 0.192),
-    "wife_last_name":             (0.53, 0.174, 0.86, 0.192),
+    # ── Item 1 — Name (HUSBAND left / WIFE right) ────────────────────────────
+    "husband_first_name":         (0.23, 0.121, 0.56, 0.139),
+    "husband_middle_name":        (0.23, 0.141, 0.56, 0.159),
+    "husband_last_name":          (0.23, 0.160, 0.56, 0.178),
+    "wife_first_name":            (0.65, 0.121, 0.98, 0.139),
+    "wife_middle_name":           (0.65, 0.141, 0.98, 0.159),
+    "wife_last_name":             (0.65, 0.160, 0.98, 0.178),
 
-    # Item 2 — Date of Birth / Age
-    "husband_dob_day":            (0.14, 0.198, 0.22, 0.216),
-    "husband_dob_month":          (0.22, 0.198, 0.32, 0.216),
-    "husband_dob_year":           (0.32, 0.198, 0.40, 0.216),
-    "husband_age":                (0.40, 0.198, 0.47, 0.216),
-    "wife_dob_day":               (0.53, 0.198, 0.60, 0.216),
-    "wife_dob_month":             (0.60, 0.198, 0.70, 0.216),
-    "wife_dob_year":              (0.70, 0.198, 0.78, 0.216),
-    "wife_age":                   (0.78, 0.198, 0.86, 0.216),
+   # "husband_first_name":         (0.14, 0.138, 0.47, 0.156),
+   # "husband_middle_name":        (0.14, 0.156, 0.47, 0.174),
+   # "husband_last_name":          (0.14, 0.174, 0.47, 0.192),
+   # "wife_first_name":            (0.53, 0.138, 0.86, 0.156),
+   # "wife_middle_name":           (0.53, 0.156, 0.86, 0.174),
+   # "wife_last_name":             (0.53, 0.174, 0.86, 0.192),
 
-    # Item 3 — Place of Birth
-    "husband_place_birth_city":   (0.14, 0.222, 0.28, 0.242),
-    "husband_place_birth_prov":   (0.28, 0.222, 0.40, 0.242),
-    "husband_place_birth_country":(0.40, 0.222, 0.47, 0.242),
-    "wife_place_birth_city":      (0.53, 0.222, 0.66, 0.242),
-    "wife_place_birth_prov":      (0.66, 0.222, 0.78, 0.242),
-    "wife_place_birth_country":   (0.78, 0.222, 0.86, 0.242),
+    # ── Item 2b — Age ────────────────────────────────────────────────────────
+    "husband_age":                (0.40, 0.198, 0.47, 0.216),  # → husband.age
+    "wife_age":                   (0.78, 0.198, 0.86, 0.216),  # → wife.age
 
-    # Items 4a-b — Sex / Citizenship
-    "husband_sex":                (0.14, 0.252, 0.22, 0.270),
-    "husband_citizenship":        (0.22, 0.252, 0.47, 0.270),
-    "wife_sex":                   (0.53, 0.252, 0.62, 0.270),
-    "wife_citizenship":           (0.62, 0.252, 0.86, 0.270),
+    # ── Item 4b — Citizenship ────────────────────────────────────────────────
+    "husband_citizenship":        (0.22, 0.252, 0.47, 0.270),  # → husband.nationality
+    "wife_citizenship":           (0.62, 0.252, 0.86, 0.270),  # → wife.nationality
 
-    # Item 5 — Residence
-    "husband_residence":          (0.14, 0.282, 0.47, 0.330),
-    "wife_residence":             (0.53, 0.282, 0.86, 0.330),
-
-    # Item 6 — Religion
-    "husband_religion":           (0.14, 0.336, 0.47, 0.354),
-    "wife_religion":              (0.53, 0.336, 0.86, 0.354),
-
-    # Item 7 — Civil Status
-    "husband_civil_status":       (0.14, 0.360, 0.47, 0.378),
-    "wife_civil_status":          (0.53, 0.360, 0.86, 0.378),
-
-    # Item 8 — Father Name
+    # ── Item 8 — Name of Father ──────────────────────────────────────────────
     "husband_father_first":       (0.14, 0.396, 0.24, 0.414),
     "husband_father_middle":      (0.24, 0.396, 0.34, 0.414),
     "husband_father_last":        (0.34, 0.396, 0.47, 0.414),
@@ -205,11 +187,11 @@ MARRIAGE_FIELDS = {
     "wife_father_middle":         (0.63, 0.396, 0.73, 0.414),
     "wife_father_last":           (0.73, 0.396, 0.86, 0.414),
 
-    # Item 9 — Father Citizenship
-    "husband_father_citizenship": (0.14, 0.420, 0.47, 0.436),
-    "wife_father_citizenship":    (0.53, 0.420, 0.86, 0.436),
+    # ── Item 9 — Citizenship of Father ──────────────────────────────────────
+    "husband_father_citizenship": (0.14, 0.420, 0.47, 0.436),  # → husband.nationality_of_father
+    "wife_father_citizenship":    (0.53, 0.420, 0.86, 0.436),  # → wife.nationality_of_father
 
-    # Item 10 — Mother Name
+    # ── Item 10 — Name of Mother ─────────────────────────────────────────────
     "husband_mother_first":       (0.14, 0.444, 0.24, 0.462),
     "husband_mother_middle":      (0.24, 0.444, 0.34, 0.462),
     "husband_mother_last":        (0.34, 0.444, 0.47, 0.462),
@@ -217,11 +199,11 @@ MARRIAGE_FIELDS = {
     "wife_mother_middle":         (0.63, 0.444, 0.73, 0.462),
     "wife_mother_last":           (0.73, 0.444, 0.86, 0.462),
 
-    # Item 11 — Mother Citizenship
-    "husband_mother_citizenship": (0.14, 0.468, 0.47, 0.484),
-    "wife_mother_citizenship":    (0.53, 0.468, 0.86, 0.484),
+    # ── Item 11 — Citizenship of Mother ─────────────────────────────────────
+    "husband_mother_citizenship": (0.14, 0.468, 0.47, 0.484),  # → husband.nationality_of_mother
+    "wife_mother_citizenship":    (0.53, 0.468, 0.86, 0.484),  # → wife.nationality_of_mother
 
-    # Items 15-16 — Place / Date of Marriage
+    # ── Items 15–16 — Place / Date of Marriage ───────────────────────────────
     "place_marriage_office":      (0.14, 0.596, 0.44, 0.614),
     "place_marriage_city":        (0.44, 0.596, 0.68, 0.614),
     "place_marriage_province":    (0.68, 0.596, 0.88, 0.614),
@@ -628,11 +610,24 @@ def run_crnn_ocr(crops: dict, model, idx_to_char: dict,
 #  CONVENIENCE WRAPPER — for other scripts that import this module
 # ══════════════════════════════════════════════════════════════════════════════
 
-def extract_field_images_dynamic(image, form_type="birth", verbose=False):
+def extract_field_images(image, form_type="birth", verbose=False):
     """Extract field crops using dynamic boundary detection.
-    Accepts PIL Image or BGR numpy array.
-    Returns {field_name: BGR numpy array}."""
+
+    Parameters
+    ----------
+    image     : PIL Image or BGR numpy array
+    form_type : str  'birth' | 'death' | 'marriage' | 'marriage_license'
+    verbose   : bool
+
+    Returns
+    -------
+    dict  {field_name: BGR numpy array}
+    """
     return DynamicFieldExtractor(form_type=form_type, verbose=verbose).extract(image)
+
+
+# Keep old name as alias so any existing code doesn't break
+extract_field_images_dynamic = extract_field_images
 
 
 # ══════════════════════════════════════════════════════════════════════════════

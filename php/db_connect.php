@@ -1,4 +1,9 @@
 <?php
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { exit(0); }
+
 $host = '127.0.0.1';
 $db   = 'main_database';
 $user = 'root';

@@ -1,4 +1,9 @@
 <?php
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { exit(0); }
+
 header('Content-Type: application/json');
 require 'db_connect.php';
 
@@ -17,14 +22,18 @@ if (!in_array($ext, ['jpg','jpeg','png','pdf'])) {
 }
 
 // ── Forward to Flask ──────────────────────────────────────────
+// Map frontend type → form_hint for Flask
+$formHintMap = ['birth' => '1A', 'death' => '2A', 'marriage-cert' => '3A', 'marriage-license' => '90'];
+$formHint = $formHintMap[$type] ?? '1A';
+
 $ch = curl_init();
 curl_setopt_array($ch, [
     CURLOPT_URL            => 'http://127.0.0.1:5000/process',
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_POST           => true,
     CURLOPT_POSTFIELDS     => [
-        'file' => new CURLFile($file['tmp_name'], $file['type'], $file['name']),
-        'type' => $type,
+        'file'      => new CURLFile($file['tmp_name'], $file['type'], $file['name']),
+        'form_hint' => $formHint,
     ],
     CURLOPT_TIMEOUT => 120,
 ]);
@@ -33,14 +42,21 @@ $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 $curlError  = curl_error($ch);
 curl_close($ch);
 
-if ($curlError || $httpStatus !== 200) {
-    echo json_encode(['status' => 'error', 'message' => 'Flask unreachable — is python app.py running? (' . ($curlError ?: "HTTP $httpStatus") . ')']);
+if ($curlError) {
+    echo json_encode(['status' => 'error', 'message' => 'Flask unreachable — is python app.py running? (' . $curlError . ')']);
     exit();
 }
 
 $result = json_decode($response, true);
+
+// Surface the real Flask error (including traceback) instead of hiding it
 if (!$result || $result['status'] !== 'success') {
-    echo json_encode(['status' => 'error', 'message' => $result['message'] ?? 'Pipeline failed']);
+    echo json_encode([
+        'status'  => 'error',
+        'message' => $result['message'] ?? 'Pipeline failed',
+        'trace'   => $result['trace']   ?? null,
+        'http'    => $httpStatus,
+    ]);
     exit();
 }
 

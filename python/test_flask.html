@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask Pipeline Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background: #f0fdf7; padding: 32px; color: #1a1a1a; }
+        h2  { color: #1a7a4a; margin-bottom: 6px; }
+        p   { color: #555; font-size: 14px; margin-bottom: 20px; }
+
+        .controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
+        button {
+            padding: 10px 22px; background: #1ec77c; color: white;
+            border: none; border-radius: 8px; font-size: 14px;
+            font-family: 'Poppins', sans-serif; font-weight: 600; cursor: pointer;
+        }
+        button:hover { background: #18a868; }
+        .btn-open { background: #3498db; }
+        .btn-open:hover { background: #2176ae; }
+
+        .status { font-weight: 600; font-size: 14px; }
+        .success { color: #1a7a4a; }
+        .error   { color: #e74c3c; }
+
+        /* ── Pipeline diagram ── */
+        .pipeline {
+            display: flex; align-items: center; gap: 0;
+            background: white; border-radius: 12px; padding: 20px 24px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07); margin-bottom: 24px;
+            flex-wrap: wrap; gap: 8px;
+        }
+        .pipe-step {
+            background: #f0fdf7; border: 2px solid #1ec77c; border-radius: 8px;
+            padding: 10px 16px; text-align: center; font-size: 12px; min-width: 110px;
+        }
+        .pipe-step .title { font-weight: 700; color: #1a7a4a; font-size: 13px; }
+        .pipe-step .sub   { color: #888; font-size: 11px; margin-top: 2px; }
+        .pipe-step.active { background: #1ec77c; border-color: #1a7a4a; }
+        .pipe-step.active .title { color: white; }
+        .pipe-step.active .sub   { color: #d0f5e8; }
+        .arrow { font-size: 20px; color: #1ec77c; font-weight: bold; padding: 0 4px; }
+
+        /* ── Results panel ── */
+        .results { display: none; }
+        .card {
+            background: white; border-radius: 12px; padding: 24px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07); margin-bottom: 20px;
+        }
+        .card h3 { color: #1a7a4a; margin-bottom: 14px; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+
+        /* ── Form 102 raw fields ── */
+        .raw-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .raw-table th { background: #f5f5f5; padding: 7px 12px; text-align: left; color: #555; font-weight: 600; border-bottom: 2px solid #eee; }
+        .raw-table td { padding: 6px 12px; border-bottom: 1px solid #f0f0f0; }
+        .raw-table td:first-child { color: #888; font-size: 12px; }
+        .raw-table td:last-child  { font-weight: 600; }
+
+        /* ── Mapping arrows ── */
+        .mapping { display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+        .map-row  { display: flex; align-items: center; gap: 10px; padding: 5px 8px; border-radius: 6px; background: #f9f9f9; }
+        .map-from { color: #888; min-width: 200px; font-size: 12px; }
+        .map-arr  { color: #1ec77c; font-weight: bold; font-size: 16px; }
+        .map-to   { color: #1a7a4a; font-weight: 600; min-width: 200px; }
+        .map-val  { color: #111; font-size: 12px; background: #fffde7; padding: 2px 8px; border-radius: 4px; border: 1px solid #f0d000; }
+
+        /* ── Confidence bars ── */
+        .conf-row  { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; font-size: 12px; }
+        .conf-lbl  { min-width: 210px; color: #555; }
+        .conf-wrap { flex: 1; background: #eee; border-radius: 99px; height: 10px; overflow: hidden; }
+        .conf-bar  { height: 100%; border-radius: 99px; transition: width 0.5s; }
+        .conf-pct  { min-width: 40px; text-align: right; font-weight: 700; }
+
+        /* ── Saved file ── */
+        .file-box { display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: #f0fdf7; border: 2px solid #1ec77c; border-radius: 10px; }
+        .file-box .icon { font-size: 28px; }
+        .file-box .name { font-weight: 700; color: #1a7a4a; font-size: 14px; }
+        .file-box .path { font-size: 12px; color: #888; margin-top: 2px; }
+    </style>
+</head>
+<body>
+
+<h2>🧪 Flask Pipeline Test</h2>
+<p>Simulates scanning <strong>Form 102</strong> → CRNN+CTC extracts fields → MNB classifies → NER maps to <strong>Form 1A</strong> → saved to <code>uploads/temp/</code></p>
+
+<!-- Pipeline diagram -->
+<div class="pipeline">
+    <div class="pipe-step" id="step1"><div class="title">📄 Form 102</div><div class="sub">Scanned input</div></div>
+    <div class="arrow">→</div>
+    <div class="pipe-step" id="step2"><div class="title">🔍 CRNN+CTC</div><div class="sub">OCR extraction</div></div>
+    <div class="arrow">→</div>
+    <div class="pipe-step" id="step3"><div class="title">📊 MNB</div><div class="sub">Classification</div></div>
+    <div class="arrow">→</div>
+    <div class="pipe-step" id="step4"><div class="title">🏷️ NER</div><div class="sub">Field mapping</div></div>
+    <div class="arrow">→</div>
+    <div class="pipe-step" id="step5"><div class="title">📋 Form 1A</div><div class="sub">Auto-filled</div></div>
+    <div class="arrow">→</div>
+    <div class="pipe-step" id="step6"><div class="title">💾 Saved</div><div class="sub">uploads/temp/</div></div>
+</div>
+
+<div class="controls">
+    <button onclick="testFlask()">▶ Run Pipeline Test</button>
+    <span id="status" class="status"></span>
+</div>
+
+<div class="results" id="results">
+
+    <!-- Step 1+2: Form 102 raw fields -->
+    <div class="card">
+        <h3>📄 Step 1+2 — Form 102 raw fields extracted by CRNN+CTC</h3>
+        <table class="raw-table">
+            <thead><tr><th>Form 102 Field Name</th><th>Extracted Value</th></tr></thead>
+            <tbody id="rawFieldsTable"></tbody>
+        </table>
+    </div>
+
+    <!-- Step 3+4: NER mapping -->
+    <div class="card">
+        <h3>🏷️ Step 3+4 — MNB classified as <span id="formClassBadge" style="background:#1ec77c;color:white;padding:2px 10px;border-radius:99px;font-size:13px"></span> &nbsp;→ NER mapped fields</h3>
+        <div class="mapping" id="mappingRows"></div>
+    </div>
+
+    <!-- Confidence scores -->
+    <div class="card">
+        <h3>📊 NER Confidence Scores</h3>
+        <div id="confidenceBars"></div>
+    </div>
+
+    <!-- Saved file -->
+    <div class="card">
+        <h3>💾 Saved to uploads/temp/</h3>
+        <div class="file-box">
+            <div class="icon">📄</div>
+            <div>
+                <div class="name" id="savedFileName"></div>
+                <div class="path" id="savedFilePath"></div>
+            </div>
+            <button class="btn-open" onclick="openPreview()" style="margin-left:auto">👁 Open Form 1A Preview</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// Form 102 field → Form 1A field name mapping (for display)
+const mappingDef = {
+    'child_first_name + child_middle_name + child_last_name': 'child_name',
+    'sex':               'sex',
+    'date_of_birth':     'date_of_birth',
+    'place_of_birth':    'place_of_birth',
+    'mother_first_name + mother_middle_name + mother_last_name': 'mother_name',
+    'mother_citizenship':'mother_nationality',
+    'father_first_name + father_middle_name + father_last_name': 'father_name',
+    'father_citizenship':'father_nationality',
+    'date_of_marriage':  'parents_marriage_date',
+    'place_of_marriage': 'parents_marriage_place',
+    'registry_number':   'registry_number',
+    'date_of_registration': 'date_of_registration',
+    'civil_registrar':   'verified_by',
+    'civil_registrar_position': 'verified_position',
+};
+
+const fieldLabels = {
+    child_name:'child_name → Name of Child',
+    sex:'sex → Sex',
+    date_of_birth:'date_of_birth → Date of Birth',
+    place_of_birth:'place_of_birth → Place of Birth',
+    mother_name:'mother_name → Name of Mother',
+    mother_nationality:'mother_nationality → Nationality of Mother',
+    father_name:'father_name → Name of Father',
+    father_nationality:'father_nationality → Nationality of Father',
+    parents_marriage_date:'parents_marriage_date → Date of Marriage of Parents',
+    parents_marriage_place:'parents_marriage_place → Place of Marriage of Parents',
+    registry_number:'registry_number → Registry Number',
+    date_of_registration:'date_of_registration → Date of Registration',
+    verified_by:'verified_by → Verified By',
+    verified_position:'verified_position → Position',
+};
+
+let _previewUrl = '';
+
+async function testFlask() {
+    const status  = document.getElementById('status');
+    const results = document.getElementById('results');
+    status.textContent = '⏳ Processing...';
+    status.className   = 'status';
+    results.style.display = 'none';
+
+    // Animate pipeline steps
+    const steps = ['step1','step2','step3','step4','step5','step6'];
+    steps.forEach(s => document.getElementById(s).classList.remove('active'));
+    let i = 0;
+    const anim = setInterval(() => {
+        if (i < steps.length) document.getElementById(steps[i++]).classList.add('active');
+        else clearInterval(anim);
+    }, 300);
+
+    const fakeFile = new File(['fake'], 'form102_scan.jpg', { type: 'image/jpeg' });
+    const formData = new FormData();
+    formData.append('file', fakeFile);
+    formData.append('type', 'cert');
+    formData.append('form_hint', '1A');
+
+    try {
+        const res  = await fetch('http://127.0.0.1:5000/process', { method: 'POST', body: formData });
+        const data = await res.json();
+
+        if (data.status !== 'success') {
+            status.innerHTML = '⚠️ ' + data.message;
+            status.className = 'status error';
+            return;
+        }
+
+        // ── Populate raw fields table ─────────────────────────
+        const rawBody = document.getElementById('rawFieldsTable');
+        rawBody.innerHTML = '';
+        // Parse raw_text back into key-value (it's a stringified dict from Python)
+        // We'll show hardcoded Form 102 fields since app.py defines them
+        const form102Fields = {
+            "child_first_name":  "Maria Luisa",
+            "child_middle_name": "Dela Cruz",
+            "child_last_name":   "Santos",
+            "sex":               "Female",
+            "date_of_birth":     "January 10, 2026",
+            "place_of_birth":    "Tarlac City, Tarlac",
+            "mother_first_name": "Rosa",
+            "mother_middle_name":"Reyes",
+            "mother_last_name":  "Dela Cruz",
+            "mother_citizenship":"Filipino",
+            "father_first_name": "Juan",
+            "father_middle_name":"Pedro",
+            "father_last_name":  "Santos",
+            "father_citizenship":"Filipino",
+            "date_of_marriage":  "June 12, 2020",
+            "place_of_marriage": "Tarlac City, Tarlac",
+            "registry_number":   "2026-BC-00123",
+            "date_of_registration": "January 15, 2026",
+            "civil_registrar":   "John Doe",
+            "civil_registrar_position": "City Civil Registrar",
+        };
+        Object.entries(form102Fields).forEach(([k, v]) => {
+            rawBody.innerHTML += `<tr><td>${k}</td><td>${v}</td></tr>`;
+        });
+
+        // ── Populate mapping rows ─────────────────────────────
+        document.getElementById('formClassBadge').textContent = 'Form ' + data.form_class;
+        const mappingDiv = document.getElementById('mappingRows');
+        mappingDiv.innerHTML = '';
+        Object.entries(mappingDef).forEach(([from, to]) => {
+            const val = data.fields[to] || '';
+            if (!val) return;
+            mappingDiv.innerHTML += `
+                <div class="map-row">
+                    <span class="map-from">📄 ${from}</span>
+                    <span class="map-arr">→</span>
+                    <span class="map-to">🏷️ ${to}</span>
+                    <span class="map-arr">→</span>
+                    <span class="map-val">${val}</span>
+                </div>`;
+        });
+
+        // ── Confidence bars ───────────────────────────────────
+        const confDiv = document.getElementById('confidenceBars');
+        confDiv.innerHTML = '';
+        Object.entries(data.confidence).forEach(([key, val]) => {
+            const pct   = Math.round(val * 100);
+            const color = pct >= 90 ? '#1ec77c' : pct >= 75 ? '#f39c12' : '#e74c3c';
+            confDiv.innerHTML += `
+                <div class="conf-row">
+                    <span class="conf-lbl">${fieldLabels[key] || key}</span>
+                    <div class="conf-wrap">
+                        <div class="conf-bar" style="width:${pct}%;background:${color}"></div>
+                    </div>
+                    <span class="conf-pct" style="color:${color}">${pct}%</span>
+                </div>`;
+        });
+
+        // ── Saved file ────────────────────────────────────────
+        _previewUrl = data.preview_url;
+        document.getElementById('savedFileName').textContent = data.saved_file;
+        document.getElementById('savedFilePath').textContent = `C:\\xampp\\htdocs\\uploads\\temp\\${data.saved_file}`;
+
+        results.style.display = 'block';
+        status.innerHTML  = `✅ Done — Form ${data.form_class} filled and saved to uploads/temp/`;
+        status.className  = 'status success';
+
+    } catch (err) {
+        status.innerHTML = '❌ Could not reach Flask. Is python app.py running?';
+        status.className = 'status error';
+        console.error(err);
+    }
+}
+
+function openPreview() {
+    if (_previewUrl) window.open('http://localhost' + _previewUrl, '_blank');
+}
+</script>
+</body>
+</html>

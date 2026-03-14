@@ -14,12 +14,9 @@
 from spacyNER.extractor import CivilRegistryNER
 from spacyNER.autofill  import AutoFillEngine
 
-
-# ── Load model ─────────────────────────────────────────────
-# After fine-tuning, change to:
-# MODEL_PATH = "./models/civil_registry_model/model-best"
-
 MODEL_PATH = "en_core_web_sm"
+# After fine-tuning:
+# MODEL_PATH = "./models/civil_registry_model/model-best"
 
 extractor = CivilRegistryNER(model_path=MODEL_PATH)
 filler    = AutoFillEngine(extractor)
@@ -30,14 +27,8 @@ print("=" * 65)
 
 
 # ──────────────────────────────────────────────────────────
-# SAMPLE OCR TEXT — Form 102 (Certificate of Live Birth)
+# CERTIFICATIONS PAGE — Form 102 (Certificate of Live Birth)
 # ──────────────────────────────────────────────────────────
-# This simulates what CRNN+CTC OCR would output after
-# scanning a filled Form 102.
-#
-# Names are split into (First) (Middle) (Last) — as on the form.
-# They will be assembled to "First Middle Last" in the output.
-
 FORM_102_OCR = """
 Registry No.: 2024-001
 Province: Metro Manila
@@ -67,11 +58,9 @@ MARRIAGE OF PARENTS:
 20b. PLACE: Manila City, Metro Manila, Philippines
 """
 
-
 # ──────────────────────────────────────────────────────────
-# SAMPLE OCR TEXT — Form 103 (Certificate of Death)
+# CERTIFICATIONS PAGE — Form 103 (Certificate of Death)
 # ──────────────────────────────────────────────────────────
-
 FORM_103_OCR = """
 Registry No.: 2024-045
 Province: Metro Manila
@@ -94,14 +83,9 @@ Antecedent cause: Hypertensive Cardiovascular Disease
 Underlying cause: Hypertension
 """
 
-
 # ──────────────────────────────────────────────────────────
-# SAMPLE OCR TEXT — Form 97 (Certificate of Marriage)
+# CERTIFICATIONS PAGE — Form 97 (Certificate of Marriage)
 # ──────────────────────────────────────────────────────────
-# NOTE: Form 97 displays name as (Last)(Middle)(First)
-# but our keyword map extracts each part into the correct
-# FIRST/MIDDLE/LAST labels so assembly is always correct.
-
 FORM_97_OCR = """
 Registry No.: 2024-088
 Province: Metro Manila
@@ -141,24 +125,72 @@ WIFE:
 16. DATE OF MARRIAGE: February 14, 2022
 """
 
+# ──────────────────────────────────────────────────────────
+# MARRIAGE LICENSE PAGE — Groom's Birth Certificate (Male/PSA)
+# MNB classify_sex() → "GROOM"  (SEX: Male)
+# Uses F90_GROOM_* labels
+# ──────────────────────────────────────────────────────────
+FORM_90_GROOM_OCR = """
+Municipal Form No. 102 Certificate of Live Birth
+PSA Registry No.: 2024-BC-001
+Date of Registration: January 10, 2024
+
+GROOM
+Groom (First): Jose  Groom (Middle): Santos  Groom (Last): Ramos
+Groom Date of Birth: March 15, 1995
+Groom Age: 29
+Groom Place of Birth: Manila
+Groom Sex: Male
+Groom Citizenship: Filipino
+Groom Residence: 123 Rizal Street Makati City
+
+Groom Father (First): Pedro  Groom Father (Middle): dela Cruz  Groom Father (Last): Villanueva
+Groom Father Citizenship: Filipino
+
+Groom Mother (First): Lourdes  Groom Mother (Middle): Reyes  Groom Mother (Last): Bautista
+Groom Mother Citizenship: Filipino
+"""
 
 # ──────────────────────────────────────────────────────────
-# HELPER: Print results in a clean table
+# MARRIAGE LICENSE PAGE — Bride's Birth Certificate (Female/NSO)
+# MNB classify_sex() → "BRIDE"  (SEX: Female)
+# Uses F90_BRIDE_* labels
 # ──────────────────────────────────────────────────────────
+FORM_90_BRIDE_OCR = """
+Municipal Form No. 102 Certificate of Live Birth
+NSO Registry No.: 2024-BC-002
+Date of Registration: January 10, 2024
 
+BRIDE
+Bride (First): Maria  Bride (Middle): Garcia  Bride (Last): Torres
+Bride Date of Birth: August 3, 1998
+Bride Age: 26
+Bride Place of Birth: Quezon City
+Bride Sex: Female
+Bride Citizenship: Filipino
+Bride Residence: 456 Mabini Avenue Quezon City
+
+Bride Father (First): Eduardo  Bride Father (Middle): Mendoza  Bride Father (Last): Aquino
+Bride Father Citizenship: Filipino
+
+Bride Mother (First): Gloria  Bride Mother (Middle): Santos  Bride Mother (Last): Lopez
+Bride Mother Citizenship: Filipino
+"""
+
+
+# ──────────────────────────────────────────────────────────
+# HELPER
+# ──────────────────────────────────────────────────────────
 def print_form(title: str, source: str, form_object):
     result = filler.to_dict(form_object)
-
     print(f"\n{'═' * 65}")
     print(f"  📋 {title}")
     print(f"     Source: {source}")
     print(f"{'═' * 65}")
-
     if not result:
         print("  ⚠️  No fields extracted.")
         print("  → Add annotated training data and fine-tune the model.")
         return
-
     for field_name, value in result.items():
         label = field_name.replace("_", " ").title()
         print(f"  {label:<45} {value}")
@@ -168,36 +200,23 @@ def print_form(title: str, source: str, form_object):
 # RUN PIPELINE
 # ──────────────────────────────────────────────────────────
 
-# Form 1A — Birth Certificate
+# ── Certifications Page ────────────────────────────────────
+
 form_1a = filler.fill_form_1a(FORM_102_OCR)
-print_form(
-    "FORM 1A — Birth Certificate",
-    "Form 102 (Certificate of Live Birth)",
-    form_1a
-)
-print("\n  ✏️  NAME ASSEMBLY RESULT:")
+print_form("FORM 1A — Birth Certificate", "Form 102 (Certificate of Live Birth)", form_1a)
+print("\n  ✏️  NAME ASSEMBLY:")
 print(f"     Name of Child  → {form_1a.name_of_child!r}")
 print(f"     Name of Mother → {form_1a.name_of_mother!r}")
 print(f"     Name of Father → {form_1a.name_of_father!r}")
 
-# Form 2A — Death Certificate
 form_2a = filler.fill_form_2a(FORM_103_OCR)
-print_form(
-    "FORM 2A — Death Certificate",
-    "Form 103 (Certificate of Death)",
-    form_2a
-)
-print("\n  ✏️  NAME ASSEMBLY RESULT:")
+print_form("FORM 2A — Death Certificate", "Form 103 (Certificate of Death)", form_2a)
+print("\n  ✏️  NAME ASSEMBLY:")
 print(f"     Name of Deceased → {form_2a.name_of_deceased!r}")
 
-# Form 3A — Marriage Certificate
 form_3a = filler.fill_form_3a(FORM_97_OCR)
-print_form(
-    "FORM 3A — Marriage Certificate",
-    "Form 97 (Certificate of Marriage)",
-    form_3a
-)
-print("\n  ✏️  NAME ASSEMBLY RESULT:")
+print_form("FORM 3A — Marriage Certificate", "Form 97 (Certificate of Marriage)", form_3a)
+print("\n  ✏️  NAME ASSEMBLY:")
 print(f"     Husband Name         → {form_3a.husband.name!r}")
 print(f"     Husband Father Name  → {form_3a.husband.name_of_father!r}")
 print(f"     Husband Mother Name  → {form_3a.husband.name_of_mother!r}")
@@ -205,17 +224,32 @@ print(f"     Wife Name            → {form_3a.wife.name!r}")
 print(f"     Wife Father Name     → {form_3a.wife.name_of_father!r}")
 print(f"     Wife Mother Name     → {form_3a.wife.name_of_mother!r}")
 
+# ── Marriage License Page ──────────────────────────────────
+# MNB has already classified:
+#   FORM_90_GROOM_OCR → classify_sex() → "GROOM" (Male)
+#   FORM_90_BRIDE_OCR → classify_sex() → "BRIDE" (Female)
+
+form_90 = filler.fill_form_90(FORM_90_GROOM_OCR, FORM_90_BRIDE_OCR)
+print_form("FORM 90 — Application for Marriage License",
+           "Marriage License Page (Groom + Bride Birth Certs)", form_90)
+print("\n  ✏️  NAME ASSEMBLY:")
+print(f"     Groom Name              → {form_90.groom.name_of_applicant!r}")
+print(f"     Groom Father Name       → {form_90.groom.name_of_father!r}")
+print(f"     Groom Mother Name       → {form_90.groom.maiden_name_of_mother!r}")
+print(f"     Bride Name              → {form_90.bride.name_of_applicant!r}")
+print(f"     Bride Father Name       → {form_90.bride.name_of_father!r}")
+print(f"     Bride Mother Name       → {form_90.bride.maiden_name_of_mother!r}")
+
 
 print("\n" + "=" * 65)
 print("  ✅ Pipeline complete!")
 print("=" * 65)
 print()
-print("  Assembly rule used:  First + Middle + Last")
-print("  Form 97 note:        Form displays Last-Middle-First,")
-print("                       but output is always First Middle Last")
+print("  CERTIFICATIONS PAGE → MNB classifies form type → SpaCy NER")
+print("  MARRIAGE LICENSE PAGE → MNB classify_sex() routes groom/bride → SpaCy NER")
 print()
 print("  NEXT STEPS:")
 print("  1. Add annotated examples → training/prepare_data.py")
 print("  2. Run: python training/prepare_data.py")
 print("  3. Run: python training/train.py")
-print("  4. Change MODEL_PATH to: ./models/civil_registry_model/model-best")
+print("  4. Set MODEL_PATH = './models/civil_registry_model/model-best'")

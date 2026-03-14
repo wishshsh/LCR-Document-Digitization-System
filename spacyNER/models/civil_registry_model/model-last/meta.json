@@ -94,14 +94,12 @@
       "F97_HUSBAND_FATHER_CITIZENSHIP",
       "F97_HUSBAND_FATHER_FIRST",
       "F97_HUSBAND_FATHER_LAST",
-      "F97_HUSBAND_FATHER_MIDDLE",
       "F97_HUSBAND_FIRST",
       "F97_HUSBAND_LAST",
       "F97_HUSBAND_MIDDLE",
       "F97_HUSBAND_MOTHER_CITIZENSHIP",
       "F97_HUSBAND_MOTHER_FIRST",
       "F97_HUSBAND_MOTHER_LAST",
-      "F97_HUSBAND_MOTHER_MIDDLE",
       "F97_PLACE_OF_MARRIAGE",
       "F97_REGISTRY_NO",
       "F97_WIFE_AGE",
@@ -109,14 +107,12 @@
       "F97_WIFE_FATHER_CITIZENSHIP",
       "F97_WIFE_FATHER_FIRST",
       "F97_WIFE_FATHER_LAST",
-      "F97_WIFE_FATHER_MIDDLE",
       "F97_WIFE_FIRST",
       "F97_WIFE_LAST",
       "F97_WIFE_MIDDLE",
       "F97_WIFE_MOTHER_CITIZENSHIP",
       "F97_WIFE_MOTHER_FIRST",
-      "F97_WIFE_MOTHER_LAST",
-      "F97_WIFE_MOTHER_MIDDLE"
+      "F97_WIFE_MOTHER_LAST"
     ]
   },
   "pipeline":[
@@ -131,9 +127,9 @@
 
   ],
   "performance":{
-    "ents_f":0.901778809,
-    "ents_p":0.899691358,
-    "ents_r":0.903875969,
+    "ents_f":0.8366972477,
+    "ents_p":0.8351648352,
+    "ents_r":0.8382352941,
     "ents_per_type":{
       "F102_REGISTRY_NO":{
         "p":1.0,
@@ -141,24 +137,24 @@
         "f":1.0
       },
       "F90_DATE_OF_REGISTRATION":{
-        "p":0.2,
-        "r":0.1428571429,
-        "f":0.1666666667
+        "p":0.5,
+        "r":0.2,
+        "f":0.2857142857
       },
       "F102_CHILD_FIRST":{
         "p":1.0,
         "r":1.0,
         "f":1.0
       },
-      "F97_HUSBAND_MOTHER_MIDDLE":{
-        "p":0.875,
-        "r":1.0,
-        "f":0.9333333333
+      "F102_MOTHER_MIDDLE":{
+        "p":0.8333333333,
+        "r":0.8333333333,
+        "f":0.8333333333
       },
       "F103_DECEASED_LAST":{
-        "p":0.7,
+        "p":0.6363636364,
         "r":0.875,
-        "f":0.7777777778
+        "f":0.7368421053
       },
       "F102_SEX":{
         "p":1.0,
@@ -166,9 +162,9 @@
         "f":1.0
       },
       "F90_BRIDE_DATE_OF_BIRTH":{
-        "p":0.1818181818,
-        "r":0.2857142857,
-        "f":0.2222222222
+        "p":0.1428571429,
+        "r":0.4,
+        "f":0.2105263158
       },
       "F102_PLACE_OF_BIRTH":{
         "p":1.0,
@@ -180,15 +176,10 @@
         "r":1.0,
         "f":1.0
       },
-      "F102_MOTHER_MIDDLE":{
-        "p":1.0,
-        "r":1.0,
-        "f":1.0
-      },
-      "F97_HUSBAND_MOTHER_LAST":{
-        "p":0.875,
-        "r":1.0,
-        "f":0.9333333333
+      "F102_FATHER_LAST":{
+        "p":0.8333333333,
+        "r":0.8333333333,
+        "f":0.8333333333
       },
       "F102_MOTHER_CITIZENSHIP":{
         "p":1.0,
@@ -201,14 +192,9 @@
         "f":0.9090909091
       },
       "F102_FATHER_MIDDLE":{
-        "p":0.6666666667,
+        "p":0.8,
         "r":0.8,
-        "f":0.7272727273
-      },
-      "F102_FATHER_LAST":{
-        "p":1.0,
-        "r":0.8333333333,
-        "f":0.9090909091
+        "f":0.8
       },
       "F102_FATHER_CITIZENSHIP":{
         "p":1.0,
@@ -216,94 +202,84 @@
         "f":1.0
       },
       "F102_MARRIAGE_DATE":{
-        "p":0.5,
+        "p":1.0,
         "r":1.0,
-        "f":0.6666666667
+        "f":1.0
       },
       "F102_MARRIAGE_PLACE":{
         "p":1.0,
         "r":1.0,
         "f":1.0
       },
-      "F102_CHILD_MIDDLE":{
-        "p":0.8333333333,
-        "r":0.8333333333,
-        "f":0.8333333333
-      },
-      "F102_CHILD_LAST":{
-        "p":0.5,
-        "r":0.1666666667,
-        "f":0.25
-      },
-      "F102_DATE_OF_BIRTH":{
-        "p":1.0,
-        "r":0.3333333333,
-        "f":0.5
+      "F102_DATE_OF_REGISTRATION":{
+        "p":0.0,
+        "r":0.0,
+        "f":0.0
       },
       "F102_MOTHER_LAST":{
         "p":0.8333333333,
         "r":0.8333333333,
         "f":0.8333333333
       },
-      "F102_DATE_OF_REGISTRATION":{
-        "p":0.0,
-        "r":0.0,
-        "f":0.0
+      "F102_CHILD_MIDDLE":{
+        "p":1.0,
+        "r":0.8333333333,
+        "f":0.9090909091
       },
-      "F97_DATE_OF_REGISTRATION":{
-        "p":0.2,
-        "r":0.2857142857,
-        "f":0.2352941176
+      "F102_CHILD_LAST":{
+        "p":0.6666666667,
+        "r":0.3333333333,
+        "f":0.4444444444
       },
-      "F90_GROOM_DATE_OF_BIRTH":{
+      "F102_DATE_OF_BIRTH":{
         "p":0.0,
         "r":0.0,
         "f":0.0
       },
       "F103_DATE_OF_REGISTRATION":{
-        "p":0.2727272727,
+        "p":0.2,
         "r":0.375,
-        "f":0.3157894737
+        "f":0.2608695652
       },
-      "F90_BRIDE_MOTHER_LAST":{
-        "p":0.875,
-        "r":1.0,
-        "f":0.9333333333
+      "F97_DATE_OF_REGISTRATION":{
+        "p":0.1666666667,
+        "r":0.1428571429,
+        "f":0.1538461538
       },
-      "F97_WIFE_MOTHER_CITIZENSHIP":{
-        "p":0.875,
+      "F90_BRIDE_MIDDLE":{
+        "p":0.8333333333,
         "r":1.0,
-        "f":0.9333333333
+        "f":0.9090909091
       },
-      "F90_BRIDE_LAST":{
-        "p":0.875,
+      "F90_GROOM_MOTHER_CITIZENSHIP":{
+        "p":0.8333333333,
         "r":1.0,
-        "f":0.9333333333
+        "f":0.9090909091
       },
-      "F97_HUSBAND_FATHER_CITIZENSHIP":{
-        "p":0.875,
-        "r":1.0,
-        "f":0.9333333333
+      "F97_HUSBAND_FATHER_FIRST":{
+        "p":0.4545454545,
+        "r":0.7142857143,
+        "f":0.5555555556
       },
-      "F103_DECEASED_FIRST":{
-        "p":0.8888888889,
-        "r":1.0,
-        "f":0.9411764706
-      },
-      "F97_WIFE_MOTHER_MIDDLE":{
-        "p":0.7777777778,
-        "r":1.0,
-        "f":0.875
+      "F97_WIFE_MIDDLE":{
+        "p":0.6666666667,
+        "r":0.8571428571,
+        "f":0.75
       },
       "F103_REGISTRY_NO":{
         "p":1.0,
         "r":1.0,
         "f":1.0
       },
+      "F103_DECEASED_FIRST":{
+        "p":0.6666666667,
+        "r":0.25,
+        "f":0.3636363636
+      },
       "F103_DECEASED_MIDDLE":{
-        "p":1.0,
+        "p":0.8571428571,
         "r":0.75,
-        "f":0.8571428571
+        "f":0.8
       },
       "F103_SEX":{
         "p":1.0,
@@ -336,9 +312,9 @@
         "f":1.0
       },
       "F103_CAUSE_IMMEDIATE":{
-        "p":1.0,
+        "p":0.875,
         "r":0.875,
-        "f":0.9333333333
+        "f":0.875
       },
       "F103_CAUSE_ANTECEDENT":{
         "p":1.0,
@@ -350,50 +326,55 @@
         "r":1.0,
         "f":1.0
       },
-      "F97_REGISTRY_NO":{
-        "p":0.6666666667,
-        "r":0.8571428571,
-        "f":0.75
-      },
       "F97_HUSBAND_FIRST":{
-        "p":1.0,
-        "r":1.0,
-        "f":1.0
+        "p":0.6,
+        "r":0.8571428571,
+        "f":0.7058823529
       },
-      "F97_HUSBAND_FATHER_MIDDLE":{
+      "F97_WIFE_MOTHER_FIRST":{
+        "p":0.4444444444,
+        "r":0.5714285714,
+        "f":0.5
+      },
+      "F97_REGISTRY_NO":{
+        "p":0.75,
+        "r":0.8571428571,
+        "f":0.8
+      },
+      "F97_HUSBAND_MIDDLE":{
+        "p":1.0,
+        "r":0.8571428571,
+        "f":0.9230769231
+      },
+      "F97_HUSBAND_LAST":{
         "p":0.875,
         "r":1.0,
         "f":0.9333333333
       },
-      "F97_HUSBAND_LAST":{
-        "p":1.0,
-        "r":1.0,
-        "f":1.0
-      },
       "F97_HUSBAND_AGE":{
-        "p":1.0,
+        "p":0.875,
         "r":1.0,
-        "f":1.0
+        "f":0.9333333333
       },
       "F97_HUSBAND_CITIZENSHIP":{
-        "p":1.0,
+        "p":0.875,
         "r":1.0,
-        "f":1.0
-      },
-      "F97_HUSBAND_FATHER_FIRST":{
-        "p":1.0,
-        "r":1.0,
-        "f":1.0
+        "f":0.9333333333
       },
       "F97_HUSBAND_FATHER_LAST":{
-        "p":1.0,
+        "p":0.7777777778,
         "r":1.0,
-        "f":1.0
+        "f":0.875
       },
-      "F97_HUSBAND_MOTHER_FIRST":{
+      "F97_HUSBAND_MOTHER_LAST":{
         "p":1.0,
-        "r":1.0,
-        "f":1.0
+        "r":0.8333333333,
+        "f":0.9090909091
+      },
+      "F97_HUSBAND_FATHER_CITIZENSHIP":{
+        "p":1.0,
+        "r":0.8571428571,
+        "f":0.9230769231
       },
       "F97_HUSBAND_MOTHER_CITIZENSHIP":{
         "p":1.0,
@@ -402,55 +383,40 @@
       },
       "F97_WIFE_FIRST":{
         "p":1.0,
-        "r":1.0,
-        "f":1.0
-      },
-      "F97_WIFE_MIDDLE":{
-        "p":0.875,
-        "r":1.0,
-        "f":0.9333333333
+        "r":0.8571428571,
+        "f":0.9230769231
       },
       "F97_WIFE_LAST":{
         "p":1.0,
-        "r":1.0,
-        "f":1.0
+        "r":0.8571428571,
+        "f":0.9230769231
       },
       "F97_WIFE_AGE":{
         "p":1.0,
-        "r":1.0,
-        "f":1.0
+        "r":0.8571428571,
+        "f":0.9230769231
       },
       "F97_WIFE_CITIZENSHIP":{
         "p":1.0,
         "r":1.0,
         "f":1.0
       },
-      "F97_WIFE_FATHER_FIRST":{
-        "p":1.0,
-        "r":1.0,
-        "f":1.0
+      "F97_WIFE_FATHER_LAST":{
+        "p":0.8571428571,
+        "r":0.8571428571,
+        "f":0.8571428571
       },
-      "F97_WIFE_FATHER_MIDDLE":{
+      "F97_WIFE_MOTHER_LAST":{
         "p":1.0,
         "r":0.8571428571,
         "f":0.9230769231
-      },
-      "F97_WIFE_FATHER_LAST":{
-        "p":1.0,
-        "r":1.0,
-        "f":1.0
       },
       "F97_WIFE_FATHER_CITIZENSHIP":{
         "p":1.0,
         "r":1.0,
         "f":1.0
       },
-      "F97_WIFE_MOTHER_FIRST":{
-        "p":1.0,
-        "r":1.0,
-        "f":1.0
-      },
-      "F97_WIFE_MOTHER_LAST":{
+      "F97_WIFE_MOTHER_CITIZENSHIP":{
         "p":1.0,
         "r":1.0,
         "f":1.0
@@ -461,18 +427,28 @@
         "f":0.875
       },
       "F97_PLACE_OF_MARRIAGE":{
-        "p":1.0,
-        "r":0.7142857143,
-        "f":0.8333333333
-      },
-      "F97_HUSBAND_MIDDLE":{
-        "p":1.0,
-        "r":0.8571428571,
-        "f":0.9230769231
-      },
-      "F90_REGISTRY_NO":{
         "p":0.8,
         "r":0.5714285714,
+        "f":0.6666666667
+      },
+      "F97_HUSBAND_MOTHER_FIRST":{
+        "p":0.3333333333,
+        "r":0.2857142857,
+        "f":0.3076923077
+      },
+      "F97_WIFE_FATHER_FIRST":{
+        "p":0.5,
+        "r":0.4285714286,
+        "f":0.4615384615
+      },
+      "F90_GROOM_FATHER_LAST":{
+        "p":0.8,
+        "r":0.8,
+        "f":0.8
+      },
+      "F90_REGISTRY_NO":{
+        "p":0.75,
+        "r":0.6,
         "f":0.6666666667
       },
       "F90_GROOM_FIRST":{
@@ -520,11 +496,6 @@
         "r":1.0,
         "f":1.0
       },
-      "F90_GROOM_FATHER_LAST":{
-        "p":1.0,
-        "r":0.8571428571,
-        "f":0.9230769231
-      },
       "F90_GROOM_FATHER_CITIZENSHIP":{
         "p":1.0,
         "r":1.0,
@@ -541,21 +512,16 @@
         "f":1.0
       },
       "F90_GROOM_MOTHER_LAST":{
-        "p":0.875,
+        "p":0.8333333333,
         "r":1.0,
-        "f":0.9333333333
-      },
-      "F90_GROOM_MOTHER_CITIZENSHIP":{
-        "p":1.0,
-        "r":1.0,
-        "f":1.0
+        "f":0.9090909091
       },
       "F90_BRIDE_FIRST":{
         "p":1.0,
         "r":1.0,
         "f":1.0
       },
-      "F90_BRIDE_MIDDLE":{
+      "F90_BRIDE_LAST":{
         "p":1.0,
         "r":1.0,
         "f":1.0
@@ -567,8 +533,8 @@
       },
       "F90_BRIDE_PLACE_OF_BIRTH":{
         "p":1.0,
-        "r":1.0,
-        "f":1.0
+        "r":0.8,
+        "f":0.8888888889
       },
       "F90_BRIDE_SEX":{
         "p":1.0,
@@ -610,13 +576,23 @@
         "r":1.0,
         "f":1.0
       },
+      "F90_BRIDE_MOTHER_LAST":{
+        "p":1.0,
+        "r":1.0,
+        "f":1.0
+      },
       "F90_BRIDE_MOTHER_CITIZENSHIP":{
         "p":1.0,
         "r":1.0,
         "f":1.0
+      },
+      "F90_GROOM_DATE_OF_BIRTH":{
+        "p":0.0,
+        "r":0.0,
+        "f":0.0
       }
     },
-    "tok2vec_loss":598.837045725,
-    "ner_loss":667.7046508789
+    "tok2vec_loss":557.8935446211,
+    "ner_loss":1066.9172363281
   }
 }

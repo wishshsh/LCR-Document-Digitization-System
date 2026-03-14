@@ -16,14 +16,26 @@
 #       ▼  CRNN + CTC (OCR)
 #   Raw OCR Text
 #       │
-#       ▼  spaCy NER  (model trained on labels defined HERE)
-#   Extracted dict  {F102_CHILD_FIRST: "Juan", ...}
+#       ▼  MNB Classifier
+#   Form Type Identified
 #       │
-#       ▼  name_assembler.py  (uses NAME_GROUPS_* from here)
-#   Assembled dict  {name_of_child: "Juan dela Cruz Santos", ...}
+#       ├─ Certifications Page → Form 102 / 103 / 97
+#       │       ▼
+#       │   spaCy NER → F102_* / F103_* / F97_* labels
+#       │       ▼
+#       │   name_assembler → assembled full names
+#       │       ▼
+#       │   autofill → Form1A / Form2A / Form3A objects
 #       │
-#       ▼  autofill.py  (uses OUTPUT_MAP_* from here)
-#   Digital Form object  Form1A(name_of_child="Juan dela Cruz Santos")
+#       └─ Marriage License Page → Groom Birth Cert + Bride Birth Cert
+#               ▼
+#           MNB classify_sex() → GROOM (Male) | BRIDE (Female)
+#               ▼
+#           spaCy NER → F90_GROOM_* labels | F90_BRIDE_* labels
+#               ▼
+#           name_assembler → assembled full names
+#               ▼
+#           autofill → Form90(groom=..., bride=...)
 #
 # ─────────────────────────────────────────────────────────────
 # OUTPUT FIELDS — what gets printed on each digital form
@@ -51,14 +63,14 @@
 #    nationality_of_father
 #    date_of_registration       date_of_marriage    place_of_marriage
 #
-#  Form 90  (Marriage License) — same fields for groom & bride
-#    name_of_applicant          date_of_birth
-#    age                        place_of_birth
-#    sex                        citizenship
-#    residence                  religion
-#    name_of_father             father_citizenship
-#    maiden_name_of_mother      mother_citizenship
-#    mother_residence
+#  Form 90  (Marriage License) — SEPARATE labels for groom and bride
+#    Groom:
+#      name_of_applicant        date_of_birth       age
+#      place_of_birth           sex                 citizenship
+#      residence                religion
+#      name_of_father           father_citizenship
+#      maiden_name_of_mother    mother_citizenship  mother_residence
+#    Bride: (same fields, separate labels)
 # =============================================================
 
 
@@ -143,7 +155,6 @@ OUTPUT_MAP_1A = {
     F102_MARRIAGE_PLACE:       "place_of_marriage_of_parents",
 }
 
-# Ordered output fields as they appear on Form 1A
 OUTPUT_FIELDS_1A = [
     "registry_number", "date_of_registration",
     "name_of_child", "sex", "date_of_birth", "place_of_birth",
@@ -167,18 +178,18 @@ F103_DECEASED_MIDDLE = "F103_DECEASED_MIDDLE"
 F103_DECEASED_LAST   = "F103_DECEASED_LAST"
 
 # — Deceased details ——————————————————————————————————————————
-F103_SEX            = "F103_SEX"            # → sex
-F103_AGE            = "F103_AGE"            # → age
-F103_CIVIL_STATUS   = "F103_CIVIL_STATUS"   # → civil_status
-F103_CITIZENSHIP    = "F103_CITIZENSHIP"    # → nationality
-F103_DATE_OF_DEATH  = "F103_DATE_OF_DEATH"  # → date_of_death
-F103_PLACE_OF_DEATH = "F103_PLACE_OF_DEATH" # → place_of_death
-F103_CAUSE_IMMEDIATE= "F103_CAUSE_IMMEDIATE"# → cause_of_death
-F103_CAUSE_ANTECEDENT="F103_CAUSE_ANTECEDENT"
-F103_CAUSE_UNDERLYING="F103_CAUSE_UNDERLYING"
-F103_RELIGION       = "F103_RELIGION"
-F103_OCCUPATION     = "F103_OCCUPATION"
-F103_RESIDENCE      = "F103_RESIDENCE"
+F103_SEX             = "F103_SEX"            # → sex
+F103_AGE             = "F103_AGE"            # → age
+F103_CIVIL_STATUS    = "F103_CIVIL_STATUS"   # → civil_status
+F103_CITIZENSHIP     = "F103_CITIZENSHIP"    # → nationality
+F103_DATE_OF_DEATH   = "F103_DATE_OF_DEATH"  # → date_of_death
+F103_PLACE_OF_DEATH  = "F103_PLACE_OF_DEATH" # → place_of_death
+F103_CAUSE_IMMEDIATE = "F103_CAUSE_IMMEDIATE"# → cause_of_death
+F103_CAUSE_ANTECEDENT= "F103_CAUSE_ANTECEDENT"
+F103_CAUSE_UNDERLYING= "F103_CAUSE_UNDERLYING"
+F103_RELIGION        = "F103_RELIGION"
+F103_OCCUPATION      = "F103_OCCUPATION"
+F103_RESIDENCE       = "F103_RESIDENCE"
 
 FORM_103_LABELS = [
     F103_REGISTRY_NO, F103_DATE_OF_REGISTRATION,
@@ -221,14 +232,12 @@ OUTPUT_FIELDS_2A = [
 # ═════════════════════════════════════════════════════════════
 # FORM 97  →  FORM 3A   Certificate of Marriage
 # ═════════════════════════════════════════════════════════════
-# Form 97 has two columns: HUSBAND and WIFE.
-# Both share the same field structure.
 
 # — Event / registry ——————————————————————————————————————————
 F97_REGISTRY_NO          = "F97_REGISTRY_NO"
-F97_DATE_OF_REGISTRATION = "F97_DATE_OF_REGISTRATION"  # → date_of_registration
-F97_DATE_OF_MARRIAGE     = "F97_DATE_OF_MARRIAGE"      # → date_of_marriage
-F97_PLACE_OF_MARRIAGE    = "F97_PLACE_OF_MARRIAGE"     # → place_of_marriage
+F97_DATE_OF_REGISTRATION = "F97_DATE_OF_REGISTRATION"
+F97_DATE_OF_MARRIAGE     = "F97_DATE_OF_MARRIAGE"
+F97_PLACE_OF_MARRIAGE    = "F97_PLACE_OF_MARRIAGE"
 
 # — Husband name parts  (assembled → husband.name) ———————————
 F97_HUSBAND_FIRST  = "F97_HUSBAND_FIRST"
@@ -237,25 +246,25 @@ F97_HUSBAND_LAST   = "F97_HUSBAND_LAST"
 
 # — Husband details ———————————————————————————————————————————
 F97_HUSBAND_DOB           = "F97_HUSBAND_DOB"
-F97_HUSBAND_AGE           = "F97_HUSBAND_AGE"          # → husband.age
+F97_HUSBAND_AGE           = "F97_HUSBAND_AGE"
 F97_HUSBAND_PLACE_BIRTH   = "F97_HUSBAND_PLACE_BIRTH"
 F97_HUSBAND_SEX           = "F97_HUSBAND_SEX"
-F97_HUSBAND_CITIZENSHIP   = "F97_HUSBAND_CITIZENSHIP"  # → husband.nationality
+F97_HUSBAND_CITIZENSHIP   = "F97_HUSBAND_CITIZENSHIP"
 F97_HUSBAND_RESIDENCE     = "F97_HUSBAND_RESIDENCE"
 F97_HUSBAND_RELIGION      = "F97_HUSBAND_RELIGION"
 F97_HUSBAND_CIVIL_STATUS  = "F97_HUSBAND_CIVIL_STATUS"
 
-# — Husband's father  (assembled → husband.name_of_father) ————
+# — Husband's father ——————————————————————————————————————————
 F97_HUSBAND_FATHER_FIRST       = "F97_HUSBAND_FATHER_FIRST"
 F97_HUSBAND_FATHER_MIDDLE      = "F97_HUSBAND_FATHER_MIDDLE"
 F97_HUSBAND_FATHER_LAST        = "F97_HUSBAND_FATHER_LAST"
-F97_HUSBAND_FATHER_CITIZENSHIP = "F97_HUSBAND_FATHER_CITIZENSHIP"  # → husband.nationality_of_father
+F97_HUSBAND_FATHER_CITIZENSHIP = "F97_HUSBAND_FATHER_CITIZENSHIP"
 
-# — Husband's mother  (assembled → husband.name_of_mother) ————
+# — Husband's mother ——————————————————————————————————————————
 F97_HUSBAND_MOTHER_FIRST       = "F97_HUSBAND_MOTHER_FIRST"
 F97_HUSBAND_MOTHER_MIDDLE      = "F97_HUSBAND_MOTHER_MIDDLE"
 F97_HUSBAND_MOTHER_LAST        = "F97_HUSBAND_MOTHER_LAST"
-F97_HUSBAND_MOTHER_CITIZENSHIP = "F97_HUSBAND_MOTHER_CITIZENSHIP"  # → husband.nationality_of_mother
+F97_HUSBAND_MOTHER_CITIZENSHIP = "F97_HUSBAND_MOTHER_CITIZENSHIP"
 
 # — Wife name parts  (assembled → wife.name) —————————————————
 F97_WIFE_FIRST  = "F97_WIFE_FIRST"
@@ -264,25 +273,25 @@ F97_WIFE_LAST   = "F97_WIFE_LAST"
 
 # — Wife details ——————————————————————————————————————————————
 F97_WIFE_DOB          = "F97_WIFE_DOB"
-F97_WIFE_AGE          = "F97_WIFE_AGE"          # → wife.age
+F97_WIFE_AGE          = "F97_WIFE_AGE"
 F97_WIFE_PLACE_BIRTH  = "F97_WIFE_PLACE_BIRTH"
 F97_WIFE_SEX          = "F97_WIFE_SEX"
-F97_WIFE_CITIZENSHIP  = "F97_WIFE_CITIZENSHIP"  # → wife.nationality
+F97_WIFE_CITIZENSHIP  = "F97_WIFE_CITIZENSHIP"
 F97_WIFE_RESIDENCE    = "F97_WIFE_RESIDENCE"
 F97_WIFE_RELIGION     = "F97_WIFE_RELIGION"
 F97_WIFE_CIVIL_STATUS = "F97_WIFE_CIVIL_STATUS"
 
-# — Wife's father  (assembled → wife.name_of_father) —————————
+# — Wife's father ————————————————————————————————————————————
 F97_WIFE_FATHER_FIRST       = "F97_WIFE_FATHER_FIRST"
 F97_WIFE_FATHER_MIDDLE      = "F97_WIFE_FATHER_MIDDLE"
 F97_WIFE_FATHER_LAST        = "F97_WIFE_FATHER_LAST"
-F97_WIFE_FATHER_CITIZENSHIP = "F97_WIFE_FATHER_CITIZENSHIP"  # → wife.nationality_of_father
+F97_WIFE_FATHER_CITIZENSHIP = "F97_WIFE_FATHER_CITIZENSHIP"
 
-# — Wife's mother  (assembled → wife.name_of_mother) —————————
+# — Wife's mother ————————————————————————————————————————————
 F97_WIFE_MOTHER_FIRST       = "F97_WIFE_MOTHER_FIRST"
 F97_WIFE_MOTHER_MIDDLE      = "F97_WIFE_MOTHER_MIDDLE"
 F97_WIFE_MOTHER_LAST        = "F97_WIFE_MOTHER_LAST"
-F97_WIFE_MOTHER_CITIZENSHIP = "F97_WIFE_MOTHER_CITIZENSHIP"  # → wife.nationality_of_mother
+F97_WIFE_MOTHER_CITIZENSHIP = "F97_WIFE_MOTHER_CITIZENSHIP"
 
 FORM_97_LABELS = [
     F97_REGISTRY_NO, F97_DATE_OF_REGISTRATION,
@@ -316,23 +325,16 @@ NAME_GROUPS_97_WIFE = [
     (F97_WIFE_MOTHER_FIRST, F97_WIFE_MOTHER_MIDDLE, F97_WIFE_MOTHER_LAST, "name_of_mother"),
 ]
 
-# NER label → SpouseOutput field name
 OUTPUT_MAP_3A_HUSBAND = {
-    # name               ← assembled
     F97_HUSBAND_AGE:                 "age",
     F97_HUSBAND_CITIZENSHIP:         "nationality",
-    # name_of_father     ← assembled
     F97_HUSBAND_FATHER_CITIZENSHIP:  "nationality_of_father",
-    # name_of_mother     ← assembled
     F97_HUSBAND_MOTHER_CITIZENSHIP:  "nationality_of_mother",
 }
 OUTPUT_MAP_3A_WIFE = {
-    # name               ← assembled
     F97_WIFE_AGE:                    "age",
     F97_WIFE_CITIZENSHIP:            "nationality",
-    # name_of_father     ← assembled
     F97_WIFE_FATHER_CITIZENSHIP:     "nationality_of_father",
-    # name_of_mother     ← assembled
     F97_WIFE_MOTHER_CITIZENSHIP:     "nationality_of_mother",
 }
 OUTPUT_MAP_3A_EVENT = {
@@ -342,7 +344,6 @@ OUTPUT_MAP_3A_EVENT = {
     F97_PLACE_OF_MARRIAGE:    "place_of_marriage",
 }
 
-# Fields per spouse on Form 3A (in order)
 OUTPUT_FIELDS_3A_SPOUSE = [
     "name", "age", "nationality",
     "name_of_mother", "nationality_of_mother",
@@ -357,64 +358,156 @@ OUTPUT_FIELDS_3A_EVENT = [
 # ═════════════════════════════════════════════════════════════
 # BIRTH CERTIFICATE  →  FORM 90   Marriage License
 # ═════════════════════════════════════════════════════════════
-# Source: individual birth certificates of groom and bride.
-# NER extracts generic F90_APPLICANT_* labels for each.
+# Source: PSA/NSO birth certificates uploaded on the
+# Marriage License page — one for GROOM, one for BRIDE.
+#
+# MNB classify_sex() routes each cert:
+#   Male   → F90_GROOM_* labels
+#   Female → F90_BRIDE_* labels
+#
+# Labels are SEPARATE per groom/bride so the trained model
+# can distinguish them in a single Form 90 document that
+# contains both applicants.
+# ═════════════════════════════════════════════════════════════
 
-# — Applicant name parts  (assembled → name_of_applicant) ————
-F90_APPLICANT_FIRST  = "F90_APPLICANT_FIRST"
-F90_APPLICANT_MIDDLE = "F90_APPLICANT_MIDDLE"
-F90_APPLICANT_LAST   = "F90_APPLICANT_LAST"
+# ── GROOM labels ─────────────────────────────────────────────
 
-# — Applicant details —————————————————————————————————————————
-F90_DATE_OF_BIRTH  = "F90_DATE_OF_BIRTH"   # → date_of_birth
-F90_AGE            = "F90_AGE"             # → age
-F90_PLACE_OF_BIRTH = "F90_PLACE_OF_BIRTH"  # → place_of_birth
-F90_SEX            = "F90_SEX"             # → sex
-F90_CITIZENSHIP    = "F90_CITIZENSHIP"     # → citizenship
-F90_RESIDENCE      = "F90_RESIDENCE"       # → residence
-F90_RELIGION       = "F90_RELIGION"        # → religion
+# — Registry (shared, extracted once) ————————————————————————
+F90_REGISTRY_NO          = "F90_REGISTRY_NO"
+F90_DATE_OF_REGISTRATION = "F90_DATE_OF_REGISTRATION"
 
-# — Father  (assembled → name_of_father) ——————————————————————
-F90_FATHER_FIRST       = "F90_FATHER_FIRST"
-F90_FATHER_LAST        = "F90_FATHER_LAST"
-F90_FATHER_CITIZENSHIP = "F90_FATHER_CITIZENSHIP"   # → father_citizenship
+# — Groom name parts  (assembled → groom.name_of_applicant) ——
+F90_GROOM_FIRST  = "F90_GROOM_FIRST"
+F90_GROOM_MIDDLE = "F90_GROOM_MIDDLE"
+F90_GROOM_LAST   = "F90_GROOM_LAST"
 
-# — Mother  (assembled → maiden_name_of_mother) ——————————————
-F90_MOTHER_FIRST       = "F90_MOTHER_FIRST"
-F90_MOTHER_LAST        = "F90_MOTHER_LAST"
-F90_MOTHER_CITIZENSHIP = "F90_MOTHER_CITIZENSHIP"   # → mother_citizenship
-F90_MOTHER_RESIDENCE   = "F90_MOTHER_RESIDENCE"     # → mother_residence
+# — Groom details —————————————————————————————————————————————
+F90_GROOM_DATE_OF_BIRTH  = "F90_GROOM_DATE_OF_BIRTH"
+F90_GROOM_AGE            = "F90_GROOM_AGE"
+F90_GROOM_PLACE_OF_BIRTH = "F90_GROOM_PLACE_OF_BIRTH"
+F90_GROOM_SEX            = "F90_GROOM_SEX"            # always Male
+F90_GROOM_CITIZENSHIP    = "F90_GROOM_CITIZENSHIP"
+F90_GROOM_RESIDENCE      = "F90_GROOM_RESIDENCE"
+F90_GROOM_RELIGION       = "F90_GROOM_RELIGION"
 
-FORM_90_LABELS = [
-    F90_APPLICANT_FIRST, F90_APPLICANT_MIDDLE, F90_APPLICANT_LAST,
-    F90_DATE_OF_BIRTH, F90_AGE, F90_PLACE_OF_BIRTH,
-    F90_SEX, F90_CITIZENSHIP, F90_RESIDENCE, F90_RELIGION,
-    F90_FATHER_FIRST, F90_FATHER_LAST, F90_FATHER_CITIZENSHIP,
-    F90_MOTHER_FIRST, F90_MOTHER_LAST, F90_MOTHER_CITIZENSHIP,
-    F90_MOTHER_RESIDENCE,
+# — Groom's father  (assembled → groom.name_of_father) ————————
+F90_GROOM_FATHER_FIRST       = "F90_GROOM_FATHER_FIRST"
+F90_GROOM_FATHER_MIDDLE      = "F90_GROOM_FATHER_MIDDLE"
+F90_GROOM_FATHER_LAST        = "F90_GROOM_FATHER_LAST"
+F90_GROOM_FATHER_CITIZENSHIP = "F90_GROOM_FATHER_CITIZENSHIP"
+
+# — Groom's mother  (assembled → groom.maiden_name_of_mother) ─
+F90_GROOM_MOTHER_FIRST       = "F90_GROOM_MOTHER_FIRST"
+F90_GROOM_MOTHER_MIDDLE      = "F90_GROOM_MOTHER_MIDDLE"
+F90_GROOM_MOTHER_LAST        = "F90_GROOM_MOTHER_LAST"
+F90_GROOM_MOTHER_CITIZENSHIP = "F90_GROOM_MOTHER_CITIZENSHIP"
+F90_GROOM_MOTHER_RESIDENCE   = "F90_GROOM_MOTHER_RESIDENCE"
+
+# ── BRIDE labels ─────────────────────────────────────────────
+
+# — Bride name parts  (assembled → bride.name_of_applicant) ——
+F90_BRIDE_FIRST  = "F90_BRIDE_FIRST"
+F90_BRIDE_MIDDLE = "F90_BRIDE_MIDDLE"
+F90_BRIDE_LAST   = "F90_BRIDE_LAST"
+
+# — Bride details —————————————————————————————————————————————
+F90_BRIDE_DATE_OF_BIRTH  = "F90_BRIDE_DATE_OF_BIRTH"
+F90_BRIDE_AGE            = "F90_BRIDE_AGE"
+F90_BRIDE_PLACE_OF_BIRTH = "F90_BRIDE_PLACE_OF_BIRTH"
+F90_BRIDE_SEX            = "F90_BRIDE_SEX"            # always Female
+F90_BRIDE_CITIZENSHIP    = "F90_BRIDE_CITIZENSHIP"
+F90_BRIDE_RESIDENCE      = "F90_BRIDE_RESIDENCE"
+F90_BRIDE_RELIGION       = "F90_BRIDE_RELIGION"
+
+# — Bride's father  (assembled → bride.name_of_father) ————————
+F90_BRIDE_FATHER_FIRST       = "F90_BRIDE_FATHER_FIRST"
+F90_BRIDE_FATHER_MIDDLE      = "F90_BRIDE_FATHER_MIDDLE"
+F90_BRIDE_FATHER_LAST        = "F90_BRIDE_FATHER_LAST"
+F90_BRIDE_FATHER_CITIZENSHIP = "F90_BRIDE_FATHER_CITIZENSHIP"
+
+# — Bride's mother  (assembled → bride.maiden_name_of_mother) ─
+F90_BRIDE_MOTHER_FIRST       = "F90_BRIDE_MOTHER_FIRST"
+F90_BRIDE_MOTHER_MIDDLE      = "F90_BRIDE_MOTHER_MIDDLE"
+F90_BRIDE_MOTHER_LAST        = "F90_BRIDE_MOTHER_LAST"
+F90_BRIDE_MOTHER_CITIZENSHIP = "F90_BRIDE_MOTHER_CITIZENSHIP"
+F90_BRIDE_MOTHER_RESIDENCE   = "F90_BRIDE_MOTHER_RESIDENCE"
+
+# ── Label lists ───────────────────────────────────────────────
+FORM_90_SHARED_LABELS = [
+    F90_REGISTRY_NO, F90_DATE_OF_REGISTRATION,
 ]
 
-# middle_label=None → join only first+last for father/mother on Form 90
-NAME_GROUPS_90 = [
-    (F90_APPLICANT_FIRST, F90_APPLICANT_MIDDLE, F90_APPLICANT_LAST, "name_of_applicant"),
-    (F90_FATHER_FIRST,    None,                 F90_FATHER_LAST,    "name_of_father"),
-    (F90_MOTHER_FIRST,    None,                 F90_MOTHER_LAST,    "maiden_name_of_mother"),
+FORM_90_GROOM_LABELS = [
+    F90_GROOM_FIRST, F90_GROOM_MIDDLE, F90_GROOM_LAST,
+    F90_GROOM_DATE_OF_BIRTH, F90_GROOM_AGE, F90_GROOM_PLACE_OF_BIRTH,
+    F90_GROOM_SEX, F90_GROOM_CITIZENSHIP, F90_GROOM_RESIDENCE, F90_GROOM_RELIGION,
+    F90_GROOM_FATHER_FIRST, F90_GROOM_FATHER_MIDDLE, F90_GROOM_FATHER_LAST,
+    F90_GROOM_FATHER_CITIZENSHIP,
+    F90_GROOM_MOTHER_FIRST, F90_GROOM_MOTHER_MIDDLE, F90_GROOM_MOTHER_LAST,
+    F90_GROOM_MOTHER_CITIZENSHIP, F90_GROOM_MOTHER_RESIDENCE,
 ]
 
-OUTPUT_MAP_90 = {
-    # name_of_applicant      ← assembled
-    F90_DATE_OF_BIRTH:       "date_of_birth",
-    F90_AGE:                 "age",
-    F90_PLACE_OF_BIRTH:      "place_of_birth",
-    F90_SEX:                 "sex",
-    F90_CITIZENSHIP:         "citizenship",
-    F90_RESIDENCE:           "residence",
-    F90_RELIGION:            "religion",
-    # name_of_father         ← assembled
-    F90_FATHER_CITIZENSHIP:  "father_citizenship",
-    # maiden_name_of_mother  ← assembled
-    F90_MOTHER_CITIZENSHIP:  "mother_citizenship",
-    F90_MOTHER_RESIDENCE:    "mother_residence",
+FORM_90_BRIDE_LABELS = [
+    F90_BRIDE_FIRST, F90_BRIDE_MIDDLE, F90_BRIDE_LAST,
+    F90_BRIDE_DATE_OF_BIRTH, F90_BRIDE_AGE, F90_BRIDE_PLACE_OF_BIRTH,
+    F90_BRIDE_SEX, F90_BRIDE_CITIZENSHIP, F90_BRIDE_RESIDENCE, F90_BRIDE_RELIGION,
+    F90_BRIDE_FATHER_FIRST, F90_BRIDE_FATHER_MIDDLE, F90_BRIDE_FATHER_LAST,
+    F90_BRIDE_FATHER_CITIZENSHIP,
+    F90_BRIDE_MOTHER_FIRST, F90_BRIDE_MOTHER_MIDDLE, F90_BRIDE_MOTHER_LAST,
+    F90_BRIDE_MOTHER_CITIZENSHIP, F90_BRIDE_MOTHER_RESIDENCE,
+]
+
+FORM_90_LABELS = FORM_90_SHARED_LABELS + FORM_90_GROOM_LABELS + FORM_90_BRIDE_LABELS
+
+# ── Name assembly groups ──────────────────────────────────────
+# (first_label, middle_label, last_label, output_field)
+NAME_GROUPS_90_GROOM = [
+    (F90_GROOM_FIRST,        F90_GROOM_MIDDLE,        F90_GROOM_LAST,        "name_of_applicant"),
+    (F90_GROOM_FATHER_FIRST, F90_GROOM_FATHER_MIDDLE, F90_GROOM_FATHER_LAST, "name_of_father"),
+    (F90_GROOM_MOTHER_FIRST, F90_GROOM_MOTHER_MIDDLE, F90_GROOM_MOTHER_LAST, "maiden_name_of_mother"),
+]
+
+NAME_GROUPS_90_BRIDE = [
+    (F90_BRIDE_FIRST,        F90_BRIDE_MIDDLE,        F90_BRIDE_LAST,        "name_of_applicant"),
+    (F90_BRIDE_FATHER_FIRST, F90_BRIDE_FATHER_MIDDLE, F90_BRIDE_FATHER_LAST, "name_of_father"),
+    (F90_BRIDE_MOTHER_FIRST, F90_BRIDE_MOTHER_MIDDLE, F90_BRIDE_MOTHER_LAST, "maiden_name_of_mother"),
+]
+
+# ── Output maps ───────────────────────────────────────────────
+OUTPUT_MAP_90_GROOM = {
+    F90_REGISTRY_NO:              "registry_number",
+    F90_DATE_OF_REGISTRATION:     "date_of_registration",
+    # name_of_applicant          ← assembled
+    F90_GROOM_DATE_OF_BIRTH:      "date_of_birth",
+    F90_GROOM_AGE:                "age",
+    F90_GROOM_PLACE_OF_BIRTH:     "place_of_birth",
+    F90_GROOM_SEX:                "sex",
+    F90_GROOM_CITIZENSHIP:        "citizenship",
+    F90_GROOM_RESIDENCE:          "residence",
+    F90_GROOM_RELIGION:           "religion",
+    # name_of_father             ← assembled
+    F90_GROOM_FATHER_CITIZENSHIP: "father_citizenship",
+    # maiden_name_of_mother      ← assembled
+    F90_GROOM_MOTHER_CITIZENSHIP: "mother_citizenship",
+    F90_GROOM_MOTHER_RESIDENCE:   "mother_residence",
+}
+
+OUTPUT_MAP_90_BRIDE = {
+    F90_REGISTRY_NO:              "registry_number",
+    F90_DATE_OF_REGISTRATION:     "date_of_registration",
+    # name_of_applicant          ← assembled
+    F90_BRIDE_DATE_OF_BIRTH:      "date_of_birth",
+    F90_BRIDE_AGE:                "age",
+    F90_BRIDE_PLACE_OF_BIRTH:     "place_of_birth",
+    F90_BRIDE_SEX:                "sex",
+    F90_BRIDE_CITIZENSHIP:        "citizenship",
+    F90_BRIDE_RESIDENCE:          "residence",
+    F90_BRIDE_RELIGION:           "religion",
+    # name_of_father             ← assembled
+    F90_BRIDE_FATHER_CITIZENSHIP: "father_citizenship",
+    # maiden_name_of_mother      ← assembled
+    F90_BRIDE_MOTHER_CITIZENSHIP: "mother_citizenship",
+    F90_BRIDE_MOTHER_RESIDENCE:   "mother_residence",
 }
 
 OUTPUT_FIELDS_90 = [

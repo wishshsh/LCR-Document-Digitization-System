@@ -1,0 +1,17 @@
+{
+  "accuracy": 100.0,
+  "samples_per_class": 150,
+  "total_samples": 450,
+  "labels": {
+    "0": "Form 102 - Certificate of Live Birth",
+    "1": "Form 103 - Certificate of Death",
+    "2": "Form 97 - Certificate of Marriage"
+  },
+  "note": "Form 90 routing is handled separately by classify_sex() using the SEX field on uploaded PSA/NSO birth certificates. Male = GROOM, Female = BRIDE.",
+  "pages": {
+    "certifications": "Classifies Form 102 / 103 / 97 from uploaded certification scan",
+    "marriage_license": "classify_sex() routes birth cert to GROOM or BRIDE slot in Form 90"
+  },
+  "model_path": "models/mnb_classifier.pkl",
+  "vectorizer_path": "models/tfidf_vectorizer.pkl"
+}

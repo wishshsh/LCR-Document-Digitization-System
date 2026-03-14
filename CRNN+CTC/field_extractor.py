@@ -155,6 +155,7 @@ MARRIAGE_FIELDS = {
     # ── Header ───────────────────────────────────────────────────────────────
     "registry_number":            (0.62, 0.088, 0.97, 0.104),  # → Form3A.registry_number
     
+    #"registry_number":            (0.62, 0.088, 0.97, 0.104),  # → Form3A.registry_number
 
     # ── Item 1 — Name (HUSBAND left / WIFE right) ────────────────────────────
     "husband_first_name":         (0.23, 0.121, 0.56, 0.139),

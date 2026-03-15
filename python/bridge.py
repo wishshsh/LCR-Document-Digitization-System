@@ -294,12 +294,13 @@ class CivilRegistryBridge:
         mnb_label = self.mnb.classify_form_type(ocr_text)
         print(f"  [Bridge] hint={form_type!r}  MNB={mnb_label}  NER→running...")
 
-        if form_type == 'birth':
-            return self.filler.fill_form_1a(ocr_text)
-        elif form_type == 'death':
+        # Use MNB classification result to pick the correct form filler
+        if mnb_label == 'form2a':
             return self.filler.fill_form_2a(ocr_text)
-        elif form_type == 'marriage':
+        elif mnb_label == 'form3a':
             return self.filler.fill_form_3a(ocr_text)
+        elif mnb_label == 'form90':
+            return self.filler.fill_form_90(ocr_text, ocr_text)
         else:
             return self.filler.fill_form_1a(ocr_text)
 

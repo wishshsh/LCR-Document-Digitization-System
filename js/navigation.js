@@ -53,6 +53,10 @@ function showPage(pageName, addToHistory = true) {
     if (pageName === 'records') {
         loadRecords();
     }
+
+    if (pageName === 'dashboard') {
+        loadDashboard();
+    }
     
     // Update profile page when navigating to it
     if (pageName === 'profile') {

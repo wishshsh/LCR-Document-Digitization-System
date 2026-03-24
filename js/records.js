@@ -30,7 +30,7 @@ function loadRecords() {
     const tbody = document.getElementById('recordsTableBody');
     if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#888;">Loading records...</td></tr>';
 
-    fetch('php/get_records.php')
+    return fetch('php/get_records.php')
     .then(r => {
         if (!r.ok) throw new Error('HTTP ' + r.status + ' ' + r.statusText);
         return r.text();
@@ -59,10 +59,18 @@ function loadRecords() {
             formData: row.formData || {}
         }));
         displayRecords(records);
+        if (typeof refreshDashboardData === 'function') {
+            refreshDashboardData(records);
+        }
+        return records;
     })
     .catch(err => {
         showNotification('Cannot reach server: ' + err.message, 'error');
         if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="no-records">Error: ' + err.message + '</td></tr>';
+        if (typeof refreshDashboardData === 'function') {
+            refreshDashboardData([]);
+        }
+        return [];
     });
 }
 

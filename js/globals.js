@@ -38,5 +38,6 @@ const pageUrls = {
     'marriageLicense':      'https://localcivilregistry.gov.ph/services/marriage-license',
     'marriageTemplateView': 'https://localcivilregistry.gov.ph/services/marriage-license/template',
     'records':              'https://localcivilregistry.gov.ph/records',
+    'dashboard':            'https://localcivilregistry.gov.ph/dashboard',
     'profile':              'https://localcivilregistry.gov.ph/profile'
 };

@@ -564,6 +564,178 @@ body {
     box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
 }
 
+
+
+.marriage-workflow-upload {
+    max-width: 920px;
+    margin: 0 auto;
+}
+
+.marriage-process-guide {
+    width: 100%;
+    max-width: 760px;
+    background: linear-gradient(135deg, #f7fffb 0%, #eef8ff 100%);
+    border: 1px solid #d8ece2;
+    border-radius: 16px;
+    padding: 24px 26px;
+    margin: 0 0 28px;
+    box-shadow: 0 8px 20px rgba(44, 62, 80, 0.08);
+}
+
+.marriage-guide-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.marriage-guide-header h3 {
+    margin: 0;
+    font-size: 22px;
+    color: var(--dark);
+}
+
+.marriage-guide-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: rgba(30, 199, 124, 0.14);
+    color: var(--dark-green);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.marriage-process-steps {
+    margin: 0;
+    padding-left: 22px;
+    display: grid;
+    gap: 10px;
+    color: #405261;
+    line-height: 1.6;
+}
+
+.marriage-process-note {
+    margin: 18px 0 0;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: rgba(243, 156, 18, 0.12);
+    color: #7a5d15;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.marriage-workflow-panel {
+    border: 1px solid #dde6eb;
+    border-radius: 14px;
+    background: #fbfdfe;
+    padding: 18px;
+    margin-bottom: 18px;
+}
+
+.marriage-workflow-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+}
+
+.marriage-workflow-title {
+    margin: 0;
+    font-size: 19px;
+    color: var(--dark);
+}
+
+.marriage-workflow-subtitle {
+    margin: 5px 0 0;
+    font-size: 13px;
+    color: #6b7a88;
+}
+
+.marriage-stage-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    background: rgba(44, 62, 80, 0.12);
+    color: var(--dark);
+    text-transform: uppercase;
+}
+
+.marriage-stage-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.marriage-stage-card {
+    border: 1px solid #e6ecef;
+    border-radius: 12px;
+    background: #fff;
+    padding: 14px;
+}
+
+.marriage-stage-card strong {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--dark);
+    font-size: 13px;
+}
+
+.marriage-stage-card span {
+    color: #60717f;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.marriage-workflow-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.marriage-workflow-btn {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.marriage-workflow-btn.posting { background: #eef7ff; color: #1f6fb2; }
+.marriage-workflow-btn.eligible { background: #fff8e8; color: #8f6600; }
+.marriage-workflow-btn.issue { background: #e9fbf2; color: #1b8757; }
+.marriage-workflow-btn.register { background: #f6efff; color: #6f42c1; }
+.marriage-workflow-btn.print { background: #2c3e50; color: #fff; }
+
+
+
+#marriageTemplateViewPage .template-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 28px 20px 48px;
+}
+
+#marriageTemplateBox {
+    max-width: 1120px;
+    margin: 0 auto;
+    overflow-x: auto;
+}
+
+#marriageTemplateBox .f90-form {
+    width: 100%;
+    min-width: 980px;
+    background: #fff;
+}
+
 /* Records Page */
 .records-container {
     display: flex;
@@ -1062,6 +1234,186 @@ body {
     color: var(--info);
 }
 
+
+
+/* Dashboard */
+.dashboard-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.dashboard-title {
+    font-size: 48px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    color: var(--dark);
+}
+
+.dashboard-subtitle {
+    margin: 0;
+    color: #68737d;
+    font-size: 16px;
+}
+
+.dashboard-refresh-btn {
+    background: var(--primary-green);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-family: var(--font-main);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 8px 20px rgba(30, 199, 124, 0.22);
+}
+
+.dashboard-refresh-btn:hover {
+    transform: translateY(-1px);
+}
+
+.dashboard-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.dashboard-stat-card,
+.dashboard-card {
+    background: var(--white);
+    border: 1px solid #e7ecef;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(28, 42, 56, 0.06);
+}
+
+.dashboard-stat-card {
+    padding: 22px 24px;
+}
+
+.dashboard-stat-label {
+    font-size: 14px;
+    color: #70808f;
+    margin-bottom: 10px;
+}
+
+.dashboard-stat-value {
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1;
+}
+
+.dashboard-stat-value.warning {
+    color: var(--warning);
+}
+
+.dashboard-stat-value.success {
+    color: var(--success);
+}
+
+.dashboard-stat-value.danger {
+    color: var(--error);
+}
+
+.dashboard-charts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.dashboard-card {
+    padding: 20px 22px;
+}
+
+.dashboard-card-wide {
+    grid-column: 1 / -1;
+}
+
+.dashboard-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.dashboard-card-header h3 {
+    margin: 0;
+    font-size: 20px;
+    color: var(--dark);
+}
+
+.dashboard-chart-wrap {
+    position: relative;
+    min-height: 300px;
+}
+
+.dashboard-table-wrap {
+    overflow-x: auto;
+}
+
+.dashboard-activity-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.dashboard-activity-table th,
+.dashboard-activity-table td {
+    padding: 14px 12px;
+    text-align: left;
+    border-bottom: 1px solid #edf1f4;
+    font-size: 14px;
+}
+
+.dashboard-activity-table th {
+    color: #6a7885;
+    font-weight: 600;
+}
+
+.dashboard-empty-state {
+    text-align: center;
+    color: #8c98a4;
+    padding: 28px 12px;
+}
+
+.dashboard-status-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 90px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--white);
+}
+
+.dashboard-status-pill.pending {
+    background: var(--warning);
+}
+
+.dashboard-status-pill.approved {
+    background: var(--success);
+}
+
+.dashboard-status-pill.rejected {
+    background: var(--error);
+}
+
+.dashboard-status-pill.processed {
+    background: var(--info);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .header {
@@ -1081,6 +1433,7 @@ body {
     
     .services-container h2,
     .records-title,
+    .dashboard-title,
     .profile-title {
         font-size: 32px;
     }
@@ -1092,6 +1445,30 @@ body {
     
     .profile-content {
         padding: 28px 20px;
+    }
+
+    .marriage-guide-header,
+    .marriage-workflow-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .marriage-stage-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .dashboard-stats-grid,
+    .dashboard-charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-card-wide {
+        grid-column: auto;
     }
     
     .profile-field {
@@ -1860,3 +2237,126 @@ body {
 .lcr-form-2a .lf-table th,
 .lcr-form-3a .lf-table td,
 .lcr-form-3a .lf-table th { border-color: #555; }
+
+.template-editable-field {
+    background: rgba(30, 199, 124, 0.10);
+    outline: 1px dashed rgba(30, 199, 124, 0.55);
+    border-radius: 2px;
+    min-height: 16px;
+}
+
+.template-editable-field:focus {
+    background: rgba(30, 199, 124, 0.18);
+    outline: 2px solid rgba(30, 199, 124, 0.85);
+}
+
+.template-editable-field[data-placeholder]:empty::before {
+    content: attr(data-placeholder);
+    color: #7a8b8f;
+}
+
+.marriage-license-document {
+    margin-top: 18px;
+    border-color: #333;
+}
+
+.marriage-license-header {
+    border-bottom-color: #333;
+}
+
+.marriage-license-banner {
+    padding: 16px 22px 8px;
+    text-align: center;
+}
+
+.marriage-license-title {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+}
+
+.marriage-license-banner p {
+    font-size: 13px;
+    color: #444;
+}
+
+.marriage-license-meta .lf-cert-label {
+    min-width: 210px;
+}
+
+.marriage-license-parties th {
+    background: #f1f4f7;
+    color: #111;
+}
+
+.marriage-license-parties .lf-cert-row-label {
+    width: 180px;
+    background: #fafafa;
+    font-weight: 600;
+}
+
+.marriage-name-edit,
+.marriage-birth-edit {
+    display: grid;
+    gap: 6px;
+}
+
+.marriage-name-edit {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.marriage-birth-edit {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.marriage-license-certification {
+    padding: 6px 20px 18px;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.marriage-license-certification p + p {
+    margin-top: 8px;
+}
+
+.marriage-license-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 28px;
+    padding: 18px 20px 22px;
+    border-top: 1px solid #d8dde1;
+}
+
+.marriage-license-signature-block {
+    flex: 1;
+    text-align: center;
+}
+
+.marriage-license-signature-line {
+    min-height: 24px;
+}
+
+.marriage-license-signature-line .lf-input,
+.marriage-license-signature-line .lf-val {
+    width: 100%;
+}
+
+.marriage-license-signature-label {
+    margin-top: 10px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #555;
+}
+
+@media (max-width: 900px) {
+    .marriage-name-edit,
+    .marriage-birth-edit {
+        grid-template-columns: 1fr;
+    }
+
+    .marriage-license-footer {
+        flex-direction: column;
+    }
+}

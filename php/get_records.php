@@ -1,21 +1,52 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { exit(0); }
+header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(200); exit(); }
 
 header('Content-Type: application/json');
 require 'db_connect.php';
 
 try {
+    // ── Read filter params ────────────────────────────────────
+    $typeParam   = isset($_GET['type'])   ? trim($_GET['type'])   : null;
+    $searchParam = isset($_GET['search']) ? trim($_GET['search']) : null;
+    $statusParam = isset($_GET['status']) ? trim($_GET['status']) : null;
+
+    // ── Map frontend type → type_code ─────────────────────────
+    $typeCodeMap = [
+        'birth'            => 'BIRTH',
+        'death'            => 'DEATH',
+        'marriage-cert'    => 'MARRCERT',
+        'marriage-license' => 'MARRLIC',
+    ];
+
+    // ── Build base query with optional type filter ────────────
+    $whereClauses = [];
+    $bindings     = [];
+
+    if ($typeParam && isset($typeCodeMap[$typeParam])) {
+        $whereClauses[] = 'UPPER(t.type_code) = :type_code';
+        $bindings[':type_code'] = $typeCodeMap[$typeParam];
+    }
+
+    if ($statusParam) {
+        $whereClauses[] = 'LOWER(d.status) = LOWER(:status)';
+        $bindings[':status'] = $statusParam;
+    }
+
+    $whereSQL = $whereClauses ? 'WHERE ' . implode(' AND ', $whereClauses) : '';
+
     $sql = "SELECT d.doc_id, d.status, d.upload_date, d.mnb_confidence_score,
                    t.type_code, t.type_name, u.username AS uploader_name
             FROM documents d
             JOIN document_types t ON d.type_id = t.type_id
             JOIN users          u ON d.user_id  = u.user_id
+            $whereSQL
             ORDER BY d.upload_date DESC";
+
     $stmt = $conn->prepare($sql);
-    $stmt->execute();
+    $stmt->execute($bindings);
     $documents = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if (empty($documents)) { echo json_encode([]); exit(); }
@@ -48,14 +79,27 @@ try {
         $frontendType = $typeMap[strtoupper(trim($doc['type_code']))] ?? 'birth';
         $raw          = $fieldsByDoc[$doc['doc_id']] ?? [];
 
-        // ── Assemble the formData keys the form renderers expect ──
+        $displayName  = buildDisplayName($frontendType, $raw, $doc['uploader_name']);
+
+        // ── Search filter (by name or doc ID) ─────────────────
+        if ($searchParam !== null && $searchParam !== '') {
+            $searchLower = strtolower($searchParam);
+            $idStr       = 'doc-' . $doc['doc_id'];
+            if (
+                strpos(strtolower($displayName), $searchLower) === false &&
+                strpos($idStr, strtolower($searchParam)) === false
+            ) {
+                continue; // skip non-matching records
+            }
+        }
+
         $formData = buildFormData($frontendType, $raw);
 
         $result[] = [
             'id'       => 'DOC-' . $doc['doc_id'],
             'doc_id'   => $doc['doc_id'],
             'type'     => $frontendType,
-            'name'     => buildDisplayName($frontendType, $raw, $doc['uploader_name']),
+            'name'     => $displayName,
             'date'     => substr($doc['upload_date'], 0, 10),
             'status'   => $doc['status'],
             'formData' => $formData,
@@ -72,7 +116,6 @@ try {
 function buildFormData($type, $r) {
     $f = [];
 
-    // Shared across all forms
     $f['registry_number']      = $r['registry_no']        ?? '';
     $f['city']                 = $r['city_municipality']   ?? '';
     $f['date']                 = $r['date_issuance']       ?? '';
@@ -125,23 +168,92 @@ function buildFormData($type, $r) {
         $f['place_of_marriage']           = trim(($r['marriage_venue'] ?? '') . (($r['marriage_city'] ?? '') ? ', ' . $r['marriage_city'] : ''));
 
     } elseif ($type === 'marriage-license') {
-        // Marriage license uses groom/bride field names
-        $f['husband_name']      = trim(($r['groom_first'] ?? '') . ' ' . ($r['groom_middle'] ?? '') . ' ' . ($r['groom_last'] ?? ''));
-        $f['husband_age']       = $r['groom_age']         ?? '';
-        $f['husband_nationality']= $r['groom_citizenship'] ?? '';
-        $f['husband_mother_name']= trim(($r['groom_mother_first'] ?? '') . ' ' . ($r['groom_mother_last'] ?? ''));
-        $f['husband_father_name']= trim(($r['groom_father_first'] ?? '') . ' ' . ($r['groom_father_last'] ?? ''));
-        $f['wife_name']         = trim(($r['bride_first'] ?? '') . ' ' . ($r['bride_middle'] ?? '') . ' ' . ($r['bride_last'] ?? ''));
-        $f['wife_age']          = $r['bride_age']         ?? '';
-        $f['wife_nationality']  = $r['bride_citizenship'] ?? '';
-        $f['wife_mother_name']  = trim(($r['bride_mother_first'] ?? '') . ' ' . ($r['bride_mother_last'] ?? ''));
-        $f['wife_father_name']  = trim(($r['bride_father_first'] ?? '') . ' ' . ($r['bride_father_last'] ?? ''));
-        $f['date_of_marriage']  = trim(($r['marriage_month'] ?? '') . ' ' . ($r['marriage_day'] ?? '') . ', ' . ($r['marriage_year'] ?? ''));
-        $f['place_of_marriage'] = trim(($r['marriage_venue'] ?? '') . (($r['marriage_city'] ?? '') ? ', ' . $r['marriage_city'] : ''));
-        $f['license_no']        = $r['license_no'] ?? '';
+        $groomFirst = $r['groom_first'] ?? ($r['f90_groom_first'] ?? '');
+        $groomMiddle = $r['groom_middle'] ?? ($r['f90_groom_middle'] ?? '');
+        $groomLast = $r['groom_last'] ?? ($r['f90_groom_last'] ?? '');
+        $brideFirst = $r['bride_first'] ?? ($r['f90_bride_first'] ?? '');
+        $brideMiddle = $r['bride_middle'] ?? ($r['f90_bride_middle'] ?? '');
+        $brideLast = $r['bride_last'] ?? ($r['f90_bride_last'] ?? '');
+
+        $f['registry_no']                 = $r['registry_no'] ?? ($r['f90_registry'] ?? '');
+        $f['province']                    = $r['province'] ?? ($r['f90_province'] ?? '');
+        $f['city_municipality']           = $r['city_municipality'] ?? ($r['f90_city'] ?? '');
+        $f['received_by']                 = $r['received_by'] ?? ($r['f90_received_by'] ?? '');
+        $f['license_no']                  = $r['license_no'] ?? ($r['f90_license_no'] ?? '');
+        $f['date_received']               = $r['date_received'] ?? ($r['f90_date_receipt'] ?? '');
+        $f['date_issuance']               = $r['date_issuance'] ?? ($r['f90_date_issuance'] ?? '');
+
+        $f['groom_first']                 = $groomFirst;
+        $f['groom_middle']                = $groomMiddle;
+        $f['groom_last']                  = $groomLast;
+        $f['groom_dob_day']               = $r['groom_dob_day'] ?? ($r['f90_groom_dob_day'] ?? '');
+        $f['groom_dob_month']             = $r['groom_dob_month'] ?? ($r['f90_groom_dob_month'] ?? '');
+        $f['groom_dob_year']              = $r['groom_dob_year'] ?? ($r['f90_groom_dob_year'] ?? '');
+        $f['groom_age']                   = $r['groom_age'] ?? ($r['f90_groom_age'] ?? '');
+        $f['groom_pob']                   = $r['groom_pob'] ?? ($r['f90_groom_pob'] ?? '');
+        $f['groom_citizenship']           = $r['groom_citizenship'] ?? ($r['f90_groom_sex'] ?? '');
+        $f['groom_residence']             = $r['groom_residence'] ?? ($r['f90_groom_residence'] ?? '');
+        $f['groom_religion']              = $r['groom_religion'] ?? ($r['f90_groom_religion'] ?? '');
+        $f['groom_civil_status']          = $r['groom_civil_status'] ?? ($r['f90_groom_civil_status'] ?? '');
+        $f['groom_father_first']          = $r['groom_father_first'] ?? ($r['f90_groom_father_first'] ?? '');
+        $f['groom_father_middle']         = $r['groom_father_middle'] ?? ($r['f90_groom_father_middle'] ?? '');
+        $f['groom_father_last']           = $r['groom_father_last'] ?? ($r['f90_groom_father_last'] ?? '');
+        $f['groom_father_citizenship']    = $r['groom_father_citizenship'] ?? ($r['f90_groom_father_citizenship'] ?? '');
+        $f['groom_mother_first']          = $r['groom_mother_first'] ?? ($r['f90_groom_mother_first'] ?? '');
+        $f['groom_mother_middle']         = $r['groom_mother_middle'] ?? ($r['f90_groom_mother_middle'] ?? '');
+        $f['groom_mother_last']           = $r['groom_mother_last'] ?? ($r['f90_groom_mother_last'] ?? '');
+        $f['groom_mother_citizenship']    = $r['groom_mother_citizenship'] ?? ($r['f90_groom_mother_citizenship'] ?? '');
+
+        $f['bride_first']                 = $brideFirst;
+        $f['bride_middle']                = $brideMiddle;
+        $f['bride_last']                  = $brideLast;
+        $f['bride_dob_day']               = $r['bride_dob_day'] ?? ($r['f90_bride_dob_day'] ?? '');
+        $f['bride_dob_month']             = $r['bride_dob_month'] ?? ($r['f90_bride_dob_month'] ?? '');
+        $f['bride_dob_year']              = $r['bride_dob_year'] ?? ($r['f90_bride_dob_year'] ?? '');
+        $f['bride_age']                   = $r['bride_age'] ?? ($r['f90_bride_age'] ?? '');
+        $f['bride_pob']                   = $r['bride_pob'] ?? ($r['f90_bride_pob'] ?? '');
+        $f['bride_citizenship']           = $r['bride_citizenship'] ?? ($r['f90_bride_sex'] ?? '');
+        $f['bride_residence']             = $r['bride_residence'] ?? ($r['f90_bride_residence'] ?? '');
+        $f['bride_religion']              = $r['bride_religion'] ?? ($r['f90_bride_religion'] ?? '');
+        $f['bride_civil_status']          = $r['bride_civil_status'] ?? ($r['f90_bride_civil_status'] ?? '');
+        $f['bride_father_first']          = $r['bride_father_first'] ?? ($r['f90_bride_father_first'] ?? '');
+        $f['bride_father_middle']         = $r['bride_father_middle'] ?? ($r['f90_bride_father_middle'] ?? '');
+        $f['bride_father_last']           = $r['bride_father_last'] ?? ($r['f90_bride_father_last'] ?? '');
+        $f['bride_father_citizenship']    = $r['bride_father_citizenship'] ?? ($r['f90_bride_father_citizenship'] ?? '');
+        $f['bride_mother_first']          = $r['bride_mother_first'] ?? ($r['f90_bride_mother_first'] ?? '');
+        $f['bride_mother_middle']         = $r['bride_mother_middle'] ?? ($r['f90_bride_mother_middle'] ?? '');
+        $f['bride_mother_last']           = $r['bride_mother_last'] ?? ($r['f90_bride_mother_last'] ?? '');
+        $f['bride_mother_citizenship']    = $r['bride_mother_citizenship'] ?? ($r['f90_bride_mother_citizenship'] ?? '');
+
+        $f['husband_name']                = trim($groomFirst . ' ' . $groomMiddle . ' ' . $groomLast);
+        $f['husband_age']                 = $f['groom_age'];
+        $f['husband_nationality']         = $f['groom_citizenship'];
+        $f['husband_mother_name']         = trim($f['groom_mother_first'] . ' ' . $f['groom_mother_last']);
+        $f['husband_father_name']         = trim($f['groom_father_first'] . ' ' . $f['groom_father_last']);
+        $f['wife_name']                   = trim($brideFirst . ' ' . $brideMiddle . ' ' . $brideLast);
+        $f['wife_age']                    = $f['bride_age'];
+        $f['wife_nationality']            = $f['bride_citizenship'];
+        $f['wife_mother_name']            = trim($f['bride_mother_first'] . ' ' . $f['bride_mother_last']);
+        $f['wife_father_name']            = trim($f['bride_father_first'] . ' ' . $f['bride_father_last']);
+
+        $f['date_of_marriage']            = trim(($r['marriage_month'] ?? '') . ' ' . ($r['marriage_day'] ?? '') . ', ' . ($r['marriage_year'] ?? ''));
+        $f['place_of_marriage']           = trim(($r['marriage_venue'] ?? '') . (($r['marriage_city'] ?? '') ? ', ' . $r['marriage_city'] : ''));
+        $f['workflow_stage']              = $r['workflow_stage'] ?? 'Form 90 Submitted';
+        $f['posting_status']              = $r['posting_status'] ?? 'Not Started';
+        $f['application_date']            = $r['application_date'] ?? $f['date_received'];
+        $f['posting_start_date']          = $r['posting_start_date'] ?? '';
+        $f['posting_end_date']            = $r['posting_end_date'] ?? '';
+        $f['license_issue_date']          = $r['license_issue_date'] ?? $f['date_issuance'];
+        $f['license_expiry_date']         = $r['license_expiry_date'] ?? '';
+        $f['form97_status']               = $r['form97_status'] ?? 'Awaiting Form 97';
+        $f['form97_received_date']        = $r['form97_received_date'] ?? '';
+        $f['form97_processed_date']       = $r['form97_processed_date'] ?? '';
+        $f['workflow_note']               = $r['workflow_note'] ?? '';
+        $f['city']                        = $f['city_municipality'];
+        $f['date']                        = $f['date_issuance'];
+        $f['date_of_registration']        = $f['date_received'];
     }
 
-    // Clean up empty date strings like " , "
     foreach ($f as $k => $v) {
         if (trim($v, ' ,') === '') $f[$k] = '';
     }
@@ -149,7 +261,6 @@ function buildFormData($type, $r) {
     return $f;
 }
 
-// ── Build display name for the records table ──────────────────
 function buildDisplayName($type, $r, $fallback) {
     switch ($type) {
         case 'birth':
@@ -164,8 +275,8 @@ function buildDisplayName($type, $r, $fallback) {
             if ($h && $w) return "$h & $w";
             return $h ?: $w ?: $fallback;
         case 'marriage-license':
-            $h = trim(($r['groom_first'] ?? '') . ' ' . ($r['groom_last'] ?? ''));
-            $w = trim(($r['bride_first'] ?? '') . ' ' . ($r['bride_last'] ?? ''));
+            $h = trim(($r['groom_first'] ?? ($r['f90_groom_first'] ?? '')) . ' ' . ($r['groom_last'] ?? ($r['f90_groom_last'] ?? '')));
+            $w = trim(($r['bride_first'] ?? ($r['f90_bride_first'] ?? '')) . ' ' . ($r['bride_last'] ?? ($r['f90_bride_last'] ?? '')));
             if ($h && $w) return "$h & $w";
             return $h ?: $w ?: $fallback;
         default:

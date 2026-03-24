@@ -31,6 +31,9 @@ import os
 import json
 from pathlib import Path
 
+import cv2
+import numpy as np
+
 # ── Make sure all three algorithm folders are importable ─────
 _ROOT = Path(__file__).parent
 for folder in ["CRNN+CTC", "MNB", "spacyNER"]:
@@ -110,11 +113,11 @@ class CivilRegistryPipeline:
                     form_type: str = None,
                     dpi:       int = 200) -> dict:
         """
-        Process one PDF through the full pipeline.
+        Process one scanned PDF or image through the full pipeline.
 
         Parameters
         ----------
-        pdf_path  : str   Path to scanned PDF
+        pdf_path  : str   Path to scanned PDF or image
         form_type : str   'birth' | 'death' | 'marriage'
                           If None, MNB auto-detects.
         dpi       : int   Render DPI (default 200)
@@ -173,20 +176,25 @@ class CivilRegistryPipeline:
     # ─────────────────────────────────────────────────────────
     # Internal — run CRNN on one PDF
     # ─────────────────────────────────────────────────────────
+    def _load_page_image(self, file_path: str, dpi: int):
+        """Load either a PDF or an image file into a page image."""
+        suffix = Path(file_path).suffix.lower()
+        if suffix == '.pdf':
+            return pdf_to_image(file_path, dpi=dpi)
+
+        raw = np.fromfile(file_path, dtype=np.uint8)
+        image = cv2.imdecode(raw, cv2.IMREAD_COLOR)
+        if image is None:
+            raise ValueError(f'Could not load image file: {file_path}')
+        return image
+
     def _run_crnn(self, pdf_path: str, form_type: str, dpi: int) -> dict:
-        """Convert PDF → run CRNN → return field dict."""
-        # 1. PDF → image
-        page_image = pdf_to_image(pdf_path, dpi=dpi)
+        """Convert PDF/image to field crops and return CRNN output."""
+        page_image = self._load_page_image(pdf_path, dpi=dpi)
 
-        # 2. Resolve form_type — default to 'birth' if unknown/None
-        # extract_field_images uses the form_type string to pick the
-        # correct field map (BIRTH_FIELDS / DEATH_FIELDS / MARRIAGE_FIELDS)
         resolved_type = form_type if form_type in FORM_FIELDS_MAP else "birth"
-
-        # 3. Crop fields from image using form_type string
         crops = extract_field_images(page_image, form_type=resolved_type)
 
-        # 4. CRNN OCR each crop
         crnn_output = run_crnn_ocr(
             crops, self.crnn_model, self.idx_to_char,
             self.img_h, self.img_w, self.device

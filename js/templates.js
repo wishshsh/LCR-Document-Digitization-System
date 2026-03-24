@@ -6,53 +6,111 @@
 // _tplEditing is declared in globals.js
 
 
-function toggleTemplateEdit(ctx) {
-    _tplEditing[ctx] = !_tplEditing[ctx];
+function _getTemplateEditableFields(ctx) {
+    const box = document.getElementById(ctx + 'TemplateBox');
+    if (!box) return [];
+
+    if (ctx === 'marriage') {
+        return Array.from(box.querySelectorAll('.lcr-field-line[id], .lcr-field-short[id]'));
+    }
+
+    const activeForm = box.querySelector('.lcr-form-variant.active-form');
+    if (!activeForm) return [];
+    return Array.from(activeForm.querySelectorAll('.lcr-field-line[id], .lcr-field-short[id]'));
+}
+
+function _setTemplateEditState(ctx, editing) {
+    const fields  = _getTemplateEditableFields(ctx);
     const box     = document.getElementById(ctx + 'TemplateBox');
     const editBtn = document.getElementById(ctx + 'EditBtn');
     const saveBtn = document.getElementById(ctx + 'SaveChangesBtn');
 
-    if (_tplEditing[ctx]) {
-        box.contentEditable      = 'true';
-        box.style.outline        = '2px dashed #1ec77c';
-        box.style.minHeight      = '80px';
-        editBtn.textContent      = '✖ CANCEL';
-        editBtn.style.background = '#aaa';
-        saveBtn.style.display    = 'inline-flex';
-    } else {
-        box.contentEditable      = 'false';
-        box.style.outline        = '';
-        editBtn.textContent      = '✏️ EDIT';
-        editBtn.style.background = '';
-        saveBtn.style.display    = 'none';
+    fields.forEach(field => {
+        field.contentEditable = editing ? 'true' : 'false';
+        field.spellcheck = false;
+        field.classList.toggle('template-editable-field', editing);
+        if (editing && !field.textContent.trim()) {
+            field.dataset.placeholder = 'Edit';
+        } else {
+            delete field.dataset.placeholder;
+        }
+    });
+
+    if (box) {
+        box.style.outline = editing ? '2px dashed #1ec77c' : '';
     }
+    if (editBtn) {
+        editBtn.textContent = editing ? 'CANCEL' : 'EDIT';
+        editBtn.style.background = editing ? '#aaa' : '';
+    }
+    if (saveBtn) {
+        saveBtn.style.display = editing ? 'inline-flex' : 'none';
+    }
+}
+
+function toggleTemplateEdit(ctx) {
+    _tplEditing[ctx] = !_tplEditing[ctx];
+    _setTemplateEditState(ctx, _tplEditing[ctx]);
 }
 
 function saveTemplateChanges(ctx) {
     _tplEditing[ctx] = false;
-    const box     = document.getElementById(ctx + 'TemplateBox');
-    const editBtn = document.getElementById(ctx + 'EditBtn');
-    const saveBtn = document.getElementById(ctx + 'SaveChangesBtn');
-    box.contentEditable      = 'false';
-    box.style.outline        = '';
-    editBtn.textContent      = '✏️ EDIT';
-    editBtn.style.background = '';
-    saveBtn.style.display    = 'none';
+    _setTemplateEditState(ctx, false);
     showNotification('Changes saved!', 'success');
 }
 
-function printTemplate(boxId) {
-    // Determine which form is active
-    const isMarriage = boxId === 'marriageTemplateBox';
-    const prefix     = isMarriage ? 'marriage' : 'cert';
+function _printHtmlDocument(title, html) {
+    const iframe = document.createElement('iframe');
+    iframe.style.position = 'fixed';
+    iframe.style.right = '0';
+    iframe.style.bottom = '0';
+    iframe.style.width = '0';
+    iframe.style.height = '0';
+    iframe.style.border = '0';
+    document.body.appendChild(iframe);
 
-    // Find the active form variant
+    const runPrint = () => {
+        if (iframe.dataset.printed === 'yes') return;
+        iframe.dataset.printed = 'yes';
+        try {
+            iframe.contentWindow.focus();
+            iframe.contentWindow.print();
+        } finally {
+            setTimeout(() => iframe.remove(), 1000);
+        }
+    };
+
+    const doc = iframe.contentWindow.document;
+    doc.open();
+    doc.write(html);
+    doc.close();
+
+    iframe.onload = runPrint;
+    setTimeout(runPrint, 500);
+}
+
+function printTemplate(boxId) {
     const box = document.getElementById(boxId);
     if (!box) return;
+
+    if (boxId === 'marriageTemplateBox') {
+        const content = box.innerHTML;
+        _printHtmlDocument(
+            'Form 90',
+            `<!DOCTYPE html><html><head><title>Form 90</title><style>
+                body{font-family:Arial,Helvetica,sans-serif;padding:18px;background:#fff;}
+                .template-box,.lcr-form{border:none!important;box-shadow:none!important;}
+                #marriageTemplateBox,.f90-form{max-width:none!important;width:100%!important;min-width:0!important;}
+                .template-editable-field{outline:none!important;background:transparent!important;}
+            </style></head><body>${content}</body></html>`
+        );
+        return;
+    }
+
+    // Determine which form is active
     const activeForm = box.querySelector('.lcr-form-variant.active-form');
     if (!activeForm) return;
-
-    // Detect form type from active form's ID
+// Detect form type from active form's ID
     const formId = activeForm.id; // form1A, form2A, form3A
     const is1A = formId === 'form1A';
     const is2A = formId === 'form2A';

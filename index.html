@@ -19,6 +19,7 @@
         <div class="header-buttons" id="headerButtons" style="display: none;">
             <button class="header-btn" onclick="showPage('services')">SERVICES</button>
             <button class="header-btn" onclick="showPage('records')">RECORDS</button>
+            <button class="header-btn" onclick="showPage('dashboard')">DASHBOARD</button>
             <div class="user-icon" onclick="toggleUserMenu()" title="User Profile">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
                     <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
@@ -279,8 +280,24 @@
 
         <!-- Marriage License Upload Page -->
         <div id="marriageLicensePage" class="page">
-            <div class="upload-container">
+            <div class="upload-container marriage-workflow-upload">
                 <h2>APPLICATION FOR MARRIAGE LICENSE</h2>
+                <p class="upload-subtitle">Form 90 application intake with built-in LCR workflow tracking.</p>
+
+                <div class="marriage-process-guide">
+                    <div class="marriage-guide-header">
+                        <h3>System Process</h3>
+                        <span class="marriage-guide-badge">Staff Workload Reduction</span>
+                    </div>
+                    <ol class="marriage-process-steps">
+                        <li>Receive the requirements with both applicants present and review the accomplished Form 90.</li>
+                        <li>Record the application in the system and monitor the mandatory 10-day public posting period.</li>
+                        <li>After the posting period with no legal objection, issue the Marriage License and track its 120-day validity.</li>
+                        <li>After the wedding, receive the signed Form 97 from the couple, witnesses, and solemnizing officer.</li>
+                        <li>Scan the signed Form 97 and use it to complete the permanent marriage record for Form 3A.</li>
+                    </ol>
+                    <p class="marriage-process-note">Note: PSA Birth Certificate scanning is intentionally excluded from this system flow so the process stays lighter for LCR staff.</p>
+                </div>
                 
                 <div class="upload-area" id="marriageUploadArea" onclick="document.getElementById('marriageFileInput').click()">
                     <svg class="upload-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -289,7 +306,7 @@
                         <rect x="30" y="28" width="25" height="35" fill="#FFA500"/>
                     </svg>
                     <p class="upload-text">
-                        Drag & Drop files here to upload<br>
+                        Upload the accomplished Form 90 for staff verification<br>
                         or <span class="browse-link" onclick="event.stopPropagation(); document.getElementById('marriageFileInput').click();">Browse Files</span>
                     </p>
                 </div>
@@ -297,7 +314,7 @@
                 
                 <div id="marriageFiles" class="uploaded-files"></div>
                 
-                <button class="btn-proceed" id="marriageProceedBtn" onclick="processMarriage()">PROCEED</button>
+                <button class="btn-proceed" id="marriageProceedBtn" onclick="processMarriage()">REVIEW FORM 90</button>
             </div>
         </div>
 
@@ -453,7 +470,7 @@
                     <button class="btn-template-action btn-edit-tpl" id="marriageEditBtn" onclick="toggleTemplateEdit('marriage')">✏️ EDIT</button>
                     <button class="btn-template-action btn-savechanges-tpl" id="marriageSaveChangesBtn" onclick="saveTemplateChanges('marriage')" style="display:none;">💾 SAVE CHANGES</button>
                     <button class="btn-template-action btn-print-tpl" onclick="printTemplate('marriageTemplateBox')">🖨️ PRINT</button>
-                    <button class="btn-save" onclick="saveMarriage()">SAVE</button>
+                    <button class="btn-save" onclick="saveMarriage()">SAVE APPLICATION</button>
                 </div>
             </div>
         </div>
@@ -481,6 +498,11 @@
                             
                             <select class="filter-select" id="statusSelect" onchange="filterRecords()">
                                 <option value="">All Status</option>
+                                <option value="Submitted">Submitted</option>
+                                <option value="For Posting">For Posting</option>
+                                <option value="Eligible for License">Eligible for License</option>
+                                <option value="License Issued">License Issued</option>
+                                <option value="Marriage Registered">Marriage Registered</option>
                                 <option value="Pending">Pending</option>
                                 <option value="Processed">Processed</option>
                                 <option value="Approved">Approved</option>
@@ -518,6 +540,92 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Dashboard Page -->
+        <div id="dashboardPage" class="page">
+            <div class="dashboard-container">
+                <div class="dashboard-header">
+                    <div>
+                        <h2 class="dashboard-title">DASHBOARD</h2>
+                        <p class="dashboard-subtitle">Live overview of civil registry records and activity.</p>
+                    </div>
+                    <button class="dashboard-refresh-btn" onclick="loadDashboard(true)">Refresh Dashboard</button>
+                </div>
+
+                <div class="dashboard-stats-grid">
+                    <div class="dashboard-stat-card">
+                        <div class="dashboard-stat-label">Total Records</div>
+                        <div class="dashboard-stat-value" id="dashboardTotalRecords">0</div>
+                    </div>
+                    <div class="dashboard-stat-card">
+                        <div class="dashboard-stat-label">Pending</div>
+                        <div class="dashboard-stat-value warning" id="dashboardPendingRecords">0</div>
+                    </div>
+                    <div class="dashboard-stat-card">
+                        <div class="dashboard-stat-label">Approved</div>
+                        <div class="dashboard-stat-value success" id="dashboardApprovedRecords">0</div>
+                    </div>
+                    <div class="dashboard-stat-card">
+                        <div class="dashboard-stat-label">Rejected</div>
+                        <div class="dashboard-stat-value danger" id="dashboardRejectedRecords">0</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-charts-grid">
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-header">
+                            <h3>Records by Type</h3>
+                        </div>
+                        <div class="dashboard-chart-wrap">
+                            <canvas id="recordsByTypeChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-header">
+                            <h3>Records by Status</h3>
+                        </div>
+                        <div class="dashboard-chart-wrap">
+                            <canvas id="recordsByStatusChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card dashboard-card-wide">
+                        <div class="dashboard-card-header">
+                            <h3>Monthly Record Trend</h3>
+                        </div>
+                        <div class="dashboard-chart-wrap">
+                            <canvas id="recordsTrendChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card dashboard-card-wide">
+                        <div class="dashboard-card-header">
+                            <h3>Recent Activity</h3>
+                        </div>
+                        <div class="dashboard-table-wrap">
+                            <table class="dashboard-activity-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dashboardRecentActivity">
+                                    <tr>
+                                        <td colspan="5" class="dashboard-empty-state">No records available yet.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -656,10 +764,12 @@
 
     <!-- Core (load first) -->
     <script src="js/globals.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/navigation.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/uploads.js"></script>
     <script src="js/records.js"></script>
+    <script src="js/dashboard.js"></script>
     <script src="js/templates.js"></script>
 
     <!-- Record modal + LCR form renderers -->

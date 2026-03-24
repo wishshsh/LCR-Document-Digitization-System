@@ -86,7 +86,7 @@ function processMarriage() {
 
     const formData = new FormData();
     formData.append('file', uploadedFiles.marriage[0]);
-    formData.append('type', 'marriage');
+    formData.append('type', 'marriage-license');
 
     fetch('php/process_upload.php', { method: 'POST', body: formData })
         .then(res => res.json())
@@ -97,8 +97,7 @@ function processMarriage() {
             }
 
             _pendingDocId = data.doc_id;
-            showCertForm(data.form_class);
-            _populateFormTemplate(data.form_class, data.fields);
+            _populateMarriageLicenseTemplate(data.fields || {});
 
             showPage('marriageTemplateView');
             showNotification('Document processed — please verify the extracted data.', 'success');
@@ -219,6 +218,7 @@ function saveCertification() {
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({
             doc_id:   _pendingDocId,
+            type:     _getCertificationType(),
             status:   'Pending',
             formData: _collectTemplateFields('cert')
         })
@@ -250,14 +250,21 @@ function saveMarriage() {
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({
             doc_id:   _pendingDocId,
-            status:   'Pending',
-            formData: _collectTemplateFields('marriage')
+            type:     'marriage-license',
+            status:   'Submitted',
+            formData: Object.assign(_normalizeMarriageFormData(_collectTemplateFields('marriage')), {
+                workflow_stage: 'Form 90 Submitted',
+                posting_status: 'Not Started',
+                application_date: _currentDateISO(),
+                form97_status: 'Awaiting Form 97',
+                workflow_note: 'Marriage license workflow begins from the reviewed Form 90 application.'
+            })
         })
     })
     .then(res => res.json())
     .then(data => {
         if (data.status === 'success') {
-            showNotification('Marriage license saved successfully!', 'success');
+            showNotification('Marriage license application saved and added to the workflow.', 'success');
         } else {
             showNotification('Save failed: ' + data.message, 'error');
         }
@@ -286,6 +293,130 @@ function _collectTemplateFields(type) {
         formData[el.id] = el.textContent.trim();
     });
     return formData;
+}
+
+
+
+function _populateMarriageLicenseTemplate(fields) {
+    const fieldMap = {
+        f90_registry: 'registry_no',
+        f90_province: 'province',
+        f90_city: 'city_municipality',
+        f90_received_by: 'received_by',
+        f90_license_no: 'license_no',
+        f90_date_receipt: 'date_received',
+        f90_date_issuance: 'date_issuance',
+        f90_groom_first: 'groom_first',
+        f90_groom_middle: 'groom_middle',
+        f90_groom_last: 'groom_last',
+        f90_bride_first: 'bride_first',
+        f90_bride_middle: 'bride_middle',
+        f90_bride_last: 'bride_last',
+        f90_groom_dob_day: 'groom_dob_day',
+        f90_groom_dob_month: 'groom_dob_month',
+        f90_groom_dob_year: 'groom_dob_year',
+        f90_groom_age: 'groom_age',
+        f90_bride_dob_day: 'bride_dob_day',
+        f90_bride_dob_month: 'bride_dob_month',
+        f90_bride_dob_year: 'bride_dob_year',
+        f90_bride_age: 'bride_age',
+        f90_groom_pob: 'groom_pob',
+        f90_bride_pob: 'bride_pob',
+        f90_groom_sex: 'groom_citizenship',
+        f90_bride_sex: 'bride_citizenship',
+        f90_groom_residence: 'groom_residence',
+        f90_bride_residence: 'bride_residence',
+        f90_groom_religion: 'groom_religion',
+        f90_bride_religion: 'bride_religion',
+        f90_groom_civil_status: 'groom_civil_status',
+        f90_bride_civil_status: 'bride_civil_status',
+        f90_groom_father_first: 'groom_father_first',
+        f90_groom_father_middle: 'groom_father_middle',
+        f90_groom_father_last: 'groom_father_last',
+        f90_bride_father_first: 'bride_father_first',
+        f90_bride_father_middle: 'bride_father_middle',
+        f90_bride_father_last: 'bride_father_last',
+        f90_groom_father_citizenship: 'groom_father_citizenship',
+        f90_bride_father_citizenship: 'bride_father_citizenship',
+        f90_groom_mother_first: 'groom_mother_first',
+        f90_groom_mother_middle: 'groom_mother_middle',
+        f90_groom_mother_last: 'groom_mother_last',
+        f90_bride_mother_first: 'bride_mother_first',
+        f90_bride_mother_middle: 'bride_mother_middle',
+        f90_bride_mother_last: 'bride_mother_last',
+        f90_groom_mother_citizenship: 'groom_mother_citizenship',
+        f90_bride_mother_citizenship: 'bride_mother_citizenship'
+    };
+
+    Object.entries(fieldMap).forEach(([elementId, sourceKey]) => {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+        element.textContent = fields[sourceKey] || '';
+    });
+}
+
+function _normalizeMarriageFormData(rawFields) {
+    return {
+        registry_no: rawFields.f90_registry || '',
+        province: rawFields.f90_province || '',
+        city_municipality: rawFields.f90_city || '',
+        received_by: rawFields.f90_received_by || '',
+        license_no: rawFields.f90_license_no || '',
+        date_received: rawFields.f90_date_receipt || '',
+        date_issuance: rawFields.f90_date_issuance || '',
+        groom_first: rawFields.f90_groom_first || '',
+        groom_middle: rawFields.f90_groom_middle || '',
+        groom_last: rawFields.f90_groom_last || '',
+        bride_first: rawFields.f90_bride_first || '',
+        bride_middle: rawFields.f90_bride_middle || '',
+        bride_last: rawFields.f90_bride_last || '',
+        groom_dob_day: rawFields.f90_groom_dob_day || '',
+        groom_dob_month: rawFields.f90_groom_dob_month || '',
+        groom_dob_year: rawFields.f90_groom_dob_year || '',
+        groom_age: rawFields.f90_groom_age || '',
+        bride_dob_day: rawFields.f90_bride_dob_day || '',
+        bride_dob_month: rawFields.f90_bride_dob_month || '',
+        bride_dob_year: rawFields.f90_bride_dob_year || '',
+        bride_age: rawFields.f90_bride_age || '',
+        groom_pob: rawFields.f90_groom_pob || '',
+        bride_pob: rawFields.f90_bride_pob || '',
+        groom_citizenship: rawFields.f90_groom_sex || '',
+        bride_citizenship: rawFields.f90_bride_sex || '',
+        groom_residence: rawFields.f90_groom_residence || '',
+        bride_residence: rawFields.f90_bride_residence || '',
+        groom_religion: rawFields.f90_groom_religion || '',
+        bride_religion: rawFields.f90_bride_religion || '',
+        groom_civil_status: rawFields.f90_groom_civil_status || '',
+        bride_civil_status: rawFields.f90_bride_civil_status || '',
+        groom_father_first: rawFields.f90_groom_father_first || '',
+        groom_father_middle: rawFields.f90_groom_father_middle || '',
+        groom_father_last: rawFields.f90_groom_father_last || '',
+        bride_father_first: rawFields.f90_bride_father_first || '',
+        bride_father_middle: rawFields.f90_bride_father_middle || '',
+        bride_father_last: rawFields.f90_bride_father_last || '',
+        groom_father_citizenship: rawFields.f90_groom_father_citizenship || '',
+        bride_father_citizenship: rawFields.f90_bride_father_citizenship || '',
+        groom_mother_first: rawFields.f90_groom_mother_first || '',
+        groom_mother_middle: rawFields.f90_groom_mother_middle || '',
+        groom_mother_last: rawFields.f90_groom_mother_last || '',
+        bride_mother_first: rawFields.f90_bride_mother_first || '',
+        bride_mother_middle: rawFields.f90_bride_mother_middle || '',
+        bride_mother_last: rawFields.f90_bride_mother_last || '',
+        groom_mother_citizenship: rawFields.f90_groom_mother_citizenship || '',
+        bride_mother_citizenship: rawFields.f90_bride_mother_citizenship || ''
+    };
+}
+
+function _currentDateISO() {
+    return new Date().toISOString().slice(0, 10);
+}
+
+function _getCertificationType() {
+    const activeForm = document.querySelector('#certTemplateBox .lcr-form-variant.active-form');
+    if (!activeForm) return 'birth';
+    if (activeForm.id === 'form2A') return 'death';
+    if (activeForm.id === 'form3A') return 'marriage-cert';
+    return 'birth';
 }
 
 function _resetUpload(type) {

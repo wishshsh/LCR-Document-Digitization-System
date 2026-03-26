@@ -107,4 +107,4 @@ document.addEventListener('DOMContentLoaded', function() {
 // ============================================================
 //  TEMPLATE EDIT / SAVE CHANGES / PRINT
 // ============================================================
-const _tplEditing = { cert: false, marriage: false };
+// NOTE: _tplEditing is declared in globals.js — do NOT re-declare here.

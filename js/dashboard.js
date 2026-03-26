@@ -4,11 +4,20 @@ let dashboardCharts = {
     trend: null
 };
 
+// Guard against concurrent loadDashboard() calls (fast re-navigation)
+let _dashboardLoading = false;
+
 function loadDashboard(forceRefresh = false) {
+    if (_dashboardLoading) return Promise.resolve();
     if (forceRefresh || !Array.isArray(records) || records.length === 0) {
-        return loadRecords().then(fetchedRecords => {
-            refreshDashboardData(fetchedRecords || []);
-        });
+        _dashboardLoading = true;
+        return loadRecords()
+            .then(fetchedRecords => {
+                refreshDashboardData(fetchedRecords || []);
+            })
+            .finally(() => {
+                _dashboardLoading = false;
+            });
     }
 
     refreshDashboardData(records);

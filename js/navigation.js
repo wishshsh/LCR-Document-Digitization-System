@@ -80,7 +80,7 @@ function toggleUserMenu() {
 // Close user menu
 function closeUserMenu() {
     const userMenu = document.getElementById('userMenu');
-    userMenu.style.display = 'none';
+    if (userMenu) userMenu.style.display = 'none';
 }
 
 // View profile

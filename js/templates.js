@@ -278,8 +278,6 @@ body { font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #111; 
 
 </body></html>`;
 
-    const win = window.open('', '_blank');
-    win.document.write(html);
-    win.document.close();
-    setTimeout(() => { win.print(); win.close(); }, 400);
+    // Use iframe to avoid popup blockers (same method as marriage/Form 90 print)
+    _printHtmlDocument('LCR Form No. ' + formNo, html);
 }

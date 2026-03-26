@@ -19,7 +19,7 @@ function displayRecords(recordsToDisplay) {
             <td>${record.name}</td>
             <td>${record.date}</td>
             <td>${record.status}</td>
-            <td><button class="btn-edit-record" onclick="viewRecord(records.find(r => r.id === '${record.id}'))">&#9998; Edit</button></td>
+            <td><button class="btn-edit-record" onclick="viewRecord(records.find(r => String(r.id) === '${record.id}'))">&#9998; Edit</button></td>
         `;
         tbody.appendChild(row);
     });
@@ -120,25 +120,29 @@ function filterRecords() {
             today.setHours(0, 0, 0, 0);
 
             switch(dateFilter) {
-                case 'today':
+                case 'today': {
                     const todayStart = new Date(today);
                     matchesDate = recordDate >= todayStart;
                     break;
-                case 'week':
+                }
+                case 'week': {
                     const weekStart = new Date(today);
                     weekStart.setDate(today.getDate() - 7);
                     matchesDate = recordDate >= weekStart;
                     break;
-                case 'month':
+                }
+                case 'month': {
                     const monthStart = new Date(today);
                     monthStart.setDate(today.getDate() - 30);
                     matchesDate = recordDate >= monthStart;
                     break;
-                case 'year':
+                }
+                case 'year': {
                     const yearStart = new Date(today);
                     yearStart.setFullYear(today.getFullYear() - 1);
                     matchesDate = recordDate >= yearStart;
                     break;
+                }
             }
         }
         

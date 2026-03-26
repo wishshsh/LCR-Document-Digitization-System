@@ -213,14 +213,18 @@ function _populateFormTemplate(formClass, fields) {
 function saveCertification() {
     if (!confirm('Save this certification to the database?')) return;
 
+    const certType = _getCertificationType();
+    const formData = _collectTemplateFields('cert');
+    const docId    = _pendingDocId;
+
     fetch('php/save_record.php', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({
-            doc_id:   _pendingDocId,
-            type:     _getCertificationType(),
+            doc_id:   docId,
+            type:     certType,
             status:   'Pending',
-            formData: _collectTemplateFields('cert')
+            formData: formData
         })
     })
     .then(res => res.json())
@@ -233,32 +237,36 @@ function saveCertification() {
     })
     .catch(() => {
         showNotification('Could not save. Is XAMPP running?', 'error');
+    })
+    .finally(() => {
+        // Reset and navigate regardless of success/failure
+        _resetUpload('cert');
+        _pendingDocId = null;
+        showPage('services');
     });
-
-    // Reset and go back regardless
-    _resetUpload('cert');
-    _pendingDocId = null;
-    showPage('services');
 }
 
 // ── SAVE MARRIAGE LICENSE ─────────────────────────────────────
 function saveMarriage() {
     if (!confirm('Save this marriage license application to the database?')) return;
 
+    const docId    = _pendingDocId;
+    const formData = Object.assign(_normalizeMarriageFormData(_collectTemplateFields('marriage')), {
+        workflow_stage:   'Form 90 Submitted',
+        posting_status:   'Not Started',
+        application_date: _currentDateISO(),
+        form97_status:    'Awaiting Form 97',
+        workflow_note:    'Marriage license workflow begins from the reviewed Form 90 application.'
+    });
+
     fetch('php/save_record.php', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({
-            doc_id:   _pendingDocId,
+            doc_id:   docId,
             type:     'marriage-license',
             status:   'Submitted',
-            formData: Object.assign(_normalizeMarriageFormData(_collectTemplateFields('marriage')), {
-                workflow_stage: 'Form 90 Submitted',
-                posting_status: 'Not Started',
-                application_date: _currentDateISO(),
-                form97_status: 'Awaiting Form 97',
-                workflow_note: 'Marriage license workflow begins from the reviewed Form 90 application.'
-            })
+            formData: formData
         })
     })
     .then(res => res.json())
@@ -271,11 +279,12 @@ function saveMarriage() {
     })
     .catch(() => {
         showNotification('Could not save. Is XAMPP running?', 'error');
+    })
+    .finally(() => {
+        _resetUpload('marriage');
+        _pendingDocId = null;
+        showPage('services');
     });
-
-    _resetUpload('marriage');
-    _pendingDocId = null;
-    showPage('services');
 }
 
 // ── Helpers ───────────────────────────────────────────────────
@@ -322,8 +331,8 @@ function _populateMarriageLicenseTemplate(fields) {
         f90_bride_age: 'bride_age',
         f90_groom_pob: 'groom_pob',
         f90_bride_pob: 'bride_pob',
-        f90_groom_sex: 'groom_citizenship',
-        f90_bride_sex: 'bride_citizenship',
+        f90_groom_citizenship: 'groom_citizenship',
+        f90_bride_citizenship: 'bride_citizenship',
         f90_groom_residence: 'groom_residence',
         f90_bride_residence: 'bride_residence',
         f90_groom_religion: 'groom_religion',
@@ -380,8 +389,8 @@ function _normalizeMarriageFormData(rawFields) {
         bride_age: rawFields.f90_bride_age || '',
         groom_pob: rawFields.f90_groom_pob || '',
         bride_pob: rawFields.f90_bride_pob || '',
-        groom_citizenship: rawFields.f90_groom_sex || '',
-        bride_citizenship: rawFields.f90_bride_sex || '',
+        groom_citizenship: rawFields.f90_groom_citizenship || '',
+        bride_citizenship: rawFields.f90_bride_citizenship || '',
         groom_residence: rawFields.f90_groom_residence || '',
         bride_residence: rawFields.f90_bride_residence || '',
         groom_religion: rawFields.f90_groom_religion || '',

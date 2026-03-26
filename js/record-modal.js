@@ -461,7 +461,15 @@ body { font-family: Arial, Helvetica, sans-serif; background: #fff; color: #111;
 }
 
 function closeRecordModal(e) {
+    // Allow: direct call (no event), OR click exactly on the backdrop overlay
     if (e && e.target !== document.getElementById('recordDetailModal')) return;
+    document.getElementById('recordDetailModal').style.display = 'none';
+    _currentRecord = null;
+    _recordEditing = false;
+}
+
+// Called directly by the close button (no event guard needed)
+function closeRecordModalDirect() {
     document.getElementById('recordDetailModal').style.display = 'none';
     _currentRecord = null;
     _recordEditing = false;

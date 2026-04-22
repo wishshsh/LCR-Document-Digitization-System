@@ -1,13 +1,13 @@
 {
   "accuracy": 100.0,
   "samples_per_class": 150,
-  "total_samples": 600,
+  "total_samples": 450,
   "labels": {
-    "0": "Form 1A - Birth Certificate",
-    "1": "Form 2A - Death Certificate",
-    "2": "Form 3A - Marriage Certificate",
-    "3": "Form 90 - Application for Marriage License"
+    "0": "Form 102 - Certificate of Live Birth",
+    "1": "Form 103 - Certificate of Death",
+    "2": "Form 97 - Certificate of Marriage"
   },
+  "note": "Form 90 routing is handled by classify_sex() \u2014 not this model",
   "model_path": "models\\mnb_classifier.pkl",
   "vectorizer_path": "models\\tfidf_vectorizer.pkl"
 }

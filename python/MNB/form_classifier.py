@@ -41,6 +41,7 @@ LABEL_MAP = {
     0: 'Form 102 - Certificate of Live Birth',
     1: 'Form 103 - Certificate of Death',
     2: 'Form 97 - Certificate of Marriage',
+    
 }
 LABEL_NAMES = list(LABEL_MAP.values())
 

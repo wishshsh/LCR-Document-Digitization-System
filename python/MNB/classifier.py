@@ -177,7 +177,7 @@ class MNBClassifier:
         Returns:
             {
                 'label':         'Form 90 - Application for Marriage License',
-                'form_code':     'form54',
+                'form_code':     'form90',
                 'confidence':    0.97,
                 'probabilities': { ... }
             }
@@ -220,14 +220,14 @@ class MNBClassifier:
         (Accountable Form No. 54 / Form No. 10 /
         Marriage License and Fee Receipt of Two Pesos).
         """
-        return self.classify_form_type(ocr_text) == "form54"
+        return self.classify_form_type(ocr_text) == "form90"
 
-    def get_form54_ner_entities(self) -> list:
+    def get_form90_ner_entities(self) -> list:
         """
         Returns the NER entity slot names bridge.py must extract
-        when processing a Form 54 document.
+        when processing a Form 90 document.
         """
-        return list(self._FORM54_NER_ENTITIES)
+        return list(self._FORM90_NER_ENTITIES)
 
 
 # ── Quick test ──────────────────────────────────────────────
@@ -283,35 +283,6 @@ if __name__ == "__main__":
     print("\n  ── PATH B: Form 90 Application for Marriage License Tests ──")
     form90_tests = [
         (
-            "Application for Marriage License "
-            "Name of applicant Juan Dela Cruz "
-            "Date of birth of applicant 03/22/1990 "
-            "Place of birth of applicant Tarlac City "
-            "Citizenship Filipino residence of applicant Brgy. Poblacion Tarlac City "
-            "Name of father Pedro Dela Cruz citizenship of father Filipino "
-            "Name of mother Rosa Santos citizenship of mother Filipino "
-            "No. of previous marriages 0 parental consent affidavit",
-            "form90"
-        ),
-        (
-            "Application for Marriage License "
-            "Applicant Maria Santos date of birth 07/15/1995 "
-            "place of birth Capas Tarlac residence Brgy. San Jose "
-            "citizenship Filipino parental advice "
-            "marriage license application",
-            "form90"
-        ),
-    ]
-    for text, expected in form90_tests:
-        result = mnb.classify_full(text)
-        mark = "✅" if result["form_code"] == expected else "❌"
-        hint = mnb.get_ner_hint(text)
-        print(f"  {mark}  Expected={expected:<8}  Got={result['form_code']:<8}  "
-              f"Confidence={result['confidence']:.1%}  hint={hint}")
-
-    print("\n  ── PATH C: Form 54 Marriage License Receipt Tests ──")
-    form54_tests = [
-        (
             "Accountable Form No. 54 Form No. 10 "
             "Republic of the Philippines City or Municipality of Mandaluyong City "
             "No. 5975035 "
@@ -338,11 +309,11 @@ if __name__ == "__main__":
             "form54"
         ),
     ]
-    for text, expected in form54_tests:
+    for text, expected in form90_tests:
         result = mnb.classify_full(text)
         mark = "✅" if result["form_code"] == expected else "❌"
-        is54 = mnb.is_form54(text)
+        is90 = mnb.is_form90(text)
         hint = mnb.get_ner_hint(text)
         print(f"  {mark}  Expected={expected:<8}  Got={result['form_code']:<8}  "
-              f"Confidence={result['confidence']:.1%}  is_form54={is54}  hint={hint}")
-    print(f"\n  Form 54 NER slots: {mnb.get_form54_ner_entities()}")
+              f"Confidence={result['confidence']:.1%}  is_form90={is90}  hint={hint}")
+    print(f"\n  Form 90 NER slots: {mnb.get_form90_ner_entities()}")

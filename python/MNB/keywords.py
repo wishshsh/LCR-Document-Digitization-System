@@ -7,21 +7,11 @@
 #   Form 102 → "Municipal Form No. 102 / Certificate of Live Birth"
 #   Form 103 → "Municipal Form No. 103 / Certificate of Death"
 #   Form 97  → "Municipal Form No. 97  / Certificate of Marriage"
-#   Form 90  → "Application for Marriage License"
-#   Form 54  → "Accountable Form No. 54 / Form No. 10
+#   Form 90  → "Accountable Form No. 54 / Form No. 10 /
 #               Marriage License and Fee Receipt of Two Pesos"
-#
-# Form 54 NER entities extracted after classification:
-#   NAME_OF_GROOM      → name of groom (contracting party, male)
-#   AGE_OF_GROOM       → age of groom in years (and months)
-#   RESIDENCE_OF_GROOM → full address / residence of groom
-#   NAME_OF_BRIDE      → name of bride (contracting party, female)
-#   AGE_OF_BRIDE       → age of bride in years (and months)
-#   RESIDENCE_OF_BRIDE → full address / residence of bride
-#   DATE_OF_ISSUANCE   → date the marriage license was issued
 # ============================================================
 
-# ── PATH A: Certifications / Marriage License Page ───────────
+# ── Certifications Page + Marriage License Page ───────────────
 FORM_KEYWORDS = {
 
     "form102": [
@@ -90,63 +80,25 @@ FORM_KEYWORDS = {
     ],
 
     "form90": [
-        # Exact header variants
-        "Application for Marriage License",
-        "application for marriage license",
-        # Field-level keywords
-        "name of applicant",
-        "date of birth of applicant",
-        "place of birth of applicant",
-        "citizenship",
-        "residence of applicant",
-        "citizenship of father",
-        "citizenship of mother",
-        "no. of previous marriages",
-        "parental consent",
-        "parental advice",
-        "affidavit",
-        "applicant",
-        "marriage license application",
-    ],
-
-    "form54": [
-        # Exact printed headers
+        # Exact header variants (Accountable Form No. 54 / Form No. 10)
         "Accountable Form No. 54",
         "Accountable Form No.54",
         "Form No. 10",
         "Form No.10",
-        "Marriage License and Fee Receipt of Two Pesos",
         "Marriage License and Fee Receipt",
-        "marriage license fee receipt",
-        # Body text cues
+        "Marriage License and Fee Receipt of Two Pesos",
+        "fee receipt of two pesos",
+        # Field-level keywords
+        "marriage license",
         "may legally contract marriage",
-        "having paid the license fee",
-        "license fee of",
-        "Articles 65 of Republic Act No. 386",
-        "Republic Act No. 386",
-        "one hundred and twenty days",
-        "marriage license valid until",
-        "marriage license valid",
+        "license fee",
+        "republic act no. 386",
+        "articles 65",
+        "valid for no more than one hundred and twenty days",
+        "contracting parties",
         "notice & application",
-        "notice and application",
-        "Registration Officer",
-        "Local Civil Registrar of",
-        # Structural cues
-        "this is to certify that",
-        "aged",
-        "years and",
+        "local civil registrar",
+        "registration officer",
+        "marriage license valid until",
     ],
 }
-
-# ── Form 54 NER entity slot names (used by bridge.py) ────────
-# Extracted from Form 54 (Marriage License and Fee Receipt)
-# after classification via classify_form_type() → 'form54'
-FORM54_NER_ENTITIES = [
-    "NAME_OF_GROOM",       # name of groom (contracting party, male)
-    "AGE_OF_GROOM",        # age of groom in years (and months)
-    "RESIDENCE_OF_GROOM",  # full address / residence of groom
-    "NAME_OF_BRIDE",       # name of bride (contracting party, female)
-    "AGE_OF_BRIDE",        # age of bride in years (and months)
-    "RESIDENCE_OF_BRIDE",  # full address / residence of bride
-    "DATE_OF_ISSUANCE",    # date the marriage license was issued
-]

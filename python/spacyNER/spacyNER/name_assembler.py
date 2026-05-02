@@ -12,8 +12,10 @@
 #   "Juan" + "dela Cruz" + "Santos" → "Juan dela Cruz Santos"
 #
 # Form 90 NOTE:
-#   Groom and Bride have SEPARATE label sets (F90_GROOM_* / F90_BRIDE_*)
-#   so they each get their own assembler function.
+#   Form 90 (Accountable Form No. 54) is the Marriage License and
+#   Fee Receipt document itself — groom and bride are both on the
+#   same document. assemble_form_90_groom / assemble_form_90_bride
+#   produce name_of_groom and name_of_bride respectively.
 # =============================================================
 
 from spacyNER.labels import (
@@ -75,16 +77,16 @@ def assemble_form_97_wife(extracted: dict) -> dict:
 
 def assemble_form_90_groom(extracted: dict) -> dict:
     """
-    Form 90 — Groom's birth certificate.
-    Adds: name_of_applicant, name_of_father, maiden_name_of_mother
+    Form 90 / Form 54 — Groom name assembly.
+    Adds: name_of_groom
     Uses F90_GROOM_* labels.
     """
     return assemble_names(extracted, NAME_GROUPS_90_GROOM)
 
 def assemble_form_90_bride(extracted: dict) -> dict:
     """
-    Form 90 — Bride's birth certificate.
-    Adds: name_of_applicant, name_of_father, maiden_name_of_mother
+    Form 90 / Form 54 — Bride name assembly.
+    Adds: name_of_bride
     Uses F90_BRIDE_* labels.
     """
     return assemble_names(extracted, NAME_GROUPS_90_BRIDE)

@@ -121,43 +121,30 @@ class Form3A:
 
 
 # ─────────────────────────────────────────────────────────────
-# ApplicantOutput — reused for groom and bride in Form 90
-# Output fields per applicant (Form 90 layout):
-#   Name of Applicant · Date of Birth · Age · Place of Birth
-#   Sex · Citizenship · Residence · Religion
-#   Name of Father · Citizenship (Father)
-#   Maiden Name of Mother · Citizenship (Mother) · Residence (Mother)
+# Form 54 — Marriage License and Fee Receipt
+# (Accountable Form No. 54 / Form No. 10 / Form 90)
+#
+# Extracted from the issued Marriage License document.
+# Required output fields:
+#   name_of_groom    age_of_groom    residence_of_groom
+#   name_of_bride    age_of_bride    residence_of_bride
+#   date_of_issuance
 # ─────────────────────────────────────────────────────────────
 @dataclass
-class ApplicantOutput:
-    name_of_applicant:      Optional[str] = None  # assembled First+Middle+Last
-    date_of_birth:          Optional[str] = None
-    age:                    Optional[str] = None
-    place_of_birth:         Optional[str] = None
-    sex:                    Optional[str] = None
-    citizenship:            Optional[str] = None
-    residence:              Optional[str] = None
-    religion:               Optional[str] = None
-    name_of_father:         Optional[str] = None  # assembled First+Last
-    father_citizenship:     Optional[str] = None
-    maiden_name_of_mother:  Optional[str] = None  # assembled First+Last
-    mother_citizenship:     Optional[str] = None
-    mother_residence:       Optional[str] = None
+class Form54:
+    registry_number:     Optional[str] = None
+    date_of_registration: Optional[str] = None
+    name_of_groom:       Optional[str] = None  # assembled First+Middle+Last
+    age_of_groom:        Optional[str] = None
+    residence_of_groom:  Optional[str] = None
+    name_of_bride:       Optional[str] = None  # assembled First+Middle+Last
+    age_of_bride:        Optional[str] = None
+    residence_of_bride:  Optional[str] = None
+    date_of_issuance:    Optional[str] = None
 
     def to_dict(self) -> dict:
         return {k: v for k, v in asdict(self).items() if v is not None}
 
 
-# ─────────────────────────────────────────────────────────────
-# Form 90 — Marriage License Application
-# ─────────────────────────────────────────────────────────────
-@dataclass
-class Form90:
-    groom: ApplicantOutput = field(default_factory=ApplicantOutput)
-    bride: ApplicantOutput = field(default_factory=ApplicantOutput)
-
-    def to_dict(self) -> dict:
-        return {
-            "groom": self.groom.to_dict(),
-            "bride": self.bride.to_dict(),
-        }
+# Keep Form90 as an alias so existing imports don't break
+Form90 = Form54

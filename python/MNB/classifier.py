@@ -2,17 +2,12 @@
 # ============================================================
 # MNB CLASSIFIER — wraps the trained DocumentClassifier
 #
-# PATH A — Certifications Page
-#   User uploads a certification scan.
-#   MNB identifies which form it is:
-#     form102  → Form 102 (Certificate of Live Birth)
-#     form103  → Form 103 (Certificate of Death)
-#     form97   → Form 97  (Certificate of Marriage)
-#
-# PATH B — Application for Marriage License Page
-#   User uploads an Application for Marriage License.
-#   MNB identifies it as:
-#     form90   → Form 90  (Application for Marriage License)
+# Identifies which form was uploaded:
+#   form102  → Form 102 (Certificate of Live Birth)
+#   form103  → Form 103 (Certificate of Death)
+#   form97   → Form 97  (Certificate of Marriage)
+#   form90   → Form 90 / Accountable Form No. 54 / Form No. 10
+#              (Marriage License and Fee Receipt of Two Pesos)
 #
 # Files needed:
 #   form_classifier.py     ← training + DocumentClassifier
@@ -85,30 +80,21 @@ _FORM_KEYWORDS = {
         "Accountable Form No.54",
         "Form No. 10",
         "Form No.10",
-        "Marriage License and Fee Receipt of Two Pesos",
         "Marriage License and Fee Receipt",
-        "marriage license fee receipt",
+        "Marriage License and Fee Receipt of Two Pesos",
+        "fee receipt of two pesos",
+        "marriage license",
         "may legally contract marriage",
-        "having paid the license fee",
-        "license fee of",
-        "Articles 65 of Republic Act No. 386",
-        "Republic Act No. 386",
-        "one hundred and twenty days",
+        "license fee",
+        "republic act no. 386",
+        "articles 65",
+        "registration officer",
         "marriage license valid until",
-        "marriage license valid",
-        "notice & application",
-        "notice and application",
-        "Registration Officer",
-        "Local Civil Registrar of",
-        "this is to certify that",
-        "aged",
-        "years and",
     ],
 }
 
-
 def _keyword_classify_form(text: str) -> str:
-    """Keyword fallback for all form classification."""
+    """Keyword fallback for form classification."""
     t = text.lower()
     scores = {k: sum(1 for kw in v if kw.lower() in t) for k, v in _FORM_KEYWORDS.items()}
     return max(scores, key=scores.get)
@@ -119,7 +105,7 @@ _FORM_CODE_TO_HINT = {
     "form102": "birth",
     "form103": "death",
     "form97":  "marriage",
-    "form90":  "marriage_license_application",
+    "form90":  "marriage_license",
 }
 
 
@@ -127,25 +113,17 @@ class MNBClassifier:
     """
     MNB Classifier for the Civil Registry Digitization System.
 
-    PATH A — Certifications Page:
+    Classifies any uploaded civil registry document:
         mnb = MNBClassifier()
         form_code = mnb.classify_form_type(ocr_text)
-        # → 'form102' | 'form103' | 'form97'
+        # → 'form102' | 'form103' | 'form97' | 'form90'
 
         hint = mnb.get_ner_hint(ocr_text)
-        # → 'birth' | 'death' | 'marriage'
+        # → 'birth' | 'death' | 'marriage' | 'marriage_license'
 
         result = mnb.classify_full(ocr_text)
-        # → {'label': 'Form 102 - Certificate of Live Birth',
-        #    'form_code': 'form102', 'confidence': 0.97, 'probabilities': {...}}
-
-    PATH B — Application for Marriage License Page (Form 90):
-        form_code = mnb.classify_form_type(ocr_text)
-        # → 'form90'
-
-        hint = mnb.get_ner_hint(ocr_text)
-        # → 'marriage_license_application'
-
+        # → {'label': 'Form 90 - Marriage License and Fee Receipt',
+        #    'form_code': 'form90', 'confidence': 0.97, 'probabilities': {...}}
     """
 
     def __init__(self, model_dir: str = "models"):
@@ -160,12 +138,10 @@ class MNBClassifier:
         else:
             print("  [MNB] form_classifier.py not found — using keyword fallback")
 
-    # ── Shared: classify any uploaded form ────────────────
-
     def classify_form_type(self, ocr_text: str) -> str:
         """
         Identify which form was uploaded.
-        Returns: 'form102' | 'form103' | 'form97' | 'form90' 
+        Returns: 'form102' | 'form103' | 'form97' | 'form90'
         """
         if self._doc_clf is not None:
             return self._doc_clf.predict(ocr_text)["form_code"]
@@ -173,10 +149,10 @@ class MNBClassifier:
 
     def classify_full(self, ocr_text: str) -> dict:
         """
-        Full classification result with confidence scores.
+        Full result with label and confidence scores.
         Returns:
             {
-                'label':         'Form 90 - Application for Marriage License',
+                'label':         'Form 90 - Marriage License and Fee Receipt',
                 'form_code':     'form90',
                 'confidence':    0.97,
                 'probabilities': { ... }
@@ -195,46 +171,17 @@ class MNBClassifier:
     def get_ner_hint(self, ocr_text: str) -> str:
         """
         Returns NER hint string for bridge.py:
-        'birth' | 'death' | 'marriage' |
-        'marriage_license_application' 
+        'birth' | 'death' | 'marriage' | 'marriage_license'
         """
         code = self.classify_form_type(ocr_text)
         return _FORM_CODE_TO_HINT.get(code, "birth")
-
-    # ── PATH C: Marriage License Receipt Page (Form 54) ───
-
-    # NER entity slots required by bridge.py for Form 54
-    _FORM90_NER_ENTITIES = [
-        "NAME_OF_GROOM",
-        "AGE_OF_GROOM",
-        "RESIDENCE_OF_GROOM",
-        "NAME_OF_BRIDE",
-        "AGE_OF_BRIDE",
-        "RESIDENCE_OF_BRIDE",
-        "DATE_OF_ISSUANCE",
-    ]
-
-    def is_form90(self, ocr_text: str) -> bool:
-        """
-        Returns True if the OCR text is a Form 54
-        (Accountable Form No. 54 / Form No. 10 /
-        Marriage License and Fee Receipt of Two Pesos).
-        """
-        return self.classify_form_type(ocr_text) == "form90"
-
-    def get_form90_ner_entities(self) -> list:
-        """
-        Returns the NER entity slot names bridge.py must extract
-        when processing a Form 90 document.
-        """
-        return list(self._FORM90_NER_ENTITIES)
 
 
 # ── Quick test ──────────────────────────────────────────────
 if __name__ == "__main__":
     mnb = MNBClassifier()
 
-    print("\n  ── PATH A: Certifications Page Tests ──")
+    print("\n  ── Form Classification Tests ──")
     cert_tests = [
         (
             "Municipal Form No. 102 Certificate of Live Birth "
@@ -273,47 +220,24 @@ if __name__ == "__main__":
             "contracting parties",
             "form97"
         ),
+        (
+            "Accountable Form No. 54 Form No. 10 "
+            "Marriage License and Fee Receipt of Two Pesos "
+            "Erastus Noel T. Delizo aged 42 years may legally contract marriage "
+            "with Maria Fatima A. Villena aged 30 years license fee "
+            "Republic Act No. 386 Registration Officer",
+            "form90"
+        ),
+        (
+            "Form No. 10 Marriage License and Fee Receipt "
+            "may legally contract marriage license fee Articles 65 "
+            "marriage license valid until local civil registrar",
+            "form90"
+        ),
     ]
+
     for text, expected in cert_tests:
         result = mnb.classify_full(text)
         mark = "✅" if result["form_code"] == expected else "❌"
         print(f"  {mark}  Expected={expected:<8}  Got={result['form_code']:<8}  "
               f"Confidence={result['confidence']:.1%}  ({result['label']})")
-
-    print("\n  ── PATH B: Form 90 Application for Marriage License Tests ──")
-    form90_tests = [
-        (
-            "Accountable Form No. 54 Form No. 10 "
-            "Republic of the Philippines City or Municipality of Mandaluyong City "
-            "No. 5975035 "
-            "Marriage License and Fee Receipt of Two Pesos "
-            "This is to certify that Erastus Noel T. Delizo aged 42 years and 10 months "
-            "and resident of No. 17 Tehran St. BF Homes International Las Pinas City "
-            "may legally contract marriage with Maria Fatima A. Villena aged 30 years "
-            "and resident of 709-A Coronado St. Brgy. Hulo Mandaluyong City "
-            "he having paid the license fee of P2.00 Articles 65 Republic Act No. 386 "
-            "issued this 17th day of October 2008 "
-            "Registration Officer III Local Civil Registrar of Mandaluyong City",
-            "form54"
-        ),
-        (
-            "Accountable Form No.54 Form No.10 "
-            "Marriage License and Fee Receipt "
-            "No. 1234567 Tarlac City "
-            "This is to certify that Carlos Bautista aged 35 years and 2 months "
-            "resident of Brgy. Poblacion Tarlac City may legally contract marriage with "
-            "Ana Reyes aged 28 years resident of Brgy. San Jose Capas Tarlac "
-            "having paid the license fee Republic Act No. 386 "
-            "issued 15 March 2015 notice and application "
-            "Local Civil Registrar of Tarlac City",
-            "form54"
-        ),
-    ]
-    for text, expected in form90_tests:
-        result = mnb.classify_full(text)
-        mark = "✅" if result["form_code"] == expected else "❌"
-        is90 = mnb.is_form90(text)
-        hint = mnb.get_ner_hint(text)
-        print(f"  {mark}  Expected={expected:<8}  Got={result['form_code']:<8}  "
-              f"Confidence={result['confidence']:.1%}  is_form90={is90}  hint={hint}")
-    print(f"\n  Form 90 NER slots: {mnb.get_form90_ner_entities()}")

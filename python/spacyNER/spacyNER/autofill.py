@@ -8,18 +8,19 @@
 #   fill_form_2a(text)  → Form2A  (from Form 103 OCR)
 #   fill_form_3a(text)  → Form3A  (from Form 97 OCR)
 #
-# Marriage License page:
-#   fill_form_90(groom_ocr, bride_ocr) → Form90
-#     Internally calls:
-#       extract_form_90_groom() → uses F90_GROOM_* labels
-#       extract_form_90_bride() → uses F90_BRIDE_* labels
-#     MNB classify_sex() has already routed each cert before this.
+# Marriage License Receipt:
+#   fill_form_90(text)  → Form54
+#     Reads the Marriage License and Fee Receipt document (Form 90 /
+#     Accountable Form No. 54 / Form No. 10) directly.
+#     Extracts: name_of_groom, age_of_groom, residence_of_groom,
+#               name_of_bride,  age_of_bride,  residence_of_bride,
+#               date_of_issuance
 # =============================================================
 
 from spacyNER.extractor import CivilRegistryNER
 from spacyNER.models    import (
-    Form1A, Form2A, Form3A, Form90,
-    SpouseOutput, ApplicantOutput,
+    Form1A, Form2A, Form3A, Form54,
+    SpouseOutput,
 )
 from spacyNER.labels import (
     OUTPUT_MAP_1A,
@@ -27,8 +28,7 @@ from spacyNER.labels import (
     OUTPUT_MAP_3A_HUSBAND,
     OUTPUT_MAP_3A_WIFE,
     OUTPUT_MAP_3A_EVENT,
-    OUTPUT_MAP_90_GROOM,
-    OUTPUT_MAP_90_BRIDE,
+    OUTPUT_MAP_90,
 )
 
 
@@ -88,38 +88,26 @@ class AutoFillEngine:
         if data.get("wife_name_of_mother"):    wife.name_of_mother    = data["wife_name_of_mother"]
         return form
 
-    # ── Form 90 ───────────────────────────────────────────────
-    def fill_form_90(self, groom_ocr: str, bride_ocr: str) -> Form90:
+    # ── Form 54 (Form 90) ─────────────────────────────────────
+    def fill_form_90(self, ocr_text: str) -> Form54:
         """
-        Marriage License page:
-          groom_ocr = OCR text from Male PSA/NSO birth cert  → F90_GROOM_* labels
-          bride_ocr = OCR text from Female PSA/NSO birth cert → F90_BRIDE_* labels
+        OCR text from the Marriage License and Fee Receipt
+        (Form 90 / Accountable Form No. 54 / Form No. 10) → Form54 object.
 
-        MNB classify_sex() should have already confirmed which is which
-        before calling this method.
+        Required output fields:
+          name_of_groom    age_of_groom    residence_of_groom
+          name_of_bride    age_of_bride    residence_of_bride
+          date_of_issuance
         """
-        groom_data = self.extractor.extract_form_90_groom(groom_ocr)
-        bride_data = self.extractor.extract_form_90_bride(bride_ocr)
-        return Form90(
-            groom=self._fill_applicant(groom_data, role="groom"),
-            bride=self._fill_applicant(bride_data, role="bride"),
-        )
-
-    def _fill_applicant(self, data: dict, role: str = "groom") -> ApplicantOutput:
-        """
-        Map extracted groom/bride data to ApplicantOutput.
-        role = "groom" → uses OUTPUT_MAP_90_GROOM
-        role = "bride" → uses OUTPUT_MAP_90_BRIDE
-        """
-        output_map = OUTPUT_MAP_90_GROOM if role == "groom" else OUTPUT_MAP_90_BRIDE
-        a = ApplicantOutput()
-        for label, field_name in output_map.items():
+        data = self.extractor.extract_form_90(ocr_text)
+        form = Form54()
+        for label, field_name in OUTPUT_MAP_90.items():
             v = data.get(label)
-            if v: setattr(a, field_name, v)
-        if data.get("name_of_applicant"):     a.name_of_applicant     = data["name_of_applicant"]
-        if data.get("name_of_father"):        a.name_of_father        = data["name_of_father"]
-        if data.get("maiden_name_of_mother"): a.maiden_name_of_mother = data["maiden_name_of_mother"]
-        return a
+            if v: setattr(form, field_name, v)
+        # Assembled names
+        if data.get("name_of_groom"): form.name_of_groom = data["name_of_groom"]
+        if data.get("name_of_bride"): form.name_of_bride = data["name_of_bride"]
+        return form
 
     # ── Utility ───────────────────────────────────────────────
     def to_dict(self, form_obj) -> dict:

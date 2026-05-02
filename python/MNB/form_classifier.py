@@ -5,17 +5,10 @@ Multinomial Naive Bayes (MNB) Document Classifier
 for Local Civil Registry Document Digitization System
 
 Classifies extracted OCR text into:
-  - Form 102  (Certificate of Live Birth)                     ← Certifications page
-  - Form 103  (Certificate of Death)                          ← Certifications page
-  - Form 97   (Certificate of Marriage)                       ← Certifications page
-  - Form 90   (Application for Marriage License)              ← Marriage License page
-  - Form 54   (Marriage License and Fee Receipt of Two Pesos) ← Marriage License Receipt page
-                Accountable Form No. 54 / Form No. 10
-
-Form 54 NER entities (extracted after classification):
-  NAME_OF_GROOM, AGE_OF_GROOM, RESIDENCE_OF_GROOM
-  NAME_OF_BRIDE, AGE_OF_BRIDE, RESIDENCE_OF_BRIDE
-  DATE_OF_ISSUANCE
+  - Form 102  (Certificate of Live Birth)
+  - Form 103  (Certificate of Death)
+  - Form 97   (Certificate of Marriage)
+  - Form 90   (Marriage License and Fee Receipt / Accountable Form No. 54 / Form No. 10)
 
 Usage:
     python form_classifier.py            # trains and saves model
@@ -42,8 +35,7 @@ LABEL_MAP = {
     0: 'Form 102 - Certificate of Live Birth',
     1: 'Form 103 - Certificate of Death',
     2: 'Form 97 - Certificate of Marriage',
-    3: 'Form 90 - Application for Marriage License',
-    4: 'Form 54 - Marriage License and Fee Receipt',
+    3: 'Form 90 - Marriage License and Fee Receipt',
 }
 LABEL_NAMES = list(LABEL_MAP.values())
 
@@ -54,46 +46,30 @@ FIRST_NAMES = [
     'Juan', 'Maria', 'Jose', 'Ana', 'Pedro', 'Rosa', 'Carlos', 'Lani',
     'Roberto', 'Nena', 'Ramon', 'Cynthia', 'Eduardo', 'Marites', 'Danilo',
     'Rowena', 'Renato', 'Melinda', 'Ernesto', 'Josephine', 'Michael',
-    'Jennifer', 'Angelo', 'Christine', 'Mark', 'Patricia', 'John', 'Mary',
-    'Erastus', 'Fatima', 'Noel', 'Gloria', 'Ricardo', 'Lourdes',
+    'Jennifer', 'Angelo', 'Christine', 'Mark', 'Patricia', 'John', 'Mary'
 ]
 LAST_NAMES = [
     'Dela Cruz', 'Santos', 'Reyes', 'Garcia', 'Torres', 'Flores',
     'Bautista', 'Villanueva', 'Mendoza', 'Castro', 'Ramos', 'Lim',
     'Aquino', 'Diaz', 'Fernandez', 'Lopez', 'Gonzales', 'Ramirez',
-    'Abad', 'Aguilar', 'Manalo', 'Navarro', 'Ocampo', 'Pascual',
-    'Delizo', 'Villena', 'Buenaventura', 'Salazar',
+    'Abad', 'Aguilar', 'Manalo', 'Navarro', 'Ocampo', 'Pascual'
 ]
 MUNICIPALITIES = [
     'Tarlac City', 'Capas', 'Paniqui', 'Gerona', 'Camiling',
     'Victoria', 'San Manuel', 'Concepcion', 'La Paz', 'Sta. Ignacia',
-    'Bamban', 'Moncada', 'Pura', 'Ramos', 'Anao',
-    'Mandaluyong City', 'Las Pinas City', 'Quezon City', 'Pasig City',
+    'Bamban', 'Moncada', 'Pura', 'Ramos', 'Anao'
 ]
-PROVINCES = ['Tarlac', 'Pampanga', 'Nueva Ecija', 'Bulacan', 'Zambales', 'Metro Manila']
+PROVINCES = ['Tarlac', 'Pampanga', 'Nueva Ecija', 'Bulacan', 'Zambales']
 BARANGAYS = [
     'Brgy. San Jose', 'Brgy. Poblacion', 'Brgy. Sto. Cristo',
     'Brgy. Tibag', 'Brgy. Maliwalo', 'Brgy. San Nicolas',
-    'Brgy. San Roque', 'Brgy. San Vicente', 'Brgy. Salapungan',
-    'Brgy. Hulo', 'Brgy. BF Homes', 'Brgy. Coronado',
+    'Brgy. San Roque', 'Brgy. San Vicente', 'Brgy. Salapungan'
 ]
 DATES = [
     '01/15/1990', '03/22/1985', '07/04/2000', '11/30/1995',
     '05/18/1988', '09/12/1975', '02/28/1993', '06/06/1980',
     '12/25/1998', '04/17/2001', '08/08/1965', '10/31/1970',
 ]
-MONTHS = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December',
-]
-YEARS = ['2005', '2006', '2007', '2008', '2009', '2010',
-         '2011', '2012', '2015', '2018', '2020', '2022']
-CITIZENSHIPS = ['Filipino', 'Chinese', 'American', 'Japanese']
-REG_OFFICERS = [
-    'Registration Officer I', 'Registration Officer II',
-    'Registration Officer III', 'Local Civil Registrar',
-]
-
 
 def _name():
     return f"{random.choice(FIRST_NAMES)} {random.choice(LAST_NAMES)}"
@@ -103,10 +79,6 @@ def _date():
 
 def _place():
     return f"{random.choice(BARANGAYS)}, {random.choice(MUNICIPALITIES)}, {random.choice(PROVINCES)}"
-
-def _address():
-    return (f"No. {random.randint(1, 999)} {random.choice(['Rizal St.', 'Mabini Ave.', 'Tehran St.', 'Coronado St.', 'Quezon Blvd.'])} "
-            f"{random.choice(BARANGAYS)} {random.choice(MUNICIPALITIES)}")
 
 
 # ─────────────────────────────────────────────────────────────
@@ -144,7 +116,7 @@ def generate_form102():
         f"name of child {_name()} date of birth {_date()} "
         f"place of birth {_place()} birth certificate municipal civil registrar",
 
-        # Template D: PSA/NSO sealed copy
+        # Template D: PSA/NSO sealed copy (used when filing Form 90)
         f"Municipal Form No. 102 Certificate of Live Birth "
         f"PSA {_name()} born on {_date()} "
         f"place of birth {_place()} "
@@ -262,105 +234,66 @@ def generate_form97():
 
 def generate_form90():
     """
-    Form 54 — Accountable Form No. 54 / Form No. 10
-    Marriage License and Fee Receipt of Two Pesos
+    Form 90 — Marriage License and Fee Receipt
+    (Accountable Form No. 54 / Form No. 10)
     Header keywords: 'Accountable Form No. 54', 'Form No. 10',
                      'Marriage License and Fee Receipt of Two Pesos'
-    NER entities: NAME_OF_GROOM, AGE_OF_GROOM, RESIDENCE_OF_GROOM,
-                  NAME_OF_BRIDE,  AGE_OF_BRIDE,  RESIDENCE_OF_BRIDE,
-                  DATE_OF_ISSUANCE
     """
-    groom_name = _name()
-    bride_name = _name()
-    groom_age  = random.randint(18, 55)
-    groom_mos  = random.randint(0, 11)
-    bride_age  = random.randint(18, 50)
-    bride_mos  = random.randint(0, 11)
-    groom_res  = _address()
-    bride_res  = _address()
-    issue_day  = random.randint(1, 28)
-    issue_mon  = random.choice(MONTHS)
-    issue_yr   = random.choice(YEARS)
-    lic_no     = random.randint(1000000, 9999999)
-    muni       = random.choice(MUNICIPALITIES)
-
     templates = [
-        # Template A: Full printed layout (closest to actual document)
+        # Template A: Full header
         f"Accountable Form No. 54 Form No. 10 "
-        f"Republic of the Philippines City or Municipality of {muni} "
-        f"No. {lic_no} "
+        f"Republic of the Philippines City or Municipality of {random.choice(MUNICIPALITIES)} "
+        f"Province of {random.choice(PROVINCES)} No. {random.randint(1000000, 9999999)} "
         f"Marriage License and Fee Receipt of Two Pesos "
-        f"This is to certify that {groom_name} aged {groom_age} years and {groom_mos} months "
-        f"and resident of {groom_res} may legally contract marriage "
-        f"with {bride_name} aged {bride_age} years and {bride_mos} months "
-        f"and resident of {bride_res} "
-        f"he having paid the license fee of P2.00 prescribed under "
-        f"Articles 65 of Republic Act No. 386 "
-        f"This license shall be valid in any part of the Philippines "
-        f"but it shall be good for no more than one hundred and twenty days "
-        f"In witness whereof I have signed and issued this license this {issue_day}th "
-        f"day of {issue_mon} {issue_yr} "
-        f"{random.choice(REG_OFFICERS)} Local Civil Registrar of {muni}",
+        f"This is to certify that {_name()} aged {random.randint(18, 60)} years and {random.randint(0, 11)} months "
+        f"resident of {_place()} may legally contract marriage with {_name()} "
+        f"aged {random.randint(18, 60)} years license fee prescribed under "
+        f"Articles 65 of Republic Act No. 386 Registration Officer "
+        f"marriage license valid until local civil registrar",
 
-        # Template B: Abbreviated scan
+        # Template B: Short header variant
         f"Accountable Form No.54 Form No.10 "
-        f"Marriage License and Fee Receipt "
-        f"No. {lic_no} {muni} "
-        f"This is to certify that {groom_name} aged {groom_age} years "
-        f"resident of {groom_res} may legally contract marriage with "
-        f"{bride_name} aged {bride_age} years resident of {bride_res} "
-        f"license fee paid Articles 65 Republic Act No. 386 "
-        f"issued this {issue_day} {issue_mon} {issue_yr} "
-        f"marriage license valid until {muni}",
-
-        # Template C: OCR-heavy (partial recognition)
-        f"Form No. 10 Accountable Form No. 54 "
         f"Marriage License and Fee Receipt of Two Pesos "
-        f"certify that {groom_name} {groom_age} years and {groom_mos} months "
-        f"resident {groom_res} contract marriage "
-        f"{bride_name} {bride_age} years {bride_mos} months "
-        f"resident {bride_res} "
-        f"license fee P2.00 Republic Act No. 386 "
-        f"one hundred twenty days notice and application "
-        f"{issue_day}th {issue_mon} {issue_yr} "
-        f"{random.choice(REG_OFFICERS)}",
+        f"{_name()} aged {random.randint(18, 60)} may legally contract marriage with {_name()} "
+        f"resident of {_place()} license fee two pesos "
+        f"valid for no more than one hundred and twenty days "
+        f"contracting parties notice application registration officer",
 
-        # Template D: Bottom-stamp variant
+        # Template C: Body-only OCR (header cut off)
+        f"Form No. 10 Marriage License and Fee Receipt "
+        f"This is to certify that {_name()} aged {random.randint(18, 60)} years "
+        f"and resident of {_place()} may legally contract marriage "
+        f"with {_name()} aged {random.randint(18, 60)} years "
+        f"license fee Republic Act No. 386 Articles 65 "
+        f"marriage license valid until {_date()} "
+        f"Local Civil Registrar of {random.choice(MUNICIPALITIES)}",
+
+        # Template D: Stamp/receipt focus
         f"Accountable Form No. 54 Form No. 10 "
         f"Marriage License and Fee Receipt of Two Pesos "
-        f"{muni} No. {lic_no} "
-        f"groom {groom_name} age {groom_age} residence {groom_res} "
-        f"bride {bride_name} age {bride_age} residence {bride_res} "
-        f"date of issuance {issue_day} {issue_mon} {issue_yr} "
-        f"marriage license valid until contracting parties "
-        f"having paid the license fee registration officer",
+        f"No. {random.randint(1000000, 9999999)} "
+        f"{_name()} aged {random.randint(18, 60)} years and {random.randint(0, 11)} months "
+        f"resident of {_place()} legally contract marriage "
+        f"{_name()} aged {random.randint(18, 60)} having paid the license fee "
+        f"P2.00 Articles 65 Republic Act No. 386 "
+        f"marriage license valid until Registration Officer III",
 
-        # Template E: Minimal / torn document
-        f"Accountable Form No. 54 Form No. 10 "
-        f"Marriage License and Fee Receipt "
-        f"No. {lic_no} "
-        f"This is to certify that {groom_name} aged {groom_age} "
-        f"may legally contract marriage with {bride_name} aged {bride_age} "
-        f"resident of {bride_res} "
-        f"issued {issue_day} {issue_mon} {issue_yr} "
-        f"Local Civil Registrar of {muni} "
-        f"notice & application contracting parties",
+        # Template E: Minimal header
+        f"Accountable Form No. 54 Marriage License Fee Receipt Two Pesos "
+        f"City Municipality {random.choice(MUNICIPALITIES)} Province {random.choice(PROVINCES)} "
+        f"certify {_name()} aged {random.randint(18, 60)} contract marriage {_name()} "
+        f"may legally contract marriage license fee registration officer "
+        f"valid one hundred twenty days",
     ]
     return random.choice(templates)
 
 
 # ─────────────────────────────────────────────────────────────
-# 4.  DATASET GENERATOR  (5 classes: 102 / 103 / 97 / 90 / 54)
+# 4.  DATASET GENERATOR  (4 classes — 102, 103, 97, 90)
 # ─────────────────────────────────────────────────────────────
 def generate_dataset(samples_per_class=150):
-    generators = [
-        generate_form102,
-        generate_form103,
-        generate_form97,
-        generate_form90,
-        generate_form54,
-    ]
-    labels_map = [0, 1, 2, 3, 4]  # 0=Form102, 1=Form103, 2=Form97, 3=Form90, 4=Form54
+    generators = [generate_form102, generate_form103, generate_form97, generate_form90]
+    labels_map = [0, 1, 2, 3]  # 0=Form102, 1=Form103, 2=Form97, 3=Form90
 
     texts, labels = [], []
     for gen, label in zip(generators, labels_map):
@@ -382,10 +315,10 @@ def train(samples_per_class=150, save_dir='models'):
 
     print("=" * 60)
     print("  MNB Document Classifier  |  Filipino Civil Registry")
-    print("  Forms: 102 / 103 / 97 / 90 / 54")
+    print("  Forms: 102 / 103 / 97 / 90 (Marriage License Receipt)")
     print("=" * 60)
 
-    print(f"\n  Generating dataset ({samples_per_class} samples × 5 forms = {samples_per_class * 5} total)...")
+    print(f"\n  Generating dataset ({samples_per_class} samples × 4 forms = {samples_per_class * 4} total)...")
     texts, labels = generate_dataset(samples_per_class)
 
     X_train, X_test, y_train, y_test = train_test_split(
@@ -417,7 +350,7 @@ def train(samples_per_class=150, save_dir='models'):
 
     print("  Confusion Matrix:")
     cm = confusion_matrix(y_test, y_pred)
-    headers = ['Form102', 'Form103', 'Form97', 'Form90', 'Form54']
+    headers = ['Form102', 'Form103', 'Form97', 'Form90']
     print(f"  {'':30s} " + "  ".join(headers))
     for i, row in enumerate(cm):
         print(f"  Actual {headers[i]}: {str(row)}")
@@ -433,22 +366,8 @@ def train(samples_per_class=150, save_dir='models'):
     meta = {
         'accuracy': round(acc * 100, 2),
         'samples_per_class': samples_per_class,
-        'total_samples': samples_per_class * 5,
-        'labels': {str(k): v for k, v in LABEL_MAP.items()},
-        'note': (
-            'Form 54 NER entities: NAME_OF_GROOM, AGE_OF_GROOM, RESIDENCE_OF_GROOM, '
-            'NAME_OF_BRIDE, AGE_OF_BRIDE, RESIDENCE_OF_BRIDE, DATE_OF_ISSUANCE'
-        ),
-        'pages': {
-            'certifications':    'Classifies Form 102 / 103 / 97 from uploaded certification scan',
-            'marriage_license':  'Classifies Form 90 (Application for Marriage License)',
-            'license_receipt':   'Classifies Form 54 (Accountable Form No. 54 / Form No. 10)',
-        },
-        'form54_ner_entities': [
-            'NAME_OF_GROOM', 'AGE_OF_GROOM', 'RESIDENCE_OF_GROOM',
-            'NAME_OF_BRIDE', 'AGE_OF_BRIDE', 'RESIDENCE_OF_BRIDE',
-            'DATE_OF_ISSUANCE',
-        ],
+        'total_samples': samples_per_class * 4,
+        'labels': LABEL_MAP,
         'model_path': model_path,
         'vectorizer_path': vec_path,
     }
@@ -468,7 +387,7 @@ def train(samples_per_class=150, save_dir='models'):
 # 6.  DOCUMENT CLASSIFIER CLASS
 # ─────────────────────────────────────────────────────────────
 class DocumentClassifier:
-    """Load trained MNB model and classify OCR text."""
+    """Load trained MNB model and classify OCR text from Certifications page."""
 
     def __init__(self, model_dir='models'):
         model_path = os.path.join(model_dir, 'mnb_classifier.pkl')
@@ -486,13 +405,13 @@ class DocumentClassifier:
 
     def predict(self, text: str) -> dict:
         """
-        Classify OCR text.
+        Classify OCR text from Certifications page.
 
         Returns:
             {
-                'label':        'Form 54 - Marriage License and Fee Receipt',
-                'form_code':    'form54',
-                'confidence':   0.97,
+                'label':        'Form 102 - Certificate of Live Birth',
+                'form_code':    'form102',
+                'confidence':   0.95,
                 'probabilities': { ... }
             }
         """
@@ -500,7 +419,7 @@ class DocumentClassifier:
         probs = self.clf.predict_proba(vec)[0]
         idx   = int(np.argmax(probs))
 
-        form_codes = ['form102', 'form103', 'form97', 'form90', 'form54']
+        form_codes = ['form102', 'form103', 'form97', 'form90']
         return {
             'label':      LABEL_MAP[idx],
             'form_code':  form_codes[idx],
@@ -517,13 +436,12 @@ class DocumentClassifier:
 # ─────────────────────────────────────────────────────────────
 def run_test():
     print("\n" + "=" * 60)
-    print("  Testing DocumentClassifier — All Forms")
+    print("  Testing DocumentClassifier — Certifications Page")
     print("=" * 60)
 
     classifier = DocumentClassifier()
 
     test_cases = [
-        # ── Form 102 ──
         (
             "Municipal Form No. 102 Certificate of Live Birth "
             "Name of child Maria Santos Date of birth 01/15/1990 "
@@ -539,7 +457,6 @@ def run_test():
             "father Pedro Dela Cruz Sex Male",
             "Form 102 - Certificate of Live Birth"
         ),
-        # ── Form 103 ──
         (
             "Municipal Form No. 103 Certificate of Death "
             "Name of deceased Pedro Reyes Date of death 03/22/2020 "
@@ -553,7 +470,6 @@ def run_test():
             "cause Pneumonia burial permit interment",
             "Form 103 - Certificate of Death"
         ),
-        # ── Form 97 ──
         (
             "Municipal Form No. 97 Certificate of Marriage "
             "Name of husband Carlos Bautista Name of wife Ana Torres "
@@ -567,52 +483,22 @@ def run_test():
             "married 11/30/1995 contracting parties solemnizing officer",
             "Form 97 - Certificate of Marriage"
         ),
-        # ── Form 90 ──
-        (
-            "Application for Marriage License "
-            "Name of applicant Juan Dela Cruz "
-            "Date of birth of applicant 03/22/1990 "
-            "Place of birth of applicant Tarlac City Tarlac "
-            "Citizenship Filipino residence of applicant Brgy. Poblacion Tarlac City "
-            "Name of father Pedro Dela Cruz citizenship of father Filipino "
-            "Name of mother Rosa Santos citizenship of mother Filipino "
-            "No. of previous marriages 0 parental consent affidavit",
-            "Form 90 - Application for Marriage License"
-        ),
-        (
-            "Application for Marriage License "
-            "Applicant Maria Santos date of birth 07/15/1995 "
-            "place of birth Capas Tarlac residence Brgy. San Jose "
-            "citizenship Filipino parental advice "
-            "marriage license application",
-            "Form 90 - Application for Marriage License"
-        ),
-        # ── Form 54 ──
         (
             "Accountable Form No. 54 Form No. 10 "
-            "Republic of the Philippines City or Municipality of Mandaluyong City "
-            "No. 5975035 "
             "Marriage License and Fee Receipt of Two Pesos "
-            "This is to certify that Erastus Noel T. Delizo aged 42 years and 10 months "
-            "and resident of No. 17 Tehran St. BF Homes International Las Pinas City "
+            "Erastus Noel T. Delizo aged 42 years and 10 months "
+            "resident of No. 17 Tehran St., BF Homes International Las Pinas City "
             "may legally contract marriage with Maria Fatima A. Villena aged 30 years "
-            "and resident of 709-A Coronado St. Brgy. Hulo Mandaluyong City "
-            "he having paid the license fee of P2.00 Articles 65 Republic Act No. 386 "
-            "issued this 17th day of October 2008 "
-            "Registration Officer III Local Civil Registrar of Mandaluyong City",
-            "Form 54 - Marriage License and Fee Receipt"
+            "Articles 65 Republic Act No. 386 Registration Officer",
+            "Form 90 - Marriage License and Fee Receipt"
         ),
         (
-            "Accountable Form No.54 Form No.10 "
-            "Marriage License and Fee Receipt "
-            "No. 1234567 Tarlac City "
-            "This is to certify that Carlos Bautista aged 35 years and 2 months "
-            "resident of Brgy. Poblacion Tarlac City may legally contract marriage with "
-            "Ana Reyes aged 28 years resident of Brgy. San Jose Capas Tarlac "
-            "having paid the license fee Republic Act No. 386 "
-            "issued 15 March 2015 notice and application "
-            "Local Civil Registrar of Tarlac City",
-            "Form 54 - Marriage License and Fee Receipt"
+            "Form No. 10 Marriage License and Fee Receipt "
+            "may legally contract marriage license fee two pesos "
+            "valid for no more than one hundred and twenty days "
+            "contracting parties notice application local civil registrar "
+            "marriage license valid until",
+            "Form 90 - Marriage License and Fee Receipt"
         ),
     ]
 

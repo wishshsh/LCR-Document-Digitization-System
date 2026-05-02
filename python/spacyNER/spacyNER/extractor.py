@@ -12,11 +12,10 @@
 #   5. Regex patterns catch dates, sex, citizenship words, etc.
 #
 # FORM 90 NOTE:
-#   Groom and Bride are uploaded SEPARATELY on the Marriage License page.
-#   MNB classify_sex() tells us which is which (Male=Groom, Female=Bride).
-#   extract_form_90_groom() → uses F90_GROOM_* labels
-#   extract_form_90_bride() → uses F90_BRIDE_* labels
-#   These are kept separate so the trained model can distinguish them.
+#   Form 90 (Accountable Form No. 54 / Form No. 10) is the
+#   Marriage License and Fee Receipt document itself.
+#   extract_form_90() reads the groom and bride data directly
+#   from that single document using F90_GROOM_* / F90_BRIDE_* labels.
 # ============================================================
 
 import re
@@ -60,23 +59,13 @@ from spacyNER.labels import (
     F97_WIFE_MOTHER_CITIZENSHIP,
     F97_PLACE_OF_MARRIAGE, F97_DATE_OF_MARRIAGE,
     F97_REGISTRY_NO, F97_DATE_OF_REGISTRATION,
-    # Form 90 — GROOM labels (Male birth cert)
+    # Form 90 — Marriage License and Fee Receipt (Accountable Form No. 54)
     F90_REGISTRY_NO, F90_DATE_OF_REGISTRATION,
     F90_GROOM_FIRST, F90_GROOM_MIDDLE, F90_GROOM_LAST,
-    F90_GROOM_DATE_OF_BIRTH, F90_GROOM_AGE, F90_GROOM_PLACE_OF_BIRTH,
-    F90_GROOM_SEX, F90_GROOM_CITIZENSHIP, F90_GROOM_RESIDENCE, F90_GROOM_RELIGION,
-    F90_GROOM_FATHER_FIRST, F90_GROOM_FATHER_MIDDLE, F90_GROOM_FATHER_LAST,
-    F90_GROOM_FATHER_CITIZENSHIP,
-    F90_GROOM_MOTHER_FIRST, F90_GROOM_MOTHER_MIDDLE, F90_GROOM_MOTHER_LAST,
-    F90_GROOM_MOTHER_CITIZENSHIP, F90_GROOM_MOTHER_RESIDENCE,
-    # Form 90 — BRIDE labels (Female birth cert)
+    F90_GROOM_AGE, F90_GROOM_RESIDENCE,
     F90_BRIDE_FIRST, F90_BRIDE_MIDDLE, F90_BRIDE_LAST,
-    F90_BRIDE_DATE_OF_BIRTH, F90_BRIDE_AGE, F90_BRIDE_PLACE_OF_BIRTH,
-    F90_BRIDE_SEX, F90_BRIDE_CITIZENSHIP, F90_BRIDE_RESIDENCE, F90_BRIDE_RELIGION,
-    F90_BRIDE_FATHER_FIRST, F90_BRIDE_FATHER_MIDDLE, F90_BRIDE_FATHER_LAST,
-    F90_BRIDE_FATHER_CITIZENSHIP,
-    F90_BRIDE_MOTHER_FIRST, F90_BRIDE_MOTHER_MIDDLE, F90_BRIDE_MOTHER_LAST,
-    F90_BRIDE_MOTHER_CITIZENSHIP, F90_BRIDE_MOTHER_RESIDENCE,
+    F90_BRIDE_AGE, F90_BRIDE_RESIDENCE,
+    F90_DATE_OF_ISSUANCE,
 )
 
 
@@ -269,75 +258,44 @@ FORM_97_SHARED_MAP = {
     "date of marriage":              F97_DATE_OF_MARRIAGE,
 }
 
-# ── Form 90 keyword maps — SEPARATE for Groom and Bride ───────
-# Groom = Male birth cert uploaded on Marriage License page
-FORM_90_GROOM_MAP = {
-    "registry no":               F90_REGISTRY_NO,
-    "registry number":           F90_REGISTRY_NO,
-    "date of registration":      F90_DATE_OF_REGISTRATION,
-    # Groom name
-    "groom (first)":             F90_GROOM_FIRST,
-    "groom first":               F90_GROOM_FIRST,
-    "groom name (first)":        F90_GROOM_FIRST,
-    "groom (middle)":            F90_GROOM_MIDDLE,
-    "groom middle":              F90_GROOM_MIDDLE,
-    "groom (last)":              F90_GROOM_LAST,
-    "groom last":                F90_GROOM_LAST,
-    "groom name (last)":         F90_GROOM_LAST,
-    # Groom details
-    "groom date of birth":       F90_GROOM_DATE_OF_BIRTH,
-    "groom age":                 F90_GROOM_AGE,
-    "groom place of birth":      F90_GROOM_PLACE_OF_BIRTH,
-    "groom sex":                 F90_GROOM_SEX,
-    "groom citizenship":         F90_GROOM_CITIZENSHIP,
-    "groom residence":           F90_GROOM_RESIDENCE,
-    "groom religion":            F90_GROOM_RELIGION,
-    # Groom father
-    "groom father (first)":      F90_GROOM_FATHER_FIRST,
-    "groom father (middle)":     F90_GROOM_FATHER_MIDDLE,
-    "groom father (last)":       F90_GROOM_FATHER_LAST,
-    "groom father citizenship":  F90_GROOM_FATHER_CITIZENSHIP,
-    # Groom mother
-    "groom mother (first)":      F90_GROOM_MOTHER_FIRST,
-    "groom mother (middle)":     F90_GROOM_MOTHER_MIDDLE,
-    "groom mother (last)":       F90_GROOM_MOTHER_LAST,
-    "groom mother citizenship":  F90_GROOM_MOTHER_CITIZENSHIP,
-    "groom mother residence":    F90_GROOM_MOTHER_RESIDENCE,
-}
-
-# Bride = Female birth cert uploaded on Marriage License page
-FORM_90_BRIDE_MAP = {
-    "registry no":               F90_REGISTRY_NO,
-    "registry number":           F90_REGISTRY_NO,
-    "date of registration":      F90_DATE_OF_REGISTRATION,
-    # Bride name
-    "bride (first)":             F90_BRIDE_FIRST,
-    "bride first":               F90_BRIDE_FIRST,
-    "bride name (first)":        F90_BRIDE_FIRST,
-    "bride (middle)":            F90_BRIDE_MIDDLE,
-    "bride middle":              F90_BRIDE_MIDDLE,
-    "bride (last)":              F90_BRIDE_LAST,
-    "bride last":                F90_BRIDE_LAST,
-    "bride name (last)":         F90_BRIDE_LAST,
-    # Bride details
-    "bride date of birth":       F90_BRIDE_DATE_OF_BIRTH,
-    "bride age":                 F90_BRIDE_AGE,
-    "bride place of birth":      F90_BRIDE_PLACE_OF_BIRTH,
-    "bride sex":                 F90_BRIDE_SEX,
-    "bride citizenship":         F90_BRIDE_CITIZENSHIP,
-    "bride residence":           F90_BRIDE_RESIDENCE,
-    "bride religion":            F90_BRIDE_RELIGION,
-    # Bride father
-    "bride father (first)":      F90_BRIDE_FATHER_FIRST,
-    "bride father (middle)":     F90_BRIDE_FATHER_MIDDLE,
-    "bride father (last)":       F90_BRIDE_FATHER_LAST,
-    "bride father citizenship":  F90_BRIDE_FATHER_CITIZENSHIP,
-    # Bride mother
-    "bride mother (first)":      F90_BRIDE_MOTHER_FIRST,
-    "bride mother (middle)":     F90_BRIDE_MOTHER_MIDDLE,
-    "bride mother (last)":       F90_BRIDE_MOTHER_LAST,
-    "bride mother citizenship":  F90_BRIDE_MOTHER_CITIZENSHIP,
-    "bride mother residence":    F90_BRIDE_MOTHER_RESIDENCE,
+# ── Form 90 keyword map — Marriage License and Fee Receipt ────
+# Source: Accountable Form No. 54 / Form No. 10
+# Extracts groom and bride data from the single license document.
+FORM_90_MAP = {
+    # Registry
+    "registry no":                    F90_REGISTRY_NO,
+    "registry number":                F90_REGISTRY_NO,
+    "no.":                            F90_REGISTRY_NO,
+    "date of registration":           F90_DATE_OF_REGISTRATION,
+    # Groom — the first named person (certify that ...)
+    "certify that":                   F90_GROOM_FIRST,
+    "this is to certify that":        F90_GROOM_FIRST,
+    "groom (first)":                  F90_GROOM_FIRST,
+    "groom first":                    F90_GROOM_FIRST,
+    "groom (middle)":                 F90_GROOM_MIDDLE,
+    "groom middle":                   F90_GROOM_MIDDLE,
+    "groom (last)":                   F90_GROOM_LAST,
+    "groom last":                     F90_GROOM_LAST,
+    "groom age":                      F90_GROOM_AGE,
+    "groom residence":                F90_GROOM_RESIDENCE,
+    "resident of":                    F90_GROOM_RESIDENCE,
+    # Bride — the second named person (contract marriage with ...)
+    "contract marriage with":         F90_BRIDE_FIRST,
+    "legally contract marriage with": F90_BRIDE_FIRST,
+    "bride (first)":                  F90_BRIDE_FIRST,
+    "bride first":                    F90_BRIDE_FIRST,
+    "bride (middle)":                 F90_BRIDE_MIDDLE,
+    "bride middle":                   F90_BRIDE_MIDDLE,
+    "bride (last)":                   F90_BRIDE_LAST,
+    "bride last":                     F90_BRIDE_LAST,
+    "bride age":                      F90_BRIDE_AGE,
+    "bride residence":                F90_BRIDE_RESIDENCE,
+    # Date of issuance (the date the license was issued)
+    "issued this":                    F90_DATE_OF_ISSUANCE,
+    "day of":                         F90_DATE_OF_ISSUANCE,
+    "date of issuance":               F90_DATE_OF_ISSUANCE,
+    "marriage license valid until":   F90_DATE_OF_ISSUANCE,
+    "valid until":                    F90_DATE_OF_ISSUANCE,
 }
 
 
@@ -354,9 +312,11 @@ class CivilRegistryNER:
         data_2a = extractor.extract_form_103(text)
         data_3a = extractor.extract_form_97(text)
 
-    Marriage License page:
-        groom_data = extractor.extract_form_90_groom(groom_ocr_text)
-        bride_data = extractor.extract_form_90_bride(bride_ocr_text)
+    Marriage License Receipt (Form 90 / Accountable Form No. 54):
+        data_54 = extractor.extract_form_90(text)
+        # Returns: name_of_groom, age_of_groom, residence_of_groom,
+        #          name_of_bride,  age_of_bride,  residence_of_bride,
+        #          date_of_issuance
     """
 
     def __init__(self, model_path: str = "en_core_web_sm"):
@@ -534,85 +494,69 @@ class CivilRegistryNER:
         results = assemble_form_97_wife(results)
         return results
 
-    # ── PUBLIC: Form 90 — GROOM birth cert ────────────────
-    # Called when MNB classify_sex() returns "GROOM" (Male)
+    # ── PUBLIC: Form 90 → Form 54 ──────────────────────────
+    # Source: Accountable Form No. 54 / Form No. 10
+    # (Marriage License and Fee Receipt of Two Pesos)
 
-    def extract_form_90_groom(self, text: str) -> dict:
+    def extract_form_90(self, text: str) -> dict:
         """
-        Extract Form 90 GROOM fields from a Male birth certificate.
-        (PSA/NSO sealed, uploaded on Marriage License page)
-        Uses F90_GROOM_* labels.
+        Extract Form 54 fields from Form 90 OCR
+        (Marriage License and Fee Receipt / Accountable Form No. 54).
+
+        The document contains BOTH groom and bride data:
+          - Groom: first named person ("certify that [NAME] aged [AGE]
+                   resident of [RESIDENCE] may legally contract marriage")
+          - Bride: second named person ("with [NAME] aged [AGE]
+                   resident of [RESIDENCE]")
+          - Date of issuance: the license issue date
+
+        Returns keys:
+          name_of_groom, age_of_groom, residence_of_groom
+          name_of_bride,  age_of_bride,  residence_of_bride
+          date_of_issuance
         """
-        results = self._scan_by_keywords(text, FORM_90_GROOM_MAP)
+        results = self._scan_by_keywords(text, FORM_90_MAP)
         spacy_ents = self._run_spacy(text)
 
+        # Use PERSON entities: first = groom, second = bride
         persons = spacy_ents.get("PERSON", [])
-        if persons and F90_GROOM_FIRST not in results:
+        if len(persons) >= 1 and F90_GROOM_FIRST not in results:
             from spacyNER.name_assembler import split_full_name
             first, middle, last = split_full_name(persons[0])
             if first:  results.setdefault(F90_GROOM_FIRST, first)
             if middle: results.setdefault(F90_GROOM_MIDDLE, middle)
             if last:   results.setdefault(F90_GROOM_LAST, last)
-
-        places = spacy_ents.get("GPE", spacy_ents.get("LOC", []))
-        if places and F90_GROOM_PLACE_OF_BIRTH not in results:
-            results.setdefault(F90_GROOM_PLACE_OF_BIRTH, places[0])
-
-        dates = spacy_ents.get("DATE", [])
-        if dates and F90_GROOM_DATE_OF_BIRTH not in results:
-            results.setdefault(F90_GROOM_DATE_OF_BIRTH, dates[0])
-
-        results = self._regex_fallback(
-            text, results,
-            date_label    = F90_GROOM_DATE_OF_BIRTH,
-            sex_label     = F90_GROOM_SEX,
-            age_label     = F90_GROOM_AGE,
-            citizen_label = F90_GROOM_CITIZENSHIP,
-            religion_label= F90_GROOM_RELIGION,
-        )
-
-        from spacyNER.name_assembler import assemble_form_90_groom
-        return assemble_form_90_groom(results)
-
-    # ── PUBLIC: Form 90 — BRIDE birth cert ────────────────
-    # Called when MNB classify_sex() returns "BRIDE" (Female)
-
-    def extract_form_90_bride(self, text: str) -> dict:
-        """
-        Extract Form 90 BRIDE fields from a Female birth certificate.
-        (PSA/NSO sealed, uploaded on Marriage License page)
-        Uses F90_BRIDE_* labels.
-        """
-        results = self._scan_by_keywords(text, FORM_90_BRIDE_MAP)
-        spacy_ents = self._run_spacy(text)
-
-        persons = spacy_ents.get("PERSON", [])
-        if persons and F90_BRIDE_FIRST not in results:
+        if len(persons) >= 2 and F90_BRIDE_FIRST not in results:
             from spacyNER.name_assembler import split_full_name
-            first, middle, last = split_full_name(persons[0])
+            first, middle, last = split_full_name(persons[1])
             if first:  results.setdefault(F90_BRIDE_FIRST, first)
             if middle: results.setdefault(F90_BRIDE_MIDDLE, middle)
             if last:   results.setdefault(F90_BRIDE_LAST, last)
 
-        places = spacy_ents.get("GPE", spacy_ents.get("LOC", []))
-        if places and F90_BRIDE_PLACE_OF_BIRTH not in results:
-            results.setdefault(F90_BRIDE_PLACE_OF_BIRTH, places[0])
+        # Date of issuance fallback
+        if F90_DATE_OF_ISSUANCE not in results:
+            m = RE_DATE.search(text)
+            if m: results[F90_DATE_OF_ISSUANCE] = m.group(0)
 
-        dates = spacy_ents.get("DATE", [])
-        if dates and F90_BRIDE_DATE_OF_BIRTH not in results:
-            results.setdefault(F90_BRIDE_DATE_OF_BIRTH, dates[0])
+        # Age fallback for groom
+        if F90_GROOM_AGE not in results:
+            m = RE_AGE.search(text)
+            if m: results[F90_GROOM_AGE] = m.group(1)
 
-        results = self._regex_fallback(
-            text, results,
-            date_label    = F90_BRIDE_DATE_OF_BIRTH,
-            sex_label     = F90_BRIDE_SEX,
-            age_label     = F90_BRIDE_AGE,
-            citizen_label = F90_BRIDE_CITIZENSHIP,
-            religion_label= F90_BRIDE_RELIGION,
-        )
+        from spacyNER.name_assembler import assemble_names
+        from spacyNER.labels import NAME_GROUPS_90_GROOM, NAME_GROUPS_90_BRIDE
+        results = assemble_names(results, NAME_GROUPS_90_GROOM)
+        results = assemble_names(results, NAME_GROUPS_90_BRIDE)
+        return results
 
-        from spacyNER.name_assembler import assemble_form_90_bride
-        return assemble_form_90_bride(results)
+    # ── PRIVATE: kept for backward compatibility ────────────
+    def extract_form_90_groom(self, text: str) -> dict:
+        """Deprecated — use extract_form_90() instead."""
+        return self.extract_form_90(text)
+
+    def extract_form_90_bride(self, text: str) -> dict:
+        """Deprecated — use extract_form_90() instead."""
+        return self.extract_form_90(text)
 
     # ── HELPER ─────────────────────────────────────────────
 

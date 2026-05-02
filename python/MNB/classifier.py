@@ -2,7 +2,7 @@
 # ============================================================
 # MNB CLASSIFIER — wraps the trained DocumentClassifier
 #
-# TWO SEPARATE CONCERNS:
+# 
 #
 # PATH A — Certifications Page
 #   User uploads a certification scan.
@@ -11,14 +11,7 @@
 #     form103  → Form 103 (Certificate of Death)
 #     form97   → Form 97  (Certificate of Marriage)
 #
-# PATH B — Application for Marriage License Page (Form 90)
-#   User uploads TWO birth certificates:
-#     - Groom's Birth Cert (PSA/NSO sealed)
-#     - Bride's Birth Cert (PSA/NSO sealed)
-#   MNB is NOT used for form type here — the upload page
-#   already tells us it's a birth cert.
-#   classify_sex() reads the SEX field → GROOM (Male) or BRIDE (Female)
-#   and routes each cert to the correct Form 90 slot.
+#
 #
 # Files needed:
 #   form_classifier.py     ← training + DocumentClassifier

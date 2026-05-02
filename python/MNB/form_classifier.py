@@ -9,12 +9,7 @@ Classifies extracted OCR text into:
   - Form 103  (Certificate of Death)             ← Certifications page
   - Form 97   (Certificate of Marriage)          ← Certifications page
 
-NOTE: Form 90 (Application for Marriage License) is NOT classified here.
-      Form 90 has its OWN upload page where the user uploads:
-        - Groom's Birth Certificate (PSA/NSO sealed)
-        - Bride's Birth Certificate (PSA/NSO sealed)
-      The SEX field on each birth cert determines GROOM (Male) or BRIDE (Female).
-      See classify_sex() in classifier.py for that routing.
+
 
 Usage:
     python form_classifier.py            # trains and saves model

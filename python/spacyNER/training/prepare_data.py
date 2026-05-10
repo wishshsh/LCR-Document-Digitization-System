@@ -463,101 +463,397 @@ def form97_examples():
 
 
 # ============================================================
-# FORM 90 — MARRIAGE LICENSE (BIRTH CERTIFICATE SOURCE)
+# FORM 90 → FORM 54
+# Source: Accountable Form No. 54 / Form No. 10
+#         (Marriage License and Fee Receipt of Two Pesos)
 #
-# PIPELINE DESIGN:
-#   Step 1 — MNB Classifier (runs FIRST)
-#             Reads the whole document and answers:
-#             "Is this the GROOM's or BRIDE's birth cert?"
-#             Signal: Sex field (Male→GROOM, Female→BRIDE)
-#             + context words (husband/wife/groom/bride)
-#
-#   Step 2 — spaCy NER (runs SECOND, after MNB decides)
-#             Extracts the field VALUES from the document.
-#             Uses GENERIC F90_* labels — no GROOM/BRIDE
-#             prefix needed here because MNB already decided.
-#
-#   Step 3 — autofill.py combines both results:
-#             if MNB → GROOM: rename F90_* → F90_GROOM_*
-#             if MNB → BRIDE: rename F90_* → F90_BRIDE_*
-#             Then write values into Form 90.
-#
-# WHY GENERIC LABELS FOR NER?
-#   Groom's and bride's birth certificates are structurally
-#   IDENTICAL. NER cannot answer "whose document is this?"
-#   — that is MNB's job. NER only extracts field values.
-#   Using generic F90_* labels keeps the NER model simple,
-#   avoids training it on an impossible distinction, and
-#   avoids doubling the label set for no benefit.
+# The document certifies that [GROOM NAME] aged [GROOM AGE],
+# resident of [GROOM RESIDENCE] may legally contract marriage
+# with [BRIDE NAME] aged [BRIDE AGE], resident of [BRIDE RESIDENCE].
+# Issued on [DATE_OF_ISSUANCE].
 #
 # NER LABELS (F90_*):
-#   F90_APPLICANT_FIRST, F90_APPLICANT_MIDDLE, F90_APPLICANT_LAST
-#   F90_DATE_OF_BIRTH, F90_AGE, F90_PLACE_OF_BIRTH
-#   F90_SEX, F90_CITIZENSHIP, F90_RESIDENCE, F90_RELIGION
-#   F90_FATHER_FIRST, F90_FATHER_MIDDLE, F90_FATHER_LAST
-#   F90_FATHER_CITIZENSHIP
-#   F90_MOTHER_FIRST, F90_MOTHER_MIDDLE, F90_MOTHER_LAST
-#   F90_MOTHER_CITIZENSHIP
-#   F90_REGISTRY_NO, F90_DATE_OF_REGISTRATION
+#   F90_REGISTRY_NO          F90_DATE_OF_REGISTRATION
+#   F90_GROOM_FIRST          F90_GROOM_MIDDLE     F90_GROOM_LAST
+#   F90_GROOM_AGE            F90_GROOM_RESIDENCE
+#   F90_BRIDE_FIRST          F90_BRIDE_MIDDLE     F90_BRIDE_LAST
+#   F90_BRIDE_AGE            F90_BRIDE_RESIDENCE
+#   F90_DATE_OF_ISSUANCE
 # ============================================================
 
 
-def form90_bc_examples():
+def form90_examples():
     examples = []
-    t = 'Registry No.: 1985-ML-001\nML Date of Registration: January 5, 2024\nGROOM\nGroom (First): Jose\nGroom (Middle): dela Cruz\nGroom (Last): Santos\nGroom Date of Birth: March 10, 1994\nGroom Age: 33\nGroom Place of Birth: Pasig City\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Juan\nGroom Father (Middle): Sy\nGroom Father (Last): Gonzales\nGroom Father Citizenship: Japanese\nGroom Mother (First): Felicidad\nGroom Mother (Middle): Reyes\nGroom Mother (Last): Mendoza\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Maria\nBride (Middle): Santos\nBride (Last): de la Cruz\nBride Date of Birth: March 20, 1992\nBride Age: 28\nBride Place of Birth: Muntinlupa City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Ricardo\nBride Father (Middle): Lopez\nBride Father (Last): Garcia\nBride Father Citizenship: Filipino\nBride Mother (First): Remedios\nBride Mother (Middle): Aquino\nBride Mother (Last): Fernandez\nBride Mother Citizenship: Filipino'
-    examples.append((t, {"entities": make_entities(t, [("1985-ML-001","F90_REGISTRY_NO"),("January 5, 2024","F90_DATE_OF_REGISTRATION"),("Jose","F90_GROOM_FIRST"),("dela Cruz","F90_GROOM_MIDDLE"),("Santos","F90_GROOM_LAST"),("March 10, 1994","F90_GROOM_DATE_OF_BIRTH"),("33","F90_GROOM_AGE"),("Pasig City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Juan","F90_GROOM_FATHER_FIRST"),("Sy","F90_GROOM_FATHER_MIDDLE"),("Gonzales","F90_GROOM_FATHER_LAST"),("Japanese","F90_GROOM_FATHER_CITIZENSHIP"),("Felicidad","F90_GROOM_MOTHER_FIRST"),("Reyes","F90_GROOM_MOTHER_MIDDLE"),("Mendoza","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Maria","F90_BRIDE_FIRST"),("Santos","F90_BRIDE_MIDDLE"),("de la Cruz","F90_BRIDE_LAST"),("March 20, 1992","F90_BRIDE_DATE_OF_BIRTH"),("28","F90_BRIDE_AGE"),("Muntinlupa City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Ricardo","F90_BRIDE_FATHER_FIRST"),("Lopez","F90_BRIDE_FATHER_MIDDLE"),("Garcia","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Remedios","F90_BRIDE_MOTHER_FIRST"),("Aquino","F90_BRIDE_MOTHER_MIDDLE"),("Fernandez","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 1994-ML-055\nML Date of Registration: February 14, 2023\nGROOM\nGroom (First): Juan\nGroom (Middle): Santos\nGroom (Last): Reyes\nGroom Date of Birth: June 15, 1992\nGroom Age: 34\nGroom Place of Birth: Manila\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Luis\nGroom Father (Middle): Lim\nGroom Father (Last): Mendoza\nGroom Father Citizenship: Filipino\nGroom Mother (First): Maria\nGroom Mother (Middle): Sy\nGroom Mother (Last): Ramos\nGroom Mother Citizenship: Korean\nBRIDE\nBride (First): Ana\nBride (Middle): Reyes\nBride (Last): Santos\nBride Date of Birth: August 6, 1994\nBride Age: 29\nBride Place of Birth: Caloocan City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Antonio\nBride Father (Middle): Torres\nBride Father (Last): Castillo\nBride Father Citizenship: Filipino\nBride Mother (First): Esmeralda\nBride Mother (Middle): Lopez\nBride Mother (Last): Villanueva\nBride Mother Citizenship: Filipino'
-    examples.append((t, {"entities": make_entities(t, [("1994-ML-055","F90_REGISTRY_NO"),("February 14, 2023","F90_DATE_OF_REGISTRATION"),("Juan","F90_GROOM_FIRST"),("Santos","F90_GROOM_MIDDLE"),("Reyes","F90_GROOM_LAST"),("June 15, 1992","F90_GROOM_DATE_OF_BIRTH"),("34","F90_GROOM_AGE"),("Manila","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Luis","F90_GROOM_FATHER_FIRST"),("Lim","F90_GROOM_FATHER_MIDDLE"),("Mendoza","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Maria","F90_GROOM_MOTHER_FIRST"),("Sy","F90_GROOM_MOTHER_MIDDLE"),("Ramos","F90_GROOM_MOTHER_LAST"),("Korean","F90_GROOM_MOTHER_CITIZENSHIP"),("Ana","F90_BRIDE_FIRST"),("Reyes","F90_BRIDE_MIDDLE"),("Santos","F90_BRIDE_LAST"),("August 6, 1994","F90_BRIDE_DATE_OF_BIRTH"),("29","F90_BRIDE_AGE"),("Caloocan City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Antonio","F90_BRIDE_FATHER_FIRST"),("Torres","F90_BRIDE_FATHER_MIDDLE"),("Castillo","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Esmeralda","F90_BRIDE_MOTHER_FIRST"),("Lopez","F90_BRIDE_MOTHER_MIDDLE"),("Villanueva","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2023-0142\nML Date of Registration: March 20, 2022\nGROOM\nGroom (First): Roberto\nGroom (Middle): Reyes\nGroom (Last): Cruz\nGroom Date of Birth: September 22, 1990\nGroom Age: 35\nGroom Place of Birth: Caloocan City\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Antonio\nGroom Father (Middle): Tan\nGroom Father (Last): Castillo\nGroom Father Citizenship: Filipino\nGroom Mother (First): Maria\nGroom Mother (Middle): Ramos\nGroom Mother (Last): Go\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Rosa\nBride (Middle): Cruz\nBride (Last): Reyes\nBride Date of Birth: May 5, 1991\nBride Age: 30\nBride Place of Birth: Manila\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Carlos\nBride Father (Middle): Villanueva\nBride Father (Last): Torres\nBride Father Citizenship: Filipino\nBride Mother (First): Gloria\nBride Mother (Middle): Lopez\nBride Mother (Last): Co\nBride Mother Citizenship: Korean'
-    examples.append((t, {"entities": make_entities(t, [("2023-0142","F90_REGISTRY_NO"),("March 20, 2022","F90_DATE_OF_REGISTRATION"),("Roberto","F90_GROOM_FIRST"),("Reyes","F90_GROOM_MIDDLE"),("Cruz","F90_GROOM_LAST"),("September 22, 1990","F90_GROOM_DATE_OF_BIRTH"),("35","F90_GROOM_AGE"),("Caloocan City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Antonio","F90_GROOM_FATHER_FIRST"),("Tan","F90_GROOM_FATHER_MIDDLE"),("Castillo","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Maria","F90_GROOM_MOTHER_FIRST"),("Ramos","F90_GROOM_MOTHER_MIDDLE"),("Go","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Rosa","F90_BRIDE_FIRST"),("Cruz","F90_BRIDE_MIDDLE"),("Reyes","F90_BRIDE_LAST"),("May 5, 1991","F90_BRIDE_DATE_OF_BIRTH"),("30","F90_BRIDE_AGE"),("Manila","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Carlos","F90_BRIDE_FATHER_FIRST"),("Villanueva","F90_BRIDE_FATHER_MIDDLE"),("Torres","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Gloria","F90_BRIDE_MOTHER_FIRST"),("Lopez","F90_BRIDE_MOTHER_MIDDLE"),("Co","F90_BRIDE_MOTHER_LAST"),("Korean","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2022-MC-088\nML Date of Registration: April 10, 2021\nGROOM\nGroom (First): Eduardo\nGroom (Middle): Garcia\nGroom (Last): Garcia\nGroom Date of Birth: December 5, 1988\nGroom Age: 36\nGroom Place of Birth: Pasay City\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Jose\nGroom Father (Middle): Go\nGroom Father (Last): De la Cruz\nGroom Father Citizenship: Japanese\nGroom Mother (First): Perla\nGroom Mother (Middle): Lim\nGroom Mother (Last): Mendoza\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Elena\nBride (Middle): Garcia\nBride (Last): Garcia\nBride Date of Birth: October 8, 1993\nBride Age: 31\nBride Place of Birth: Paranaque City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Alfredo\nBride Father (Middle): Castillo\nBride Father (Last): Santos\nBride Father Citizenship: Filipino\nBride Mother (First): Gloria\nBride Mother (Middle): Torres\nBride Mother (Last): Sy\nBride Mother Citizenship: Filipino'
-    examples.append((t, {"entities": make_entities(t, [("2022-MC-088","F90_REGISTRY_NO"),("April 10, 2021","F90_DATE_OF_REGISTRATION"),("Eduardo","F90_GROOM_FIRST"),("Garcia","F90_GROOM_MIDDLE"),("Garcia","F90_GROOM_LAST"),("December 5, 1988","F90_GROOM_DATE_OF_BIRTH"),("36","F90_GROOM_AGE"),("Pasay City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Jose","F90_GROOM_FATHER_FIRST"),("Go","F90_GROOM_FATHER_MIDDLE"),("De la Cruz","F90_GROOM_FATHER_LAST"),("Japanese","F90_GROOM_FATHER_CITIZENSHIP"),("Perla","F90_GROOM_MOTHER_FIRST"),("Lim","F90_GROOM_MOTHER_MIDDLE"),("Mendoza","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Elena","F90_BRIDE_FIRST"),("Garcia","F90_BRIDE_MIDDLE"),("Garcia","F90_BRIDE_LAST"),("October 8, 1993","F90_BRIDE_DATE_OF_BIRTH"),("31","F90_BRIDE_AGE"),("Paranaque City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Alfredo","F90_BRIDE_FATHER_FIRST"),("Castillo","F90_BRIDE_FATHER_MIDDLE"),("Santos","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Gloria","F90_BRIDE_MOTHER_FIRST"),("Torres","F90_BRIDE_MOTHER_MIDDLE"),("Sy","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2021-067\nML Date of Registration: May 3, 2020\nGROOM\nGroom (First): Miguel\nGroom (Middle): Torres\nGroom (Last): Torres\nGroom Date of Birth: January 8, 1995\nGroom Age: 37\nGroom Place of Birth: Pasay City\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Ramon\nGroom Father (Middle): Villanueva\nGroom Father (Last): Sy\nGroom Father Citizenship: Filipino\nGroom Mother (First): Milagros\nGroom Mother (Middle): Mendoza\nGroom Mother (Last): Co\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Sofia\nBride (Middle): Torres\nBride (Last): Torres\nBride Date of Birth: January 3, 1996\nBride Age: 32\nBride Place of Birth: Bacolod City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Eduardo\nBride Father (Middle): Tan\nBride Father (Last): Garcia\nBride Father Citizenship: Filipino\nBride Mother (First): Elvira\nBride Mother (Middle): Aquino\nBride Mother (Last): Cruz\nBride Mother Citizenship: Filipino'
-    examples.append((t, {"entities": make_entities(t, [("2021-067","F90_REGISTRY_NO"),("May 3, 2020","F90_DATE_OF_REGISTRATION"),("Miguel","F90_GROOM_FIRST"),("Torres","F90_GROOM_MIDDLE"),("Torres","F90_GROOM_LAST"),("January 8, 1995","F90_GROOM_DATE_OF_BIRTH"),("37","F90_GROOM_AGE"),("Pasay City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Ramon","F90_GROOM_FATHER_FIRST"),("Villanueva","F90_GROOM_FATHER_MIDDLE"),("Sy","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Milagros","F90_GROOM_MOTHER_FIRST"),("Mendoza","F90_GROOM_MOTHER_MIDDLE"),("Co","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Sofia","F90_BRIDE_FIRST"),("Torres","F90_BRIDE_MIDDLE"),("Torres","F90_BRIDE_LAST"),("January 3, 1996","F90_BRIDE_DATE_OF_BIRTH"),("32","F90_BRIDE_AGE"),("Bacolod City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Eduardo","F90_BRIDE_FATHER_FIRST"),("Tan","F90_BRIDE_FATHER_MIDDLE"),("Garcia","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Elvira","F90_BRIDE_MOTHER_FIRST"),("Aquino","F90_BRIDE_MOTHER_MIDDLE"),("Cruz","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2020-114\nML Date of Registration: June 8, 2019\nGROOM\nGroom (First): Carlos\nGroom (Middle): Ramos\nGroom (Last): Ramos\nGroom Date of Birth: August 20, 1991\nGroom Age: 38\nGroom Place of Birth: Taguig City\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Alfredo\nGroom Father (Middle): Torres\nGroom Father (Last): Tan\nGroom Father Citizenship: Filipino\nGroom Mother (First): Corazon\nGroom Mother (Middle): Gonzales\nGroom Mother (Last): Sy\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Carmen\nBride (Middle): Ramos\nBride (Last): Ramos\nBride Date of Birth: February 14, 1988\nBride Age: 33\nBride Place of Birth: Cebu City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Roberto\nBride Father (Middle): Lim\nBride Father (Last): Lopez\nBride Father Citizenship: Korean\nBride Mother (First): Milagros\nBride Mother (Middle): Santos\nBride Mother (Last): Villanueva\nBride Mother Citizenship: American'
-    examples.append((t, {"entities": make_entities(t, [("2020-114","F90_REGISTRY_NO"),("June 8, 2019","F90_DATE_OF_REGISTRATION"),("Carlos","F90_GROOM_FIRST"),("Ramos","F90_GROOM_MIDDLE"),("Ramos","F90_GROOM_LAST"),("August 20, 1991","F90_GROOM_DATE_OF_BIRTH"),("38","F90_GROOM_AGE"),("Taguig City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Alfredo","F90_GROOM_FATHER_FIRST"),("Torres","F90_GROOM_FATHER_MIDDLE"),("Tan","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Corazon","F90_GROOM_MOTHER_FIRST"),("Gonzales","F90_GROOM_MOTHER_MIDDLE"),("Sy","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Carmen","F90_BRIDE_FIRST"),("Ramos","F90_BRIDE_MIDDLE"),("Ramos","F90_BRIDE_LAST"),("February 14, 1988","F90_BRIDE_DATE_OF_BIRTH"),("33","F90_BRIDE_AGE"),("Cebu City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Roberto","F90_BRIDE_FATHER_FIRST"),("Lim","F90_BRIDE_FATHER_MIDDLE"),("Lopez","F90_BRIDE_FATHER_LAST"),("Korean","F90_BRIDE_FATHER_CITIZENSHIP"),("Milagros","F90_BRIDE_MOTHER_FIRST"),("Santos","F90_BRIDE_MOTHER_MIDDLE"),("Villanueva","F90_BRIDE_MOTHER_LAST"),("American","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2019-203\nML Date of Registration: July 15, 2018\nGROOM\nGroom (First): Antonio\nGroom (Middle): Lopez\nGroom (Last): Lopez\nGroom Date of Birth: April 3, 1993\nGroom Age: 39\nGroom Place of Birth: Pasig City\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Ernesto\nGroom Father (Middle): de la Cruz\nGroom Father (Last): Gonzales\nGroom Father Citizenship: Filipino\nGroom Mother (First): Estrella\nGroom Mother (Middle): Reyes\nGroom Mother (Last): Mendoza\nGroom Mother Citizenship: Japanese\nBRIDE\nBride (First): Luz\nBride (Middle): Lopez\nBride (Last): Lopez\nBride Date of Birth: July 30, 1990\nBride Age: 34\nBride Place of Birth: Caloocan City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Ricardo\nBride Father (Middle): Castillo\nBride Father (Last): Co\nBride Father Citizenship: Filipino\nBride Mother (First): Gloria\nBride Mother (Middle): Torres\nBride Mother (Last): Bautista\nBride Mother Citizenship: Chinese'
-    examples.append((t, {"entities": make_entities(t, [("2019-203","F90_REGISTRY_NO"),("July 15, 2018","F90_DATE_OF_REGISTRATION"),("Antonio","F90_GROOM_FIRST"),("Lopez","F90_GROOM_MIDDLE"),("Lopez","F90_GROOM_LAST"),("April 3, 1993","F90_GROOM_DATE_OF_BIRTH"),("39","F90_GROOM_AGE"),("Pasig City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Ernesto","F90_GROOM_FATHER_FIRST"),("de la Cruz","F90_GROOM_FATHER_MIDDLE"),("Gonzales","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Estrella","F90_GROOM_MOTHER_FIRST"),("Reyes","F90_GROOM_MOTHER_MIDDLE"),("Mendoza","F90_GROOM_MOTHER_LAST"),("Japanese","F90_GROOM_MOTHER_CITIZENSHIP"),("Luz","F90_BRIDE_FIRST"),("Lopez","F90_BRIDE_MIDDLE"),("Lopez","F90_BRIDE_LAST"),("July 30, 1990","F90_BRIDE_DATE_OF_BIRTH"),("34","F90_BRIDE_AGE"),("Caloocan City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Ricardo","F90_BRIDE_FATHER_FIRST"),("Castillo","F90_BRIDE_FATHER_MIDDLE"),("Co","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Gloria","F90_BRIDE_MOTHER_FIRST"),("Torres","F90_BRIDE_MOTHER_MIDDLE"),("Bautista","F90_BRIDE_MOTHER_LAST"),("Chinese","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2018-099\nML Date of Registration: August 3, 2017\nGROOM\nGroom (First): Francisco\nGroom (Middle): Mendoza\nGroom (Last): Mendoza\nGroom Date of Birth: July 12, 1989\nGroom Age: 40\nGroom Place of Birth: Antipolo City\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Isidro\nGroom Father (Middle): Fernandez\nGroom Father (Last): Co\nGroom Father Citizenship: Filipino\nGroom Mother (First): Perla\nGroom Mother (Middle): Lim\nGroom Mother (Last): De la Cruz\nGroom Mother Citizenship: Chinese\nBRIDE\nBride (First): Grace\nBride (Middle): de la Cruz\nBride (Last): Mendoza\nBride Date of Birth: April 18, 1992\nBride Age: 35\nBride Place of Birth: Taguig City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Mario\nBride Father (Middle): Lopez\nBride Father (Last): Bautista\nBride Father Citizenship: Filipino\nBride Mother (First): Ligaya\nBride Mother (Middle): Santos\nBride Mother (Last): Go\nBride Mother Citizenship: Korean'
-    examples.append((t, {"entities": make_entities(t, [("2018-099","F90_REGISTRY_NO"),("August 3, 2017","F90_DATE_OF_REGISTRATION"),("Francisco","F90_GROOM_FIRST"),("Mendoza","F90_GROOM_MIDDLE"),("Mendoza","F90_GROOM_LAST"),("July 12, 1989","F90_GROOM_DATE_OF_BIRTH"),("40","F90_GROOM_AGE"),("Antipolo City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Isidro","F90_GROOM_FATHER_FIRST"),("Fernandez","F90_GROOM_FATHER_MIDDLE"),("Co","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Perla","F90_GROOM_MOTHER_FIRST"),("Lim","F90_GROOM_MOTHER_MIDDLE"),("De la Cruz","F90_GROOM_MOTHER_LAST"),("Chinese","F90_GROOM_MOTHER_CITIZENSHIP"),("Grace","F90_BRIDE_FIRST"),("de la Cruz","F90_BRIDE_MIDDLE"),("Mendoza","F90_BRIDE_LAST"),("April 18, 1992","F90_BRIDE_DATE_OF_BIRTH"),("35","F90_BRIDE_AGE"),("Taguig City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Mario","F90_BRIDE_FATHER_FIRST"),("Lopez","F90_BRIDE_FATHER_MIDDLE"),("Bautista","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Ligaya","F90_BRIDE_MOTHER_FIRST"),("Santos","F90_BRIDE_MOTHER_MIDDLE"),("Go","F90_BRIDE_MOTHER_LAST"),("Korean","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2017-175\nML Date of Registration: September 2, 2016\nGROOM\nGroom (First): Ramon\nGroom (Middle): Cruz\nGroom (Last): Bautista\nGroom Date of Birth: February 28, 1996\nGroom Age: 41\nGroom Place of Birth: Makati City\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Antonio\nGroom Father (Middle): Go\nGroom Father (Last): Ramos\nGroom Father Citizenship: Filipino\nGroom Mother (First): Carmen\nGroom Mother (Middle): Lopez\nGroom Mother (Last): Reyes\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Joy\nBride (Middle): Bautista\nBride (Last): Cruz\nBride Date of Birth: December 2, 1995\nBride Age: 36\nBride Place of Birth: Marikina City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Pedro\nBride Father (Middle): Mendoza\nBride Father (Last): Lim\nBride Father Citizenship: Filipino\nBride Mother (First): Esmeralda\nBride Mother (Middle): Garcia\nBride Mother (Last): Castillo\nBride Mother Citizenship: Filipino'
-    examples.append((t, {"entities": make_entities(t, [("2017-175","F90_REGISTRY_NO"),("September 2, 2016","F90_DATE_OF_REGISTRATION"),("Ramon","F90_GROOM_FIRST"),("Cruz","F90_GROOM_MIDDLE"),("Bautista","F90_GROOM_LAST"),("February 28, 1996","F90_GROOM_DATE_OF_BIRTH"),("41","F90_GROOM_AGE"),("Makati City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Antonio","F90_GROOM_FATHER_FIRST"),("Go","F90_GROOM_FATHER_MIDDLE"),("Ramos","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Carmen","F90_GROOM_MOTHER_FIRST"),("Lopez","F90_GROOM_MOTHER_MIDDLE"),("Reyes","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Joy","F90_BRIDE_FIRST"),("Bautista","F90_BRIDE_MIDDLE"),("Cruz","F90_BRIDE_LAST"),("December 2, 1995","F90_BRIDE_DATE_OF_BIRTH"),("36","F90_BRIDE_AGE"),("Marikina City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Pedro","F90_BRIDE_FATHER_FIRST"),("Mendoza","F90_BRIDE_FATHER_MIDDLE"),("Lim","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Esmeralda","F90_BRIDE_MOTHER_FIRST"),("Garcia","F90_BRIDE_MOTHER_MIDDLE"),("Castillo","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2016-231\nML Date of Registration: October 11, 2015\nGROOM\nGroom (First): Mario\nGroom (Middle): Bautista\nGroom (Last): Aquino\nGroom Date of Birth: October 17, 1987\nGroom Age: 42\nGroom Place of Birth: Muntinlupa City\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Eduardo\nGroom Father (Middle): de la Cruz\nGroom Father (Last): De la Cruz\nGroom Father Citizenship: Filipino\nGroom Mother (First): Elvira\nGroom Mother (Middle): Fernandez\nGroom Mother (Last): Santos\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Faith\nBride (Middle): Tan\nBride (Last): Bautista\nBride Date of Birth: September 9, 1989\nBride Age: 37\nBride Place of Birth: Cebu City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Fernando\nBride Father (Middle): Villanueva\nBride Father (Last): Garcia\nBride Father Citizenship: Filipino\nBride Mother (First): Felicidad\nBride Mother (Middle): Ramos\nBride Mother (Last): Co\nBride Mother Citizenship: Filipino'
-    examples.append((t, {"entities": make_entities(t, [("2016-231","F90_REGISTRY_NO"),("October 11, 2015","F90_DATE_OF_REGISTRATION"),("Mario","F90_GROOM_FIRST"),("Bautista","F90_GROOM_MIDDLE"),("Aquino","F90_GROOM_LAST"),("October 17, 1987","F90_GROOM_DATE_OF_BIRTH"),("42","F90_GROOM_AGE"),("Muntinlupa City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Eduardo","F90_GROOM_FATHER_FIRST"),("de la Cruz","F90_GROOM_FATHER_MIDDLE"),("De la Cruz","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Elvira","F90_GROOM_MOTHER_FIRST"),("Fernandez","F90_GROOM_MOTHER_MIDDLE"),("Santos","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Faith","F90_BRIDE_FIRST"),("Tan","F90_BRIDE_MIDDLE"),("Bautista","F90_BRIDE_LAST"),("September 9, 1989","F90_BRIDE_DATE_OF_BIRTH"),("37","F90_BRIDE_AGE"),("Cebu City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Fernando","F90_BRIDE_FATHER_FIRST"),("Villanueva","F90_BRIDE_FATHER_MIDDLE"),("Garcia","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Felicidad","F90_BRIDE_MOTHER_FIRST"),("Ramos","F90_BRIDE_MOTHER_MIDDLE"),("Co","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2015-087\nML Date of Registration: November 5, 2024\nGROOM\nGroom (First): Pedro\nGroom (Middle): Tan\nGroom (Last): Villanueva\nGroom Date of Birth: May 25, 1994\nGroom Age: 43\nGroom Place of Birth: Bacolod City\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Roberto\nGroom Father (Middle): Fernandez\nGroom Father (Last): Lopez\nGroom Father Citizenship: Filipino\nGroom Mother (First): Natividad\nGroom Mother (Middle): Cruz\nGroom Mother (Last): Co\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Hope\nBride (Middle): Lim\nBride (Last): Aquino\nBride Date of Birth: June 1, 1991\nBride Age: 38\nBride Place of Birth: Pasig City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Fernando\nBride Father (Middle): Santos\nBride Father (Last): Bautista\nBride Father Citizenship: Filipino\nBride Mother (First): Elvira\nBride Mother (Middle): Castillo\nBride Mother (Last): Gonzales\nBride Mother Citizenship: Filipino'
-    examples.append((t, {"entities": make_entities(t, [("2015-087","F90_REGISTRY_NO"),("November 5, 2024","F90_DATE_OF_REGISTRATION"),("Pedro","F90_GROOM_FIRST"),("Tan","F90_GROOM_MIDDLE"),("Villanueva","F90_GROOM_LAST"),("May 25, 1994","F90_GROOM_DATE_OF_BIRTH"),("43","F90_GROOM_AGE"),("Bacolod City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Roberto","F90_GROOM_FATHER_FIRST"),("Fernandez","F90_GROOM_FATHER_MIDDLE"),("Lopez","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Natividad","F90_GROOM_MOTHER_FIRST"),("Cruz","F90_GROOM_MOTHER_MIDDLE"),("Co","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Hope","F90_BRIDE_FIRST"),("Lim","F90_BRIDE_MIDDLE"),("Aquino","F90_BRIDE_LAST"),("June 1, 1991","F90_BRIDE_DATE_OF_BIRTH"),("38","F90_BRIDE_AGE"),("Pasig City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Fernando","F90_BRIDE_FATHER_FIRST"),("Santos","F90_BRIDE_FATHER_MIDDLE"),("Bautista","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Elvira","F90_BRIDE_MOTHER_FIRST"),("Castillo","F90_BRIDE_MOTHER_MIDDLE"),("Gonzales","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2024-ML-019\nML Date of Registration: December 12, 2023\nGROOM\nGroom (First): Luis\nGroom (Middle): Lim\nGroom (Last): Fernandez\nGroom Date of Birth: November 30, 1992\nGroom Age: 44\nGroom Place of Birth: Quezon City\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Manuel\nGroom Father (Middle): Villanueva\nGroom Father (Last): Ramos\nGroom Father Citizenship: Filipino\nGroom Mother (First): Remedios\nGroom Mother (Middle): Aquino\nGroom Mother (Last): Castillo\nGroom Mother Citizenship: Korean\nBRIDE\nBride (First): Patricia\nBride (Middle): Villanueva\nBride (Last): Villanueva\nBride Date of Birth: August 14, 1993\nBride Age: 39\nBride Place of Birth: Makati City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Dante\nBride Father (Middle): Garcia\nBride Father (Last): Mendoza\nBride Father Citizenship: Filipino\nBride Mother (First): Felicidad\nBride Mother (Middle): Reyes\nBride Mother (Last): Go\nBride Mother Citizenship: Korean'
-    examples.append((t, {"entities": make_entities(t, [("2024-ML-019","F90_REGISTRY_NO"),("December 12, 2023","F90_DATE_OF_REGISTRATION"),("Luis","F90_GROOM_FIRST"),("Lim","F90_GROOM_MIDDLE"),("Fernandez","F90_GROOM_LAST"),("November 30, 1992","F90_GROOM_DATE_OF_BIRTH"),("44","F90_GROOM_AGE"),("Quezon City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Manuel","F90_GROOM_FATHER_FIRST"),("Villanueva","F90_GROOM_FATHER_MIDDLE"),("Ramos","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Remedios","F90_GROOM_MOTHER_FIRST"),("Aquino","F90_GROOM_MOTHER_MIDDLE"),("Castillo","F90_GROOM_MOTHER_LAST"),("Korean","F90_GROOM_MOTHER_CITIZENSHIP"),("Patricia","F90_BRIDE_FIRST"),("Villanueva","F90_BRIDE_MIDDLE"),("Villanueva","F90_BRIDE_LAST"),("August 14, 1993","F90_BRIDE_DATE_OF_BIRTH"),("39","F90_BRIDE_AGE"),("Makati City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Dante","F90_BRIDE_FATHER_FIRST"),("Garcia","F90_BRIDE_FATHER_MIDDLE"),("Mendoza","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Felicidad","F90_BRIDE_MOTHER_FIRST"),("Reyes","F90_BRIDE_MOTHER_MIDDLE"),("Go","F90_BRIDE_MOTHER_LAST"),("Korean","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2023-ML-044\nML Date of Registration: January 20, 2022\nGROOM\nGroom (First): Ricardo\nGroom (Middle): Go\nGroom (Last): Gonzales\nGroom Date of Birth: March 7, 1990\nGroom Age: 33\nGroom Place of Birth: Manila\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Fernando\nGroom Father (Middle): Tan\nGroom Father (Last): Santos\nGroom Father Citizenship: Filipino\nGroom Mother (First): Pacita\nGroom Mother (Middle): Castillo\nGroom Mother (Last): Ramos\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Josephine\nBride (Middle): Fernandez\nBride (Last): Fernandez\nBride Date of Birth: March 7, 1990\nBride Age: 28\nBride Place of Birth: Iloilo City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Alfredo\nBride Father (Middle): Cruz\nBride Father (Last): Lopez\nBride Father Citizenship: Filipino\nBride Mother (First): Amparo\nBride Mother (Middle): Villanueva\nBride Mother (Last): Garcia\nBride Mother Citizenship: Japanese'
-    examples.append((t, {"entities": make_entities(t, [("2023-ML-044","F90_REGISTRY_NO"),("January 20, 2022","F90_DATE_OF_REGISTRATION"),("Ricardo","F90_GROOM_FIRST"),("Go","F90_GROOM_MIDDLE"),("Gonzales","F90_GROOM_LAST"),("March 7, 1990","F90_GROOM_DATE_OF_BIRTH"),("33","F90_GROOM_AGE"),("Manila","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Fernando","F90_GROOM_FATHER_FIRST"),("Tan","F90_GROOM_FATHER_MIDDLE"),("Santos","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Pacita","F90_GROOM_MOTHER_FIRST"),("Castillo","F90_GROOM_MOTHER_MIDDLE"),("Ramos","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Josephine","F90_BRIDE_FIRST"),("Fernandez","F90_BRIDE_MIDDLE"),("Fernandez","F90_BRIDE_LAST"),("March 7, 1990","F90_BRIDE_DATE_OF_BIRTH"),("28","F90_BRIDE_AGE"),("Iloilo City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Alfredo","F90_BRIDE_FATHER_FIRST"),("Cruz","F90_BRIDE_FATHER_MIDDLE"),("Lopez","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Amparo","F90_BRIDE_MOTHER_FIRST"),("Villanueva","F90_BRIDE_MOTHER_MIDDLE"),("Garcia","F90_BRIDE_MOTHER_LAST"),("Japanese","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2022-067\nML Date of Registration: February 6, 2021\nGROOM\nGroom (First): Emmanuel\nGroom (Middle): Co\nGroom (Last): Dela Cruz\nGroom Date of Birth: August 14, 1993\nGroom Age: 34\nGroom Place of Birth: Makati City\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Antonio\nGroom Father (Middle): Go\nGroom Father (Last): Sy\nGroom Father Citizenship: Filipino\nGroom Mother (First): Amparo\nGroom Mother (Middle): Fernandez\nGroom Mother (Last): Tan\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Marisol\nBride (Middle): Mendoza\nBride (Last): Gonzales\nBride Date of Birth: November 30, 1992\nBride Age: 29\nBride Place of Birth: Pasig City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Jose\nBride Father (Middle): Ramos\nBride Father (Last): Bautista\nBride Father Citizenship: Filipino\nBride Mother (First): Perla\nBride Mother (Middle): Garcia\nBride Mother (Last): Aquino\nBride Mother Citizenship: Filipino'
-    examples.append((t, {"entities": make_entities(t, [("2022-067","F90_REGISTRY_NO"),("February 6, 2021","F90_DATE_OF_REGISTRATION"),("Emmanuel","F90_GROOM_FIRST"),("Co","F90_GROOM_MIDDLE"),("Dela Cruz","F90_GROOM_LAST"),("August 14, 1993","F90_GROOM_DATE_OF_BIRTH"),("34","F90_GROOM_AGE"),("Makati City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Antonio","F90_GROOM_FATHER_FIRST"),("Go","F90_GROOM_FATHER_MIDDLE"),("Sy","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Amparo","F90_GROOM_MOTHER_FIRST"),("Fernandez","F90_GROOM_MOTHER_MIDDLE"),("Tan","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Marisol","F90_BRIDE_FIRST"),("Mendoza","F90_BRIDE_MIDDLE"),("Gonzales","F90_BRIDE_LAST"),("November 30, 1992","F90_BRIDE_DATE_OF_BIRTH"),("29","F90_BRIDE_AGE"),("Pasig City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Jose","F90_BRIDE_FATHER_FIRST"),("Ramos","F90_BRIDE_FATHER_MIDDLE"),("Bautista","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Perla","F90_BRIDE_MOTHER_FIRST"),("Garcia","F90_BRIDE_MOTHER_MIDDLE"),("Aquino","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2021-133\nML Date of Registration: March 15, 2020\nGROOM\nGroom (First): Victor\nGroom (Middle): Sy\nGroom (Last): Castillo\nGroom Date of Birth: June 1, 1991\nGroom Age: 35\nGroom Place of Birth: Marikina City\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Pedro\nGroom Father (Middle): Cruz\nGroom Father (Last): Ramos\nGroom Father Citizenship: Filipino\nGroom Mother (First): Amparo\nGroom Mother (Middle): Go\nGroom Mother (Last): Garcia\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Cristina\nBride (Middle): Aquino\nBride (Last): Castillo\nBride Date of Birth: May 25, 1994\nBride Age: 30\nBride Place of Birth: Davao City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Bernardo\nBride Father (Middle): Mendoza\nBride Father (Last): Torres\nBride Father Citizenship: Filipino\nBride Mother (First): Maria\nBride Mother (Middle): Lopez\nBride Mother (Last): Fernandez\nBride Mother Citizenship: Filipino'
-    examples.append((t, {"entities": make_entities(t, [("2021-133","F90_REGISTRY_NO"),("March 15, 2020","F90_DATE_OF_REGISTRATION"),("Victor","F90_GROOM_FIRST"),("Sy","F90_GROOM_MIDDLE"),("Castillo","F90_GROOM_LAST"),("June 1, 1991","F90_GROOM_DATE_OF_BIRTH"),("35","F90_GROOM_AGE"),("Marikina City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Pedro","F90_GROOM_FATHER_FIRST"),("Cruz","F90_GROOM_FATHER_MIDDLE"),("Ramos","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Amparo","F90_GROOM_MOTHER_FIRST"),("Go","F90_GROOM_MOTHER_MIDDLE"),("Garcia","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Cristina","F90_BRIDE_FIRST"),("Aquino","F90_BRIDE_MIDDLE"),("Castillo","F90_BRIDE_LAST"),("May 25, 1994","F90_BRIDE_DATE_OF_BIRTH"),("30","F90_BRIDE_AGE"),("Davao City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Bernardo","F90_BRIDE_FATHER_FIRST"),("Mendoza","F90_BRIDE_FATHER_MIDDLE"),("Torres","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Maria","F90_BRIDE_MOTHER_FIRST"),("Lopez","F90_BRIDE_MOTHER_MIDDLE"),("Fernandez","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2020-089\nML Date of Registration: April 5, 2019\nGROOM\nGroom (First): Dante\nGroom (Middle): Villanueva\nGroom (Last): Lim\nGroom Date of Birth: September 9, 1989\nGroom Age: 36\nGroom Place of Birth: Pasay City\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Manuel\nGroom Father (Middle): Aquino\nGroom Father (Last): Co\nGroom Father Citizenship: Filipino\nGroom Mother (First): Amparo\nGroom Mother (Middle): Gonzales\nGroom Mother (Last): Cruz\nGroom Mother Citizenship: Korean\nBRIDE\nBride (First): Natividad\nBride (Middle): Castillo\nBride (Last): Lim\nBride Date of Birth: October 17, 1987\nBride Age: 31\nBride Place of Birth: Davao City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Juan\nBride Father (Middle): Garcia\nBride Father (Last): Torres\nBride Father Citizenship: Filipino\nBride Mother (First): Felicidad\nBride Mother (Middle): Tan\nBride Mother (Last): Lopez\nBride Mother Citizenship: Filipino'
-    examples.append((t, {"entities": make_entities(t, [("2020-089","F90_REGISTRY_NO"),("April 5, 2019","F90_DATE_OF_REGISTRATION"),("Dante","F90_GROOM_FIRST"),("Villanueva","F90_GROOM_MIDDLE"),("Lim","F90_GROOM_LAST"),("September 9, 1989","F90_GROOM_DATE_OF_BIRTH"),("36","F90_GROOM_AGE"),("Pasay City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Manuel","F90_GROOM_FATHER_FIRST"),("Aquino","F90_GROOM_FATHER_MIDDLE"),("Co","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Amparo","F90_GROOM_MOTHER_FIRST"),("Gonzales","F90_GROOM_MOTHER_MIDDLE"),("Cruz","F90_GROOM_MOTHER_LAST"),("Korean","F90_GROOM_MOTHER_CITIZENSHIP"),("Natividad","F90_BRIDE_FIRST"),("Castillo","F90_BRIDE_MIDDLE"),("Lim","F90_BRIDE_LAST"),("October 17, 1987","F90_BRIDE_DATE_OF_BIRTH"),("31","F90_BRIDE_AGE"),("Davao City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Juan","F90_BRIDE_FATHER_FIRST"),("Garcia","F90_BRIDE_FATHER_MIDDLE"),("Torres","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Felicidad","F90_BRIDE_MOTHER_FIRST"),("Tan","F90_BRIDE_MOTHER_MIDDLE"),("Lopez","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2019-155\nML Date of Registration: May 10, 2018\nGROOM\nGroom (First): Renato\nGroom (Middle): Fernandez\nGroom (Last): Tan\nGroom Date of Birth: December 2, 1995\nGroom Age: 37\nGroom Place of Birth: General Santos\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Alfredo\nGroom Father (Middle): Castillo\nGroom Father (Last): Aquino\nGroom Father Citizenship: Filipino\nGroom Mother (First): Maria\nGroom Mother (Middle): Mendoza\nGroom Mother (Last): Cruz\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Remedios\nBride (Middle): Gonzales\nBride (Last): Tan\nBride Date of Birth: February 28, 1996\nBride Age: 32\nBride Place of Birth: Valenzuela City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Roberto\nBride Father (Middle): Torres\nBride Father (Last): Reyes\nBride Father Citizenship: Korean\nBride Mother (First): Elvira\nBride Mother (Middle): Co\nBride Mother (Last): Garcia\nBride Mother Citizenship: Filipino'
-    examples.append((t, {"entities": make_entities(t, [("2019-155","F90_REGISTRY_NO"),("May 10, 2018","F90_DATE_OF_REGISTRATION"),("Renato","F90_GROOM_FIRST"),("Fernandez","F90_GROOM_MIDDLE"),("Tan","F90_GROOM_LAST"),("December 2, 1995","F90_GROOM_DATE_OF_BIRTH"),("37","F90_GROOM_AGE"),("General Santos","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Alfredo","F90_GROOM_FATHER_FIRST"),("Castillo","F90_GROOM_FATHER_MIDDLE"),("Aquino","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Maria","F90_GROOM_MOTHER_FIRST"),("Mendoza","F90_GROOM_MOTHER_MIDDLE"),("Cruz","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Remedios","F90_BRIDE_FIRST"),("Gonzales","F90_BRIDE_MIDDLE"),("Tan","F90_BRIDE_LAST"),("February 28, 1996","F90_BRIDE_DATE_OF_BIRTH"),("32","F90_BRIDE_AGE"),("Valenzuela City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Roberto","F90_BRIDE_FATHER_FIRST"),("Torres","F90_BRIDE_FATHER_MIDDLE"),("Reyes","F90_BRIDE_FATHER_LAST"),("Korean","F90_BRIDE_FATHER_CITIZENSHIP"),("Elvira","F90_BRIDE_MOTHER_FIRST"),("Co","F90_BRIDE_MOTHER_MIDDLE"),("Garcia","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2018-201\nML Date of Registration: June 20, 2017\nGROOM\nGroom (First): Alfredo\nGroom (Middle): Aquino\nGroom (Last): Co\nGroom Date of Birth: April 18, 1992\nGroom Age: 38\nGroom Place of Birth: Valenzuela City\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Roberto\nGroom Father (Middle): Reyes\nGroom Father (Last): Gonzales\nGroom Father Citizenship: Japanese\nGroom Mother (First): Esmeralda\nGroom Mother (Middle): Garcia\nGroom Mother (Last): Castillo\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Corazon\nBride (Middle): Co\nBride (Last): Co\nBride Date of Birth: July 12, 1989\nBride Age: 33\nBride Place of Birth: Caloocan City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Fernando\nBride Father (Middle): Bautista\nBride Father (Last): Santos\nBride Father Citizenship: Filipino\nBride Mother (First): Felicidad\nBride Mother (Middle): Lopez\nBride Mother (Last): Fernandez\nBride Mother Citizenship: Korean'
-    examples.append((t, {"entities": make_entities(t, [("2018-201","F90_REGISTRY_NO"),("June 20, 2017","F90_DATE_OF_REGISTRATION"),("Alfredo","F90_GROOM_FIRST"),("Aquino","F90_GROOM_MIDDLE"),("Co","F90_GROOM_LAST"),("April 18, 1992","F90_GROOM_DATE_OF_BIRTH"),("38","F90_GROOM_AGE"),("Valenzuela City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Roberto","F90_GROOM_FATHER_FIRST"),("Reyes","F90_GROOM_FATHER_MIDDLE"),("Gonzales","F90_GROOM_FATHER_LAST"),("Japanese","F90_GROOM_FATHER_CITIZENSHIP"),("Esmeralda","F90_GROOM_MOTHER_FIRST"),("Garcia","F90_GROOM_MOTHER_MIDDLE"),("Castillo","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Corazon","F90_BRIDE_FIRST"),("Co","F90_BRIDE_MIDDLE"),("Co","F90_BRIDE_LAST"),("July 12, 1989","F90_BRIDE_DATE_OF_BIRTH"),("33","F90_BRIDE_AGE"),("Caloocan City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Fernando","F90_BRIDE_FATHER_FIRST"),("Bautista","F90_BRIDE_FATHER_MIDDLE"),("Santos","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Felicidad","F90_BRIDE_MOTHER_FIRST"),("Lopez","F90_BRIDE_MOTHER_MIDDLE"),("Fernandez","F90_BRIDE_MOTHER_LAST"),("Korean","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2017-044\nML Date of Registration: July 4, 2016\nGROOM\nGroom (First): Bernardo\nGroom (Middle): Castillo\nGroom (Last): Go\nGroom Date of Birth: July 30, 1990\nGroom Age: 39\nGroom Place of Birth: Manila\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Victor\nGroom Father (Middle): Sy\nGroom Father (Last): Torres\nGroom Father Citizenship: Filipino\nGroom Mother (First): Consuelo\nGroom Mother (Middle): Fernandez\nGroom Mother (Last): Cruz\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Perla\nBride (Middle): Go\nBride (Last): Go\nBride Date of Birth: April 3, 1993\nBride Age: 34\nBride Place of Birth: Quezon City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Pedro\nBride Father (Middle): Lopez\nBride Father (Last): Aquino\nBride Father Citizenship: Filipino\nBride Mother (First): Rosario\nBride Mother (Middle): Villanueva\nBride Mother (Last): Santos\nBride Mother Citizenship: American'
-    examples.append((t, {"entities": make_entities(t, [("2017-044","F90_REGISTRY_NO"),("July 4, 2016","F90_DATE_OF_REGISTRATION"),("Bernardo","F90_GROOM_FIRST"),("Castillo","F90_GROOM_MIDDLE"),("Go","F90_GROOM_LAST"),("July 30, 1990","F90_GROOM_DATE_OF_BIRTH"),("39","F90_GROOM_AGE"),("Manila","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Victor","F90_GROOM_FATHER_FIRST"),("Sy","F90_GROOM_FATHER_MIDDLE"),("Torres","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Consuelo","F90_GROOM_MOTHER_FIRST"),("Fernandez","F90_GROOM_MOTHER_MIDDLE"),("Cruz","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Perla","F90_BRIDE_FIRST"),("Go","F90_BRIDE_MIDDLE"),("Go","F90_BRIDE_LAST"),("April 3, 1993","F90_BRIDE_DATE_OF_BIRTH"),("34","F90_BRIDE_AGE"),("Quezon City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Pedro","F90_BRIDE_FATHER_FIRST"),("Lopez","F90_BRIDE_FATHER_MIDDLE"),("Aquino","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Rosario","F90_BRIDE_MOTHER_FIRST"),("Villanueva","F90_BRIDE_MOTHER_MIDDLE"),("Santos","F90_BRIDE_MOTHER_LAST"),("American","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2016-178\nML Date of Registration: August 15, 2015\nGROOM\nGroom (First): Celso\nGroom (Middle): Gonzales\nGroom (Last): Sy\nGroom Date of Birth: February 14, 1988\nGroom Age: 40\nGroom Place of Birth: Antipolo City\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Antonio\nGroom Father (Middle): Ramos\nGroom Father (Last): Reyes\nGroom Father Citizenship: Filipino\nGroom Mother (First): Corazon\nGroom Mother (Middle): Lopez\nGroom Mother (Last): Mendoza\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Ligaya\nBride (Middle): Sy\nBride (Last): Sy\nBride Date of Birth: August 20, 1991\nBride Age: 35\nBride Place of Birth: Cagayan de Oro\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Carlos\nBride Father (Middle): Villanueva\nBride Father (Last): Fernandez\nBride Father Citizenship: Filipino\nBride Mother (First): Maria\nBride Mother (Middle): Lim\nBride Mother (Last): Tan\nBride Mother Citizenship: Filipino'
-    examples.append((t, {"entities": make_entities(t, [("2016-178","F90_REGISTRY_NO"),("August 15, 2015","F90_DATE_OF_REGISTRATION"),("Celso","F90_GROOM_FIRST"),("Gonzales","F90_GROOM_MIDDLE"),("Sy","F90_GROOM_LAST"),("February 14, 1988","F90_GROOM_DATE_OF_BIRTH"),("40","F90_GROOM_AGE"),("Antipolo City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Antonio","F90_GROOM_FATHER_FIRST"),("Ramos","F90_GROOM_FATHER_MIDDLE"),("Reyes","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Corazon","F90_GROOM_MOTHER_FIRST"),("Lopez","F90_GROOM_MOTHER_MIDDLE"),("Mendoza","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Ligaya","F90_BRIDE_FIRST"),("Sy","F90_BRIDE_MIDDLE"),("Sy","F90_BRIDE_LAST"),("August 20, 1991","F90_BRIDE_DATE_OF_BIRTH"),("35","F90_BRIDE_AGE"),("Cagayan de Oro","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Carlos","F90_BRIDE_FATHER_FIRST"),("Villanueva","F90_BRIDE_FATHER_MIDDLE"),("Fernandez","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Maria","F90_BRIDE_MOTHER_FIRST"),("Lim","F90_BRIDE_MOTHER_MIDDLE"),("Tan","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2015-093\nML Date of Registration: September 3, 2024\nGROOM\nGroom (First): Jose\nGroom (Middle): dela Cruz\nGroom (Last): Santos\nGroom Date of Birth: January 3, 1996\nGroom Age: 41\nGroom Place of Birth: Marikina City\nGroom Sex: Male\nGroom Citizenship: American\nGroom Father (First): Bernardo\nGroom Father (Middle): Tan\nGroom Father (Last): Ramos\nGroom Father Citizenship: Filipino\nGroom Mother (First): Remedios\nGroom Mother (Middle): Torres\nGroom Mother (Last): Go\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Maria\nBride (Middle): Santos\nBride (Last): de la Cruz\nBride Date of Birth: January 8, 1995\nBride Age: 36\nBride Place of Birth: Antipolo City\nBride Sex: Female\nBride Citizenship: American\nBride Father (First): Fernando\nBride Father (Middle): Sy\nBride Father (Last): De la Cruz\nBride Father Citizenship: Filipino\nBride Mother (First): Ligaya\nBride Mother (Middle): Fernandez\nBride Mother (Last): Garcia\nBride Mother Citizenship: Filipino'
-    examples.append((t, {"entities": make_entities(t, [("2015-093","F90_REGISTRY_NO"),("September 3, 2024","F90_DATE_OF_REGISTRATION"),("Jose","F90_GROOM_FIRST"),("dela Cruz","F90_GROOM_MIDDLE"),("Santos","F90_GROOM_LAST"),("January 3, 1996","F90_GROOM_DATE_OF_BIRTH"),("41","F90_GROOM_AGE"),("Marikina City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("American","F90_GROOM_CITIZENSHIP"),("Bernardo","F90_GROOM_FATHER_FIRST"),("Tan","F90_GROOM_FATHER_MIDDLE"),("Ramos","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Remedios","F90_GROOM_MOTHER_FIRST"),("Torres","F90_GROOM_MOTHER_MIDDLE"),("Go","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Maria","F90_BRIDE_FIRST"),("Santos","F90_BRIDE_MIDDLE"),("de la Cruz","F90_BRIDE_LAST"),("January 8, 1995","F90_BRIDE_DATE_OF_BIRTH"),("36","F90_BRIDE_AGE"),("Antipolo City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("American","F90_BRIDE_CITIZENSHIP"),("Fernando","F90_BRIDE_FATHER_FIRST"),("Sy","F90_BRIDE_FATHER_MIDDLE"),("De la Cruz","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Ligaya","F90_BRIDE_MOTHER_FIRST"),("Fernandez","F90_BRIDE_MOTHER_MIDDLE"),("Garcia","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2024-ML-202\nML Date of Registration: October 2, 2023\nGROOM\nGroom (First): Juan\nGroom (Middle): Santos\nGroom (Last): Reyes\nGroom Date of Birth: October 8, 1993\nGroom Age: 42\nGroom Place of Birth: Antipolo City\nGroom Sex: Male\nGroom Citizenship: Chinese\nGroom Father (First): Celso\nGroom Father (Middle): Ramos\nGroom Father (Last): Aquino\nGroom Father Citizenship: Filipino\nGroom Mother (First): Elvira\nGroom Mother (Middle): Gonzales\nGroom Mother (Last): Co\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Ana\nBride (Middle): Reyes\nBride (Last): Santos\nBride Date of Birth: December 5, 1988\nBride Age: 37\nBride Place of Birth: Pasig City\nBride Sex: Female\nBride Citizenship: Chinese\nBride Father (First): Luis\nBride Father (Middle): Fernandez\nBride Father (Last): Cruz\nBride Father Citizenship: Filipino\nBride Mother (First): Amparo\nBride Mother (Middle): Tan\nBride Mother (Last): Garcia\nBride Mother Citizenship: Filipino'
-    examples.append((t, {"entities": make_entities(t, [("2024-ML-202","F90_REGISTRY_NO"),("October 2, 2023","F90_DATE_OF_REGISTRATION"),("Juan","F90_GROOM_FIRST"),("Santos","F90_GROOM_MIDDLE"),("Reyes","F90_GROOM_LAST"),("October 8, 1993","F90_GROOM_DATE_OF_BIRTH"),("42","F90_GROOM_AGE"),("Antipolo City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Chinese","F90_GROOM_CITIZENSHIP"),("Celso","F90_GROOM_FATHER_FIRST"),("Ramos","F90_GROOM_FATHER_MIDDLE"),("Aquino","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Elvira","F90_GROOM_MOTHER_FIRST"),("Gonzales","F90_GROOM_MOTHER_MIDDLE"),("Co","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Ana","F90_BRIDE_FIRST"),("Reyes","F90_BRIDE_MIDDLE"),("Santos","F90_BRIDE_LAST"),("December 5, 1988","F90_BRIDE_DATE_OF_BIRTH"),("37","F90_BRIDE_AGE"),("Pasig City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Chinese","F90_BRIDE_CITIZENSHIP"),("Luis","F90_BRIDE_FATHER_FIRST"),("Fernandez","F90_BRIDE_FATHER_MIDDLE"),("Cruz","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Amparo","F90_BRIDE_MOTHER_FIRST"),("Tan","F90_BRIDE_MOTHER_MIDDLE"),("Garcia","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2023-ML-117\nML Date of Registration: November 8, 2022\nGROOM\nGroom (First): Roberto\nGroom (Middle): Reyes\nGroom (Last): Cruz\nGroom Date of Birth: May 5, 1991\nGroom Age: 43\nGroom Place of Birth: Bacolod City\nGroom Sex: Male\nGroom Citizenship: Korean\nGroom Father (First): Alfredo\nGroom Father (Middle): Bautista\nGroom Father (Last): Fernandez\nGroom Father Citizenship: Filipino\nGroom Mother (First): Corazon\nGroom Mother (Middle): Garcia\nGroom Mother (Last): Lopez\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Rosa\nBride (Middle): Cruz\nBride (Last): Reyes\nBride Date of Birth: September 22, 1990\nBride Age: 38\nBride Place of Birth: Iloilo City\nBride Sex: Female\nBride Citizenship: Korean\nBride Father (First): Ramon\nBride Father (Middle): Torres\nBride Father (Last): Sy\nBride Father Citizenship: Japanese\nBride Mother (First): Perla\nBride Mother (Middle): Santos\nBride Mother (Last): Aquino\nBride Mother Citizenship: Filipino'
-    examples.append((t, {"entities": make_entities(t, [("2023-ML-117","F90_REGISTRY_NO"),("November 8, 2022","F90_DATE_OF_REGISTRATION"),("Roberto","F90_GROOM_FIRST"),("Reyes","F90_GROOM_MIDDLE"),("Cruz","F90_GROOM_LAST"),("May 5, 1991","F90_GROOM_DATE_OF_BIRTH"),("43","F90_GROOM_AGE"),("Bacolod City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Korean","F90_GROOM_CITIZENSHIP"),("Alfredo","F90_GROOM_FATHER_FIRST"),("Bautista","F90_GROOM_FATHER_MIDDLE"),("Fernandez","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Corazon","F90_GROOM_MOTHER_FIRST"),("Garcia","F90_GROOM_MOTHER_MIDDLE"),("Lopez","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Rosa","F90_BRIDE_FIRST"),("Cruz","F90_BRIDE_MIDDLE"),("Reyes","F90_BRIDE_LAST"),("September 22, 1990","F90_BRIDE_DATE_OF_BIRTH"),("38","F90_BRIDE_AGE"),("Iloilo City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Korean","F90_BRIDE_CITIZENSHIP"),("Ramon","F90_BRIDE_FATHER_FIRST"),("Torres","F90_BRIDE_FATHER_MIDDLE"),("Sy","F90_BRIDE_FATHER_LAST"),("Japanese","F90_BRIDE_FATHER_CITIZENSHIP"),("Perla","F90_BRIDE_MOTHER_FIRST"),("Santos","F90_BRIDE_MOTHER_MIDDLE"),("Aquino","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2022-188\nML Date of Registration: December 5, 2021\nGROOM\nGroom (First): Eduardo\nGroom (Middle): Garcia\nGroom (Last): Garcia\nGroom Date of Birth: August 6, 1994\nGroom Age: 44\nGroom Place of Birth: Pasay City\nGroom Sex: Male\nGroom Citizenship: Japanese\nGroom Father (First): Carlos\nGroom Father (Middle): Fernandez\nGroom Father (Last): Go\nGroom Father Citizenship: British\nGroom Mother (First): Ligaya\nGroom Mother (Middle): Aquino\nGroom Mother (Last): De la Cruz\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Elena\nBride (Middle): Garcia\nBride (Last): Garcia\nBride Date of Birth: June 15, 1992\nBride Age: 39\nBride Place of Birth: Makati City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Alfredo\nBride Father (Middle): Castillo\nBride Father (Last): Lopez\nBride Father Citizenship: Filipino\nBride Mother (First): Corazon\nBride Mother (Middle): Sy\nBride Mother (Last): Villanueva\nBride Mother Citizenship: Filipino'
-    examples.append((t, {"entities": make_entities(t, [("2022-188","F90_REGISTRY_NO"),("December 5, 2021","F90_DATE_OF_REGISTRATION"),("Eduardo","F90_GROOM_FIRST"),("Garcia","F90_GROOM_MIDDLE"),("Garcia","F90_GROOM_LAST"),("August 6, 1994","F90_GROOM_DATE_OF_BIRTH"),("44","F90_GROOM_AGE"),("Pasay City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Japanese","F90_GROOM_CITIZENSHIP"),("Carlos","F90_GROOM_FATHER_FIRST"),("Fernandez","F90_GROOM_FATHER_MIDDLE"),("Go","F90_GROOM_FATHER_LAST"),("British","F90_GROOM_FATHER_CITIZENSHIP"),("Ligaya","F90_GROOM_MOTHER_FIRST"),("Aquino","F90_GROOM_MOTHER_MIDDLE"),("De la Cruz","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Elena","F90_BRIDE_FIRST"),("Garcia","F90_BRIDE_MIDDLE"),("Garcia","F90_BRIDE_LAST"),("June 15, 1992","F90_BRIDE_DATE_OF_BIRTH"),("39","F90_BRIDE_AGE"),("Makati City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Alfredo","F90_BRIDE_FATHER_FIRST"),("Castillo","F90_BRIDE_FATHER_MIDDLE"),("Lopez","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Corazon","F90_BRIDE_MOTHER_FIRST"),("Sy","F90_BRIDE_MOTHER_MIDDLE"),("Villanueva","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
-    t = 'Registry No.: 2021-254\nML Date of Registration: January 15, 2020\nGROOM\nGroom (First): Miguel\nGroom (Middle): Torres\nGroom (Last): Torres\nGroom Date of Birth: March 20, 1992\nGroom Age: 33\nGroom Place of Birth: Cagayan de Oro\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Antonio\nGroom Father (Middle): Bautista\nGroom Father (Last): Mendoza\nGroom Father Citizenship: Filipino\nGroom Mother (First): Lourdes\nGroom Mother (Middle): Reyes\nGroom Mother (Last): Lim\nGroom Mother Citizenship: British\nBRIDE\nBride (First): Sofia\nBride (Middle): Torres\nBride (Last): Torres\nBride Date of Birth: March 10, 1994\nBride Age: 28\nBride Place of Birth: Antipolo City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Ricardo\nBride Father (Middle): Aquino\nBride Father (Last): De la Cruz\nBride Father Citizenship: Japanese\nBride Mother (First): Felicidad\nBride Mother (Middle): Villanueva\nBride Mother (Last): Gonzales\nBride Mother Citizenship: Filipino'
-    examples.append((t, {"entities": make_entities(t, [("2021-254","F90_REGISTRY_NO"),("January 15, 2020","F90_DATE_OF_REGISTRATION"),("Miguel","F90_GROOM_FIRST"),("Torres","F90_GROOM_MIDDLE"),("Torres","F90_GROOM_LAST"),("March 20, 1992","F90_GROOM_DATE_OF_BIRTH"),("33","F90_GROOM_AGE"),("Cagayan de Oro","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Antonio","F90_GROOM_FATHER_FIRST"),("Bautista","F90_GROOM_FATHER_MIDDLE"),("Mendoza","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Lourdes","F90_GROOM_MOTHER_FIRST"),("Reyes","F90_GROOM_MOTHER_MIDDLE"),("Lim","F90_GROOM_MOTHER_LAST"),("British","F90_GROOM_MOTHER_CITIZENSHIP"),("Sofia","F90_BRIDE_FIRST"),("Torres","F90_BRIDE_MIDDLE"),("Torres","F90_BRIDE_LAST"),("March 10, 1994","F90_BRIDE_DATE_OF_BIRTH"),("28","F90_BRIDE_AGE"),("Antipolo City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Ricardo","F90_BRIDE_FATHER_FIRST"),("Aquino","F90_BRIDE_FATHER_MIDDLE"),("De la Cruz","F90_BRIDE_FATHER_LAST"),("Japanese","F90_BRIDE_FATHER_CITIZENSHIP"),("Felicidad","F90_BRIDE_MOTHER_FIRST"),("Villanueva","F90_BRIDE_MOTHER_MIDDLE"),("Gonzales","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")])}))
+
+    # ── Example 1 — Based on actual Accountable Form No. 54 ──────────────────
+    t = (
+        "Accountable Form No. 54 Form No. 10\n"
+        "Republic of the Philippines\n"
+        "City or Municipality of Mandaluyong City\n"
+        "Province of Metro Manila\n"
+        "No. 5975035\n"
+        "MARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\n"
+        "This is to certify that Erastus Noel T. Delizo aged 42 years and 10 months\n"
+        "and resident of No. 17 Tehran St., BF Homes International Las Pinas City\n"
+        "may legally contract marriage\n"
+        "with Maria Fatima A. Villena aged 30 years\n"
+        "and resident of 709-A Coronado St., Brgy. Hulo Mandaluyong City\n"
+        "having paid the license fee of P2.00 prescribed under\n"
+        "Articles 65 of Republic Act No. 386.\n"
+        "issued this 17th day of October, 2008\n"
+        "MARRIAGE LICENSE VALID UNTIL FEB 13 2009\n"
+        "Local Civil Registrar of Mandaluyong City"
+    )
+    examples.append((t, {"entities": make_entities(t, [
+        ("5975035",                                           "F90_REGISTRY_NO"),
+        ("Erastus",                                          "F90_GROOM_FIRST"),
+        ("Noel T.",                                          "F90_GROOM_MIDDLE"),
+        ("Delizo",                                           "F90_GROOM_LAST"),
+        ("42",                                               "F90_GROOM_AGE"),
+        ("No. 17 Tehran St., BF Homes International Las Pinas City", "F90_GROOM_RESIDENCE"),
+        ("Maria",                                            "F90_BRIDE_FIRST"),
+        ("Fatima A.",                                        "F90_BRIDE_MIDDLE"),
+        ("Villena",                                          "F90_BRIDE_LAST"),
+        ("30",                                               "F90_BRIDE_AGE"),
+        ("709-A Coronado St., Brgy. Hulo Mandaluyong City",  "F90_BRIDE_RESIDENCE"),
+        ("17th day of October, 2008",                        "F90_DATE_OF_ISSUANCE"),
+    ])}))
+
+    # ── Example 2 ─────────────────────────────────────────────────────────────
+    t = (
+        "Accountable Form No. 54 Form No. 10\n"
+        "City or Municipality of Quezon City\n"
+        "No. 4812033\n"
+        "MARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\n"
+        "ML Date of Registration: January 5, 2020\n"
+        "This is to certify that Jose Santos Ramos aged 29 years\n"
+        "and resident of 123 Rizal Street Makati City\n"
+        "may legally contract marriage\n"
+        "with Maria Garcia Torres aged 26 years\n"
+        "and resident of 456 Mabini Avenue Quezon City\n"
+        "license fee Articles 65 Republic Act No. 386\n"
+        "issued this 5th day of January, 2020\n"
+        "MARRIAGE LICENSE VALID UNTIL May 4, 2020\n"
+        "Local Civil Registrar of Quezon City"
+    )
+    examples.append((t, {"entities": make_entities(t, [
+        ("4812033",                       "F90_REGISTRY_NO"),
+        ("January 5, 2020",              "F90_DATE_OF_REGISTRATION"),
+        ("Jose",                          "F90_GROOM_FIRST"),
+        ("Santos",                        "F90_GROOM_MIDDLE"),
+        ("Ramos",                         "F90_GROOM_LAST"),
+        ("29",                            "F90_GROOM_AGE"),
+        ("123 Rizal Street Makati City",  "F90_GROOM_RESIDENCE"),
+        ("Maria",                         "F90_BRIDE_FIRST"),
+        ("Garcia",                        "F90_BRIDE_MIDDLE"),
+        ("Torres",                        "F90_BRIDE_LAST"),
+        ("26",                            "F90_BRIDE_AGE"),
+        ("456 Mabini Avenue Quezon City", "F90_BRIDE_RESIDENCE"),
+        ("5th day of January, 2020",      "F90_DATE_OF_ISSUANCE"),
+    ])}))
+
+    # ── Example 3 ─────────────────────────────────────────────────────────────
+    t = (
+        "Accountable Form No. 54 Form No. 10\n"
+        "City or Municipality of Taguig City\n"
+        "No. 6023441\n"
+        "MARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\n"
+        "ML Date of Registration: March 10, 2022\n"
+        "This is to certify that Carlos Reyes Mendoza aged 35 years\n"
+        "and resident of 88 Aurora Blvd., Brgy. Bagumbayan Taguig City\n"
+        "may legally contract marriage\n"
+        "with Ana dela Cruz Santos aged 31 years\n"
+        "and resident of 22 Magsaysay Ave., Brgy. Hulo Mandaluyong City\n"
+        "having paid the license fee prescribed under Articles 65 of Republic Act No. 386\n"
+        "issued this 10th day of March, 2022\n"
+        "MARRIAGE LICENSE VALID UNTIL July 7, 2022"
+    )
+    examples.append((t, {"entities": make_entities(t, [
+        ("6023441",                                            "F90_REGISTRY_NO"),
+        ("March 10, 2022",                                    "F90_DATE_OF_REGISTRATION"),
+        ("Carlos",                                             "F90_GROOM_FIRST"),
+        ("Reyes",                                              "F90_GROOM_MIDDLE"),
+        ("Mendoza",                                            "F90_GROOM_LAST"),
+        ("35",                                                 "F90_GROOM_AGE"),
+        ("88 Aurora Blvd., Brgy. Bagumbayan Taguig City",     "F90_GROOM_RESIDENCE"),
+        ("Ana",                                                "F90_BRIDE_FIRST"),
+        ("dela Cruz",                                          "F90_BRIDE_MIDDLE"),
+        ("Santos",                                             "F90_BRIDE_LAST"),
+        ("31",                                                 "F90_BRIDE_AGE"),
+        ("22 Magsaysay Ave., Brgy. Hulo Mandaluyong City",    "F90_BRIDE_RESIDENCE"),
+        ("10th day of March, 2022",                           "F90_DATE_OF_ISSUANCE"),
+    ])}))
+
+    # ── Example 4 ─────────────────────────────────────────────────────────────
+    t = (
+        "Accountable Form No. 54 Form No. 10\n"
+        "City or Municipality of Cebu City\n"
+        "No. 3901122\n"
+        "MARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\n"
+        "ML Date of Registration: July 20, 2019\n"
+        "This is to certify that Roberto dela Cruz Villanueva aged 28 years\n"
+        "and resident of 5 Osmena Blvd., Cebu City\n"
+        "may legally contract marriage\n"
+        "with Gloria Santos Aquino aged 25 years\n"
+        "and resident of 10 Colon Street, Cebu City\n"
+        "license fee P2.00 Articles 65 Republic Act No. 386\n"
+        "issued this 20th day of July, 2019\n"
+        "MARRIAGE LICENSE VALID UNTIL November 16, 2019\n"
+        "Local Civil Registrar of Cebu City"
+    )
+    examples.append((t, {"entities": make_entities(t, [
+        ("3901122",                     "F90_REGISTRY_NO"),
+        ("July 20, 2019",              "F90_DATE_OF_REGISTRATION"),
+        ("Roberto",                     "F90_GROOM_FIRST"),
+        ("dela Cruz",                   "F90_GROOM_MIDDLE"),
+        ("Villanueva",                  "F90_GROOM_LAST"),
+        ("28",                          "F90_GROOM_AGE"),
+        ("5 Osmena Blvd., Cebu City",  "F90_GROOM_RESIDENCE"),
+        ("Gloria",                      "F90_BRIDE_FIRST"),
+        ("Santos",                      "F90_BRIDE_MIDDLE"),
+        ("Aquino",                      "F90_BRIDE_LAST"),
+        ("25",                          "F90_BRIDE_AGE"),
+        ("10 Colon Street, Cebu City", "F90_BRIDE_RESIDENCE"),
+        ("20th day of July, 2019",     "F90_DATE_OF_ISSUANCE"),
+    ])}))
+
+    # ── Example 5 ─────────────────────────────────────────────────────────────
+    t = (
+        "Accountable Form No. 54 Form No. 10\n"
+        "City or Municipality of Davao City\n"
+        "No. 7140089\n"
+        "MARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\n"
+        "ML Date of Registration: 05/10/2021\n"
+        "This is to certify that Pedro Bautista Flores aged 33 years\n"
+        "and resident of 300 JP Laurel Ave., Davao City\n"
+        "may legally contract marriage\n"
+        "with Lourdes Navarro Castillo aged 30 years\n"
+        "and resident of 45 Pichon Street, Davao City\n"
+        "Articles 65 Republic Act No. 386\n"
+        "issued this 10th day of May, 2021\n"
+        "MARRIAGE LICENSE VALID UNTIL 09/06/2021"
+    )
+    examples.append((t, {"entities": make_entities(t, [
+        ("7140089",                         "F90_REGISTRY_NO"),
+        ("05/10/2021",                      "F90_DATE_OF_REGISTRATION"),
+        ("Pedro",                            "F90_GROOM_FIRST"),
+        ("Bautista",                         "F90_GROOM_MIDDLE"),
+        ("Flores",                           "F90_GROOM_LAST"),
+        ("33",                               "F90_GROOM_AGE"),
+        ("300 JP Laurel Ave., Davao City",  "F90_GROOM_RESIDENCE"),
+        ("Lourdes",                          "F90_BRIDE_FIRST"),
+        ("Navarro",                          "F90_BRIDE_MIDDLE"),
+        ("Castillo",                         "F90_BRIDE_LAST"),
+        ("30",                               "F90_BRIDE_AGE"),
+        ("45 Pichon Street, Davao City",    "F90_BRIDE_RESIDENCE"),
+        ("10th day of May, 2021",           "F90_DATE_OF_ISSUANCE"),
+    ])}))
+
+    # ── Example 6 ─────────────────────────────────────────────────────────────
+    t = (
+        "Accountable Form No. 54 Form No. 10\n"
+        "City or Municipality of Makati City\n"
+        "No. 8812501\n"
+        "MARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\n"
+        "ML Date of Registration: November 15, 2023\n"
+        "This is to certify that Juan dela Paz Ocampo aged 40 years\n"
+        "and resident of Unit 4B, Torre de Manila, Ermita, Manila\n"
+        "may legally contract marriage\n"
+        "with Elena Soriano Reyes aged 36 years\n"
+        "and resident of 12 Gen. Luna Street, Intramuros, Manila\n"
+        "license fee P2.00 prescribed under Articles 65 of Republic Act No. 386\n"
+        "issued this 15th day of November, 2023\n"
+        "MARRIAGE LICENSE VALID UNTIL March 13, 2024\n"
+        "Local Civil Registrar of Makati City"
+    )
+    examples.append((t, {"entities": make_entities(t, [
+        ("8812501",                                       "F90_REGISTRY_NO"),
+        ("November 15, 2023",                            "F90_DATE_OF_REGISTRATION"),
+        ("Juan",                                          "F90_GROOM_FIRST"),
+        ("dela Paz",                                      "F90_GROOM_MIDDLE"),
+        ("Ocampo",                                        "F90_GROOM_LAST"),
+        ("40",                                            "F90_GROOM_AGE"),
+        ("Unit 4B, Torre de Manila, Ermita, Manila",     "F90_GROOM_RESIDENCE"),
+        ("Elena",                                         "F90_BRIDE_FIRST"),
+        ("Soriano",                                       "F90_BRIDE_MIDDLE"),
+        ("Reyes",                                         "F90_BRIDE_LAST"),
+        ("36",                                            "F90_BRIDE_AGE"),
+        ("12 Gen. Luna Street, Intramuros, Manila",      "F90_BRIDE_RESIDENCE"),
+        ("15th day of November, 2023",                   "F90_DATE_OF_ISSUANCE"),
+    ])}))
+
+    # ── Example 7 ─────────────────────────────────────────────────────────────
+    t = (
+        "Accountable Form No. 54 Form No. 10\n"
+        "City or Municipality of Iloilo City\n"
+        "No. 2255019\n"
+        "MARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\n"
+        "ML Date of Registration: 14 February 2018\n"
+        "This is to certify that Marco Espiritu Padilla aged 27 years\n"
+        "and resident of Brgy. Molo, Iloilo City\n"
+        "may legally contract marriage\n"
+        "with Sheila Aguilar Navarro aged 24 years\n"
+        "and resident of Brgy. La Paz, Iloilo City\n"
+        "having paid the license fee prescribed under Articles 65 of Republic Act No. 386\n"
+        "issued this 14th day of February, 2018\n"
+        "MARRIAGE LICENSE VALID UNTIL June 13, 2018"
+    )
+    examples.append((t, {"entities": make_entities(t, [
+        ("2255019",                     "F90_REGISTRY_NO"),
+        ("14 February 2018",           "F90_DATE_OF_REGISTRATION"),
+        ("Marco",                       "F90_GROOM_FIRST"),
+        ("Espiritu",                    "F90_GROOM_MIDDLE"),
+        ("Padilla",                     "F90_GROOM_LAST"),
+        ("27",                          "F90_GROOM_AGE"),
+        ("Brgy. Molo, Iloilo City",    "F90_GROOM_RESIDENCE"),
+        ("Sheila",                      "F90_BRIDE_FIRST"),
+        ("Aguilar",                     "F90_BRIDE_MIDDLE"),
+        ("Navarro",                     "F90_BRIDE_LAST"),
+        ("24",                          "F90_BRIDE_AGE"),
+        ("Brgy. La Paz, Iloilo City",  "F90_BRIDE_RESIDENCE"),
+        ("14th day of February, 2018", "F90_DATE_OF_ISSUANCE"),
+    ])}))
+
+    # ── Example 8 ─────────────────────────────────────────────────────────────
+    t = (
+        "Accountable Form No. 54 Form No. 10\n"
+        "City or Municipality of Caloocan City\n"
+        "No. 9030871\n"
+        "MARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\n"
+        "ML Date of Registration: 08/22/2016\n"
+        "This is to certify that Dante Aquino Villanueva aged 32 years\n"
+        "and resident of 18 Samson Road, Caloocan City\n"
+        "may legally contract marriage\n"
+        "with Diana Cruz Santos aged 28 years\n"
+        "and resident of 99 A. Mabini Street, Malabon City\n"
+        "Articles 65 Republic Act No. 386\n"
+        "issued this 22nd day of August, 2016\n"
+        "MARRIAGE LICENSE VALID UNTIL 12/19/2016\n"
+        "Local Civil Registrar of Caloocan City"
+    )
+    examples.append((t, {"entities": make_entities(t, [
+        ("9030871",                             "F90_REGISTRY_NO"),
+        ("08/22/2016",                          "F90_DATE_OF_REGISTRATION"),
+        ("Dante",                                "F90_GROOM_FIRST"),
+        ("Aquino",                               "F90_GROOM_MIDDLE"),
+        ("Villanueva",                           "F90_GROOM_LAST"),
+        ("32",                                   "F90_GROOM_AGE"),
+        ("18 Samson Road, Caloocan City",       "F90_GROOM_RESIDENCE"),
+        ("Diana",                                "F90_BRIDE_FIRST"),
+        ("Cruz",                                 "F90_BRIDE_MIDDLE"),
+        ("Santos",                               "F90_BRIDE_LAST"),
+        ("28",                                   "F90_BRIDE_AGE"),
+        ("99 A. Mabini Street, Malabon City",   "F90_BRIDE_RESIDENCE"),
+        ("22nd day of August, 2016",            "F90_DATE_OF_ISSUANCE"),
+    ])}))
+
+    # ── Example 9 ─────────────────────────────────────────────────────────────
+    t = (
+        "Accountable Form No. 54 Form No. 10\n"
+        "City or Municipality of Paranaque City\n"
+        "No. 5501340\n"
+        "MARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\n"
+        "ML Date of Registration: June 1, 2024\n"
+        "This is to certify that Lester Gomez Padilla aged 33 years\n"
+        "and resident of 7 BF Resort Village, Las Pinas City\n"
+        "may legally contract marriage\n"
+        "with Leslie Navarro Espiritu aged 29 years\n"
+        "and resident of 3 Moonwalk Subdivision, Paranaque City\n"
+        "having paid the license fee of P2.00 prescribed under Articles 65 of Republic Act No. 386\n"
+        "issued this 1st day of June, 2024\n"
+        "MARRIAGE LICENSE VALID UNTIL September 28, 2024\n"
+        "Local Civil Registrar of Paranaque City"
+    )
+    examples.append((t, {"entities": make_entities(t, [
+        ("5501340",                                   "F90_REGISTRY_NO"),
+        ("June 1, 2024",                             "F90_DATE_OF_REGISTRATION"),
+        ("Lester",                                    "F90_GROOM_FIRST"),
+        ("Gomez",                                     "F90_GROOM_MIDDLE"),
+        ("Padilla",                                   "F90_GROOM_LAST"),
+        ("33",                                        "F90_GROOM_AGE"),
+        ("7 BF Resort Village, Las Pinas City",      "F90_GROOM_RESIDENCE"),
+        ("Leslie",                                    "F90_BRIDE_FIRST"),
+        ("Navarro",                                   "F90_BRIDE_MIDDLE"),
+        ("Espiritu",                                  "F90_BRIDE_LAST"),
+        ("29",                                        "F90_BRIDE_AGE"),
+        ("3 Moonwalk Subdivision, Paranaque City",   "F90_BRIDE_RESIDENCE"),
+        ("1st day of June, 2024",                    "F90_DATE_OF_ISSUANCE"),
+    ])}))
+
+    # ── Example 10 ────────────────────────────────────────────────────────────
+    t = (
+        "Accountable Form No. 54 Form No. 10\n"
+        "City or Municipality of Pasig City\n"
+        "No. 3340092\n"
+        "MARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\n"
+        "ML Date of Registration: September 3, 2015\n"
+        "This is to certify that Eduardo Garcia Mendoza aged 38 years\n"
+        "and resident of Blk 5 Lot 3, Greenpark Village, Pasig City\n"
+        "may legally contract marriage\n"
+        "with Elena Torres Garcia aged 34 years\n"
+        "and resident of 101 Shaw Boulevard, Mandaluyong City\n"
+        "license fee P2.00 Articles 65 Republic Act No. 386\n"
+        "issued this 3rd day of September, 2015\n"
+        "MARRIAGE LICENSE VALID UNTIL January 30, 2016\n"
+        "Local Civil Registrar of Pasig City"
+    )
+    examples.append((t, {"entities": make_entities(t, [
+        ("3340092",                                       "F90_REGISTRY_NO"),
+        ("September 3, 2015",                            "F90_DATE_OF_REGISTRATION"),
+        ("Eduardo",                                       "F90_GROOM_FIRST"),
+        ("Garcia",                                        "F90_GROOM_MIDDLE"),
+        ("Mendoza",                                       "F90_GROOM_LAST"),
+        ("38",                                            "F90_GROOM_AGE"),
+        ("Blk 5 Lot 3, Greenpark Village, Pasig City",  "F90_GROOM_RESIDENCE"),
+        ("Elena",                                         "F90_BRIDE_FIRST"),
+        ("Torres",                                        "F90_BRIDE_MIDDLE"),
+        ("Garcia",                                        "F90_BRIDE_LAST"),
+        ("34",                                            "F90_BRIDE_AGE"),
+        ("101 Shaw Boulevard, Mandaluyong City",         "F90_BRIDE_RESIDENCE"),
+        ("3rd day of September, 2015",                   "F90_DATE_OF_ISSUANCE"),
+    ])}))
+
+    # ── Examples 11–21 (date-format + address variation boosters) ─────────────
+    short_formats = [
+        ("Accountable Form No. 54 Form No. 10\nCity of Marikina\nNo. 1122334\nMARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\nML Date of Registration: 03/15/2017\nThis is to certify that Victor Cruz Dela Cruz aged 30 years\nand resident of 5 Park Ave., Marikina City\nmay legally contract marriage\nwith Nena Reyes Santos aged 27 years\nand resident of 12 Sumulong Hwy., Marikina City\nArticles 65 Republic Act No. 386\nissued this 15th day of March, 2017\nMARRIAGE LICENSE VALID UNTIL 07/12/2017",
+         [("1122334","F90_REGISTRY_NO"),("03/15/2017","F90_DATE_OF_REGISTRATION"),("Victor","F90_GROOM_FIRST"),("Cruz","F90_GROOM_MIDDLE"),("Dela Cruz","F90_GROOM_LAST"),("30","F90_GROOM_AGE"),("5 Park Ave., Marikina City","F90_GROOM_RESIDENCE"),("Nena","F90_BRIDE_FIRST"),("Reyes","F90_BRIDE_MIDDLE"),("Santos","F90_BRIDE_LAST"),("27","F90_BRIDE_AGE"),("12 Sumulong Hwy., Marikina City","F90_BRIDE_RESIDENCE"),("15th day of March, 2017","F90_DATE_OF_ISSUANCE")]),
+
+        ("Accountable Form No. 54 Form No. 10\nCity of Valenzuela\nNo. 8843210\nMARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\nML Date of Registration: 20 August 2020\nThis is to certify that Dennis Cruz Padilla aged 45 years\nand resident of 33 Karuhatan Road, Valenzuela City\nmay legally contract marriage\nwith Carla Torres Santos aged 40 years\nand resident of 7 Dalangin Street, Valenzuela City\nArticles 65 Republic Act No. 386\nissued this 20th day of August, 2020\nMARRIAGE LICENSE VALID UNTIL 16 December 2020",
+         [("8843210","F90_REGISTRY_NO"),("20 August 2020","F90_DATE_OF_REGISTRATION"),("Dennis","F90_GROOM_FIRST"),("Cruz","F90_GROOM_MIDDLE"),("Padilla","F90_GROOM_LAST"),("45","F90_GROOM_AGE"),("33 Karuhatan Road, Valenzuela City","F90_GROOM_RESIDENCE"),("Carla","F90_BRIDE_FIRST"),("Torres","F90_BRIDE_MIDDLE"),("Santos","F90_BRIDE_LAST"),("40","F90_BRIDE_AGE"),("7 Dalangin Street, Valenzuela City","F90_BRIDE_RESIDENCE"),("20th day of August, 2020","F90_DATE_OF_ISSUANCE")]),
+
+        ("Accountable Form No. 54 Form No. 10\nCity of San Juan\nNo. 4419933\nMARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\nML Date of Registration: December 28, 2013\nThis is to certify that Anthony Villafuerte Cruz aged 32 years\nand resident of 44 N. Domingo Street, San Juan City\nmay legally contract marriage\nwith Lovely Hernandez Santos aged 28 years\nand resident of 9 Pinaglabanan Street, San Juan City\nArticles 65 Republic Act No. 386\nissued this 28th day of December, 2013\nMARRIAGE LICENSE VALID UNTIL April 26, 2014\nLocal Civil Registrar of San Juan City",
+         [("4419933","F90_REGISTRY_NO"),("December 28, 2013","F90_DATE_OF_REGISTRATION"),("Anthony","F90_GROOM_FIRST"),("Villafuerte","F90_GROOM_MIDDLE"),("Cruz","F90_GROOM_LAST"),("32","F90_GROOM_AGE"),("44 N. Domingo Street, San Juan City","F90_GROOM_RESIDENCE"),("Lovely","F90_BRIDE_FIRST"),("Hernandez","F90_BRIDE_MIDDLE"),("Santos","F90_BRIDE_LAST"),("28","F90_BRIDE_AGE"),("9 Pinaglabanan Street, San Juan City","F90_BRIDE_RESIDENCE"),("28th day of December, 2013","F90_DATE_OF_ISSUANCE")]),
+
+        ("Accountable Form No. 54 Form No. 10\nMunicipality of Tarlac City\nNo. 6617204\nMARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\nML Date of Registration: 04/18/2011\nThis is to certify that Marco dela Paz Valdez aged 26 years\nand resident of Brgy. San Miguel, Tarlac City\nmay legally contract marriage\nwith Marcia Castillo de Guzman aged 22 years\nand resident of Brgy. Sto. Cristo, Tarlac City\nArticles 65 Republic Act No. 386\nissued this 18th day of April, 2011\nMARRIAGE LICENSE VALID UNTIL 08/15/2011",
+         [("6617204","F90_REGISTRY_NO"),("04/18/2011","F90_DATE_OF_REGISTRATION"),("Marco","F90_GROOM_FIRST"),("dela Paz","F90_GROOM_MIDDLE"),("Valdez","F90_GROOM_LAST"),("26","F90_GROOM_AGE"),("Brgy. San Miguel, Tarlac City","F90_GROOM_RESIDENCE"),("Marcia","F90_BRIDE_FIRST"),("Castillo","F90_BRIDE_MIDDLE"),("de Guzman","F90_BRIDE_LAST"),("22","F90_BRIDE_AGE"),("Brgy. Sto. Cristo, Tarlac City","F90_BRIDE_RESIDENCE"),("18th day of April, 2011","F90_DATE_OF_ISSUANCE")]),
+
+        ("Accountable Form No. 54 Form No. 10\nCity of Muntinlupa\nNo. 7700145\nMARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\nML Date of Registration: 10 March 2009\nThis is to certify that Nathan Ramos Padilla aged 22 years\nand resident of Blk 2 Lot 5, Alabang Hills, Muntinlupa City\nmay legally contract marriage\nwith Hazel Aguilar Dela Cruz aged 20 years\nand resident of 6 Crestwood Drive, Alabang, Muntinlupa City\nArticles 65 Republic Act No. 386\nissued this 10th day of March, 2009\nMARRIAGE LICENSE VALID UNTIL 07/07/2009",
+         [("7700145","F90_REGISTRY_NO"),("10 March 2009","F90_DATE_OF_REGISTRATION"),("Nathan","F90_GROOM_FIRST"),("Ramos","F90_GROOM_MIDDLE"),("Padilla","F90_GROOM_LAST"),("22","F90_GROOM_AGE"),("Blk 2 Lot 5, Alabang Hills, Muntinlupa City","F90_GROOM_RESIDENCE"),("Hazel","F90_BRIDE_FIRST"),("Aguilar","F90_BRIDE_MIDDLE"),("Dela Cruz","F90_BRIDE_LAST"),("20","F90_BRIDE_AGE"),("6 Crestwood Drive, Alabang, Muntinlupa City","F90_BRIDE_RESIDENCE"),("10th day of March, 2009","F90_DATE_OF_ISSUANCE")]),
+
+        ("Accountable Form No. 54 Form No. 10\nCity of Las Pinas\nNo. 5123098\nMARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\nML Date of Registration: May 5, 2022\nThis is to certify that Jerome Espiritu Ramos aged 29 years\nand resident of 14 Pulang Lupa, Las Pinas City\nmay legally contract marriage\nwith Felisa Torres Aguilar aged 26 years\nand resident of 20 CAA Road, Las Pinas City\nArticles 65 Republic Act No. 386\nissued this 5th day of May, 2022\nMARRIAGE LICENSE VALID UNTIL September 1, 2022\nLocal Civil Registrar of Las Pinas City",
+         [("5123098","F90_REGISTRY_NO"),("May 5, 2022","F90_DATE_OF_REGISTRATION"),("Jerome","F90_GROOM_FIRST"),("Espiritu","F90_GROOM_MIDDLE"),("Ramos","F90_GROOM_LAST"),("29","F90_GROOM_AGE"),("14 Pulang Lupa, Las Pinas City","F90_GROOM_RESIDENCE"),("Felisa","F90_BRIDE_FIRST"),("Torres","F90_BRIDE_MIDDLE"),("Aguilar","F90_BRIDE_LAST"),("26","F90_BRIDE_AGE"),("20 CAA Road, Las Pinas City","F90_BRIDE_RESIDENCE"),("5th day of May, 2022","F90_DATE_OF_ISSUANCE")]),
+
+        ("Accountable Form No. 54 Form No. 10\nCity of Malabon\nNo. 9988776\nMARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\nML Date of Registration: 01/30/2024\nThis is to certify that Gerald Catalan Marquez aged 28 years\nand resident of 55 Longos, Malabon City\nmay legally contract marriage\nwith Camille Aguilar Ramos aged 25 years\nand resident of 11 Tinajeros, Malabon City\nArticles 65 Republic Act No. 386\nissued this 30th day of January, 2024\nMARRIAGE LICENSE VALID UNTIL 05/28/2024",
+         [("9988776","F90_REGISTRY_NO"),("01/30/2024","F90_DATE_OF_REGISTRATION"),("Gerald","F90_GROOM_FIRST"),("Catalan","F90_GROOM_MIDDLE"),("Marquez","F90_GROOM_LAST"),("28","F90_GROOM_AGE"),("55 Longos, Malabon City","F90_GROOM_RESIDENCE"),("Camille","F90_BRIDE_FIRST"),("Aguilar","F90_BRIDE_MIDDLE"),("Ramos","F90_BRIDE_LAST"),("25","F90_BRIDE_AGE"),("11 Tinajeros, Malabon City","F90_BRIDE_RESIDENCE"),("30th day of January, 2024","F90_DATE_OF_ISSUANCE")]),
+
+        ("Accountable Form No. 54 Form No. 10\nCity of Navotas\nNo. 3301210\nMARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\nML Date of Registration: 25 September 2010\nThis is to certify that Joshua Bautista Enriquez aged 23 years\nand resident of 8 M. Naval Street, Navotas City\nmay legally contract marriage\nwith Natividad Ramos Bautista aged 21 years\nand resident of 3 Tanza Street, Navotas City\nArticles 65 Republic Act No. 386\nissued this 25th day of September, 2010\nMARRIAGE LICENSE VALID UNTIL January 21, 2011",
+         [("3301210","F90_REGISTRY_NO"),("25 September 2010","F90_DATE_OF_REGISTRATION"),("Joshua","F90_GROOM_FIRST"),("Bautista","F90_GROOM_MIDDLE"),("Enriquez","F90_GROOM_LAST"),("23","F90_GROOM_AGE"),("8 M. Naval Street, Navotas City","F90_GROOM_RESIDENCE"),("Natividad","F90_BRIDE_FIRST"),("Ramos","F90_BRIDE_MIDDLE"),("Bautista","F90_BRIDE_LAST"),("21","F90_BRIDE_AGE"),("3 Tanza Street, Navotas City","F90_BRIDE_RESIDENCE"),("25th day of September, 2010","F90_DATE_OF_ISSUANCE")]),
+
+        ("Accountable Form No. 54 Form No. 10\nCity of Mandaluyong\nNo. 4402987\nMARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\nML Date of Registration: August 8, 2023\nThis is to certify that Kenneth Garcia Pascual aged 31 years\nand resident of 34 Wack-Wack Village, Mandaluyong City\nmay legally contract marriage\nwith Emelinda dela Cruz Reyes aged 28 years\nand resident of 22 Vergara Street, Mandaluyong City\nArticles 65 Republic Act No. 386\nissued this 8th day of August, 2023\nMARRIAGE LICENSE VALID UNTIL December 5, 2023\nLocal Civil Registrar of Mandaluyong City",
+         [("4402987","F90_REGISTRY_NO"),("August 8, 2023","F90_DATE_OF_REGISTRATION"),("Kenneth","F90_GROOM_FIRST"),("Garcia","F90_GROOM_MIDDLE"),("Pascual","F90_GROOM_LAST"),("31","F90_GROOM_AGE"),("34 Wack-Wack Village, Mandaluyong City","F90_GROOM_RESIDENCE"),("Emelinda","F90_BRIDE_FIRST"),("dela Cruz","F90_BRIDE_MIDDLE"),("Reyes","F90_BRIDE_LAST"),("28","F90_BRIDE_AGE"),("22 Vergara Street, Mandaluyong City","F90_BRIDE_RESIDENCE"),("8th day of August, 2023","F90_DATE_OF_ISSUANCE")]),
+
+        ("Accountable Form No. 54 Form No. 10\nMunicipality of Antipolo City\nNo. 6693021\nMARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\nML Date of Registration: 12/12/2007\nThis is to certify that Rodrigo dela Torre Villanueva aged 35 years\nand resident of Brgy. San Roque, Antipolo City\nmay legally contract marriage\nwith Precious Buenaventura Hernandez aged 32 years\nand resident of Brgy. San Luis, Antipolo City\nArticles 65 Republic Act No. 386\nissued this 12th day of December, 2007\nMARRIAGE LICENSE VALID UNTIL 04/09/2008",
+         [("6693021","F90_REGISTRY_NO"),("12/12/2007","F90_DATE_OF_REGISTRATION"),("Rodrigo","F90_GROOM_FIRST"),("dela Torre","F90_GROOM_MIDDLE"),("Villanueva","F90_GROOM_LAST"),("35","F90_GROOM_AGE"),("Brgy. San Roque, Antipolo City","F90_GROOM_RESIDENCE"),("Precious","F90_BRIDE_FIRST"),("Buenaventura","F90_BRIDE_MIDDLE"),("Hernandez","F90_BRIDE_LAST"),("32","F90_BRIDE_AGE"),("Brgy. San Luis, Antipolo City","F90_BRIDE_RESIDENCE"),("12th day of December, 2007","F90_DATE_OF_ISSUANCE")]),
+
+        ("Accountable Form No. 54 Form No. 10\nCity of Bacoor\nNo. 5039877\nMARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\nML Date of Registration: February 20, 2014\nThis is to certify that Patrick Soriano Navarro aged 30 years\nand resident of 7 Habay I, Bacoor City, Cavite\nmay legally contract marriage\nwith Donna Evangelista Cruz aged 27 years\nand resident of 15 Molino III, Bacoor City, Cavite\nArticles 65 Republic Act No. 386\nissued this 20th day of February, 2014\nMARRIAGE LICENSE VALID UNTIL June 19, 2014\nLocal Civil Registrar of Bacoor City",
+         [("5039877","F90_REGISTRY_NO"),("February 20, 2014","F90_DATE_OF_REGISTRATION"),("Patrick","F90_GROOM_FIRST"),("Soriano","F90_GROOM_MIDDLE"),("Navarro","F90_GROOM_LAST"),("30","F90_GROOM_AGE"),("7 Habay I, Bacoor City, Cavite","F90_GROOM_RESIDENCE"),("Donna","F90_BRIDE_FIRST"),("Evangelista","F90_BRIDE_MIDDLE"),("Cruz","F90_BRIDE_LAST"),("27","F90_BRIDE_AGE"),("15 Molino III, Bacoor City, Cavite","F90_BRIDE_RESIDENCE"),("20th day of February, 2014","F90_DATE_OF_ISSUANCE")]),
+    ]
+    for t, pairs in short_formats:
+        examples.append((t, {"entities": make_entities(t, pairs)}))
+
     return examples
 
-# ============================================================
-# WEAK LABEL BOOSTER EXAMPLES
+
 # Target: DATE_OF_REGISTRATION (all forms) — was 0–40% F1
 #         F90_GROOM/BRIDE_DATE_OF_BIRTH — was 29–35% F1
 #         F102_CHILD_LAST — was 40% F1
@@ -621,20 +917,22 @@ def weak_label_booster_examples():
     for t, pairs in formats_97:
         examples.append((t, {"entities": make_entities(t, pairs)}))
 
-    # ── DATE_OF_REGISTRATION + DATE_OF_BIRTH — Form 90 ───────
-    # These were the worst: F90_DATE_OF_REG=40%, GROOM/BRIDE_DOB=29-35%
+    # ── DATE_OF_REGISTRATION + DATE_OF_ISSUANCE — Form 90 ──
+    # Source: Accountable Form No. 54 / Form No. 10
+    # Target labels: F90_DATE_OF_REGISTRATION, F90_DATE_OF_ISSUANCE,
+    #                F90_GROOM/BRIDE_RESIDENCE (address variation)
     formats_90 = [
-        ("Registry No.: 2023-ML-055\nML Date of Registration: 03/05/2023\nGROOM\nGroom (First): Carlo\nGroom (Middle): Mendoza\nGroom (Last): Reyes\nGroom Date of Birth: 06/12/1990\nGroom Age: 33\nGroom Place of Birth: Taguig City\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Pedro\nGroom Father (Middle): Cruz\nGroom Father (Last): Reyes\nGroom Father Citizenship: Filipino\nGroom Mother (First): Rosa\nGroom Mother (Middle): Santos\nGroom Mother (Last): Reyes\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Carla\nBride (Middle): Torres\nBride (Last): Santos\nBride Date of Birth: 09/20/1994\nBride Age: 29\nBride Place of Birth: Makati City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Ramon\nBride Father (Middle): Flores\nBride Father (Last): Santos\nBride Father Citizenship: Filipino\nBride Mother (First): Nena\nBride Mother (Middle): Reyes\nBride Mother (Last): Santos\nBride Mother Citizenship: Filipino",
-         [("2023-ML-055","F90_REGISTRY_NO"),("03/05/2023","F90_DATE_OF_REGISTRATION"),("Carlo","F90_GROOM_FIRST"),("Mendoza","F90_GROOM_MIDDLE"),("Reyes","F90_GROOM_LAST"),("06/12/1990","F90_GROOM_DATE_OF_BIRTH"),("33","F90_GROOM_AGE"),("Taguig City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Pedro","F90_GROOM_FATHER_FIRST"),("Cruz","F90_GROOM_FATHER_MIDDLE"),("Reyes","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Rosa","F90_GROOM_MOTHER_FIRST"),("Santos","F90_GROOM_MOTHER_MIDDLE"),("Reyes","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Carla","F90_BRIDE_FIRST"),("Torres","F90_BRIDE_MIDDLE"),("Santos","F90_BRIDE_LAST"),("09/20/1994","F90_BRIDE_DATE_OF_BIRTH"),("29","F90_BRIDE_AGE"),("Makati City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Ramon","F90_BRIDE_FATHER_FIRST"),("Flores","F90_BRIDE_FATHER_MIDDLE"),("Santos","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Nena","F90_BRIDE_MOTHER_FIRST"),("Reyes","F90_BRIDE_MOTHER_MIDDLE"),("Santos","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")]),
+        ("Accountable Form No. 54 Form No. 10\nCity of Makati\nNo. 2023-ML-055\nMARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\nML Date of Registration: 03/05/2023\nThis is to certify that Carlo Mendoza Reyes aged 33 years\nand resident of 10 Ayala Ave., Makati City\nmay legally contract marriage\nwith Carla Torres Santos aged 29 years\nand resident of 5 Paseo de Roxas, Makati City\nArticles 65 Republic Act No. 386\nissued this 5th day of March, 2023\nMARRIAGE LICENSE VALID UNTIL 07/02/2023",
+         [("2023-ML-055","F90_REGISTRY_NO"),("03/05/2023","F90_DATE_OF_REGISTRATION"),("Carlo","F90_GROOM_FIRST"),("Mendoza","F90_GROOM_MIDDLE"),("Reyes","F90_GROOM_LAST"),("33","F90_GROOM_AGE"),("10 Ayala Ave., Makati City","F90_GROOM_RESIDENCE"),("Carla","F90_BRIDE_FIRST"),("Torres","F90_BRIDE_MIDDLE"),("Santos","F90_BRIDE_LAST"),("29","F90_BRIDE_AGE"),("5 Paseo de Roxas, Makati City","F90_BRIDE_RESIDENCE"),("5th day of March, 2023","F90_DATE_OF_ISSUANCE")]),
 
-        ("Registry No.: 2020-ML-121\nML Date of Registration: 14 February 2020\nGROOM\nGroom (First): Dante\nGroom (Middle): Aquino\nGroom (Last): Villanueva\nGroom Date of Birth: 20 April 1988\nGroom Age: 32\nGroom Place of Birth: Iloilo City\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Ernesto\nGroom Father (Middle): Santos\nGroom Father (Last): Villanueva\nGroom Father Citizenship: Filipino\nGroom Mother (First): Luz\nGroom Mother (Middle): Reyes\nGroom Mother (Last): Villanueva\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Diana\nBride (Middle): Cruz\nBride (Last): Aquino\nBride Date of Birth: 08 March 1993\nBride Age: 27\nBride Place of Birth: Bacolod City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Eduardo\nBride Father (Middle): Lim\nBride Father (Last): Aquino\nBride Father Citizenship: Filipino\nBride Mother (First): Perla\nBride Mother (Middle): Torres\nBride Mother (Last): Aquino\nBride Mother Citizenship: Filipino",
-         [("2020-ML-121","F90_REGISTRY_NO"),("14 February 2020","F90_DATE_OF_REGISTRATION"),("Dante","F90_GROOM_FIRST"),("Aquino","F90_GROOM_MIDDLE"),("Villanueva","F90_GROOM_LAST"),("20 April 1988","F90_GROOM_DATE_OF_BIRTH"),("32","F90_GROOM_AGE"),("Iloilo City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Ernesto","F90_GROOM_FATHER_FIRST"),("Santos","F90_GROOM_FATHER_MIDDLE"),("Villanueva","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Luz","F90_GROOM_MOTHER_FIRST"),("Reyes","F90_GROOM_MOTHER_MIDDLE"),("Villanueva","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Diana","F90_BRIDE_FIRST"),("Cruz","F90_BRIDE_MIDDLE"),("Aquino","F90_BRIDE_LAST"),("08 March 1993","F90_BRIDE_DATE_OF_BIRTH"),("27","F90_BRIDE_AGE"),("Bacolod City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Eduardo","F90_BRIDE_FATHER_FIRST"),("Lim","F90_BRIDE_FATHER_MIDDLE"),("Aquino","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Perla","F90_BRIDE_MOTHER_FIRST"),("Torres","F90_BRIDE_MOTHER_MIDDLE"),("Aquino","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")]),
+        ("Accountable Form No. 54 Form No. 10\nCity of Iloilo\nNo. 2020-ML-121\nMARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\nML Date of Registration: 14 February 2020\nThis is to certify that Dante Aquino Villanueva aged 32 years\nand resident of Brgy. Mandurriao, Iloilo City\nmay legally contract marriage\nwith Diana Cruz Aquino aged 27 years\nand resident of Brgy. Jaro, Iloilo City\nArticles 65 Republic Act No. 386\nissued this 14th day of February, 2020\nMARRIAGE LICENSE VALID UNTIL June 12, 2020",
+         [("2020-ML-121","F90_REGISTRY_NO"),("14 February 2020","F90_DATE_OF_REGISTRATION"),("Dante","F90_GROOM_FIRST"),("Aquino","F90_GROOM_MIDDLE"),("Villanueva","F90_GROOM_LAST"),("32","F90_GROOM_AGE"),("Brgy. Mandurriao, Iloilo City","F90_GROOM_RESIDENCE"),("Diana","F90_BRIDE_FIRST"),("Cruz","F90_BRIDE_MIDDLE"),("Aquino","F90_BRIDE_LAST"),("27","F90_BRIDE_AGE"),("Brgy. Jaro, Iloilo City","F90_BRIDE_RESIDENCE"),("14th day of February, 2020","F90_DATE_OF_ISSUANCE")]),
 
-        ("Registry No.: 2024-ML-009\nML Date of Registration: May 20, 2024\nGROOM\nGroom (First): Lester\nGroom (Middle): Gomez\nGroom (Last): Padilla\nGroom Date of Birth: November 11, 1991\nGroom Age: 33\nGroom Place of Birth: Legazpi City\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Aurelio\nGroom Father (Middle): Bautista\nGroom Father (Last): Padilla\nGroom Father Citizenship: Filipino\nGroom Mother (First): Celia\nGroom Mother (Middle): Santos\nGroom Mother (Last): Padilla\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Leslie\nBride (Middle): Navarro\nBride (Last): Espiritu\nBride Date of Birth: February 25, 1995\nBride Age: 29\nBride Place of Birth: Naga City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Victor\nBride Father (Middle): Torres\nBride Father (Last): Espiritu\nBride Father Citizenship: Filipino\nBride Mother (First): Gloria\nBride Mother (Middle): Reyes\nBride Mother (Last): Espiritu\nBride Mother Citizenship: Filipino",
-         [("2024-ML-009","F90_REGISTRY_NO"),("May 20, 2024","F90_DATE_OF_REGISTRATION"),("Lester","F90_GROOM_FIRST"),("Gomez","F90_GROOM_MIDDLE"),("Padilla","F90_GROOM_LAST"),("November 11, 1991","F90_GROOM_DATE_OF_BIRTH"),("33","F90_GROOM_AGE"),("Legazpi City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Aurelio","F90_GROOM_FATHER_FIRST"),("Bautista","F90_GROOM_FATHER_MIDDLE"),("Padilla","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Celia","F90_GROOM_MOTHER_FIRST"),("Santos","F90_GROOM_MOTHER_MIDDLE"),("Padilla","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Leslie","F90_BRIDE_FIRST"),("Navarro","F90_BRIDE_MIDDLE"),("Espiritu","F90_BRIDE_LAST"),("February 25, 1995","F90_BRIDE_DATE_OF_BIRTH"),("29","F90_BRIDE_AGE"),("Naga City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Victor","F90_BRIDE_FATHER_FIRST"),("Torres","F90_BRIDE_FATHER_MIDDLE"),("Espiritu","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Gloria","F90_BRIDE_MOTHER_FIRST"),("Reyes","F90_BRIDE_MOTHER_MIDDLE"),("Espiritu","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")]),
+        ("Accountable Form No. 54 Form No. 10\nCity of Taguig\nNo. 2024-ML-009\nMARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\nML Date of Registration: May 20, 2024\nThis is to certify that Lester Gomez Padilla aged 33 years\nand resident of 2 McKinley Pkwy., BGC, Taguig City\nmay legally contract marriage\nwith Leslie Navarro Espiritu aged 29 years\nand resident of 8 26th Street, BGC, Taguig City\nArticles 65 Republic Act No. 386\nissued this 20th day of May, 2024\nMARRIAGE LICENSE VALID UNTIL September 16, 2024",
+         [("2024-ML-009","F90_REGISTRY_NO"),("May 20, 2024","F90_DATE_OF_REGISTRATION"),("Lester","F90_GROOM_FIRST"),("Gomez","F90_GROOM_MIDDLE"),("Padilla","F90_GROOM_LAST"),("33","F90_GROOM_AGE"),("2 McKinley Pkwy., BGC, Taguig City","F90_GROOM_RESIDENCE"),("Leslie","F90_BRIDE_FIRST"),("Navarro","F90_BRIDE_MIDDLE"),("Espiritu","F90_BRIDE_LAST"),("29","F90_BRIDE_AGE"),("8 26th Street, BGC, Taguig City","F90_BRIDE_RESIDENCE"),("20th day of May, 2024","F90_DATE_OF_ISSUANCE")]),
 
-        ("Registry No.: 2017-ML-066\nML Date of Registration: 12/18/2017\nGROOM\nGroom (First): Marco\nGroom (Middle): dela Paz\nGroom (Last): Valdez\nGroom Date of Birth: 07/04/1985\nGroom Age: 32\nGroom Place of Birth: Tarlac City\nGroom Sex: Male\nGroom Citizenship: Filipino\nGroom Father (First): Rodrigo\nGroom Father (Middle): Reyes\nGroom Father (Last): Valdez\nGroom Father Citizenship: Filipino\nGroom Mother (First): Milagros\nGroom Mother (Middle): Santos\nGroom Mother (Last): Valdez\nGroom Mother Citizenship: Filipino\nBRIDE\nBride (First): Marcia\nBride (Middle): Castillo\nBride (Last): de Guzman\nBride Date of Birth: 11/30/1990\nBride Age: 27\nBride Place of Birth: Tarlac City\nBride Sex: Female\nBride Citizenship: Filipino\nBride Father (First): Bernardo\nBride Father (Middle): Cruz\nBride Father (Last): de Guzman\nBride Father Citizenship: Filipino\nBride Mother (First): Erlinda\nBride Mother (Middle): Ramos\nBride Mother (Last): de Guzman\nBride Mother Citizenship: Filipino",
-         [("2017-ML-066","F90_REGISTRY_NO"),("12/18/2017","F90_DATE_OF_REGISTRATION"),("Marco","F90_GROOM_FIRST"),("dela Paz","F90_GROOM_MIDDLE"),("Valdez","F90_GROOM_LAST"),("07/04/1985","F90_GROOM_DATE_OF_BIRTH"),("32","F90_GROOM_AGE"),("Tarlac City","F90_GROOM_PLACE_OF_BIRTH"),("Male","F90_GROOM_SEX"),("Filipino","F90_GROOM_CITIZENSHIP"),("Rodrigo","F90_GROOM_FATHER_FIRST"),("Reyes","F90_GROOM_FATHER_MIDDLE"),("Valdez","F90_GROOM_FATHER_LAST"),("Filipino","F90_GROOM_FATHER_CITIZENSHIP"),("Milagros","F90_GROOM_MOTHER_FIRST"),("Santos","F90_GROOM_MOTHER_MIDDLE"),("Valdez","F90_GROOM_MOTHER_LAST"),("Filipino","F90_GROOM_MOTHER_CITIZENSHIP"),("Marcia","F90_BRIDE_FIRST"),("Castillo","F90_BRIDE_MIDDLE"),("de Guzman","F90_BRIDE_LAST"),("11/30/1990","F90_BRIDE_DATE_OF_BIRTH"),("27","F90_BRIDE_AGE"),("Tarlac City","F90_BRIDE_PLACE_OF_BIRTH"),("Female","F90_BRIDE_SEX"),("Filipino","F90_BRIDE_CITIZENSHIP"),("Bernardo","F90_BRIDE_FATHER_FIRST"),("Cruz","F90_BRIDE_FATHER_MIDDLE"),("de Guzman","F90_BRIDE_FATHER_LAST"),("Filipino","F90_BRIDE_FATHER_CITIZENSHIP"),("Erlinda","F90_BRIDE_MOTHER_FIRST"),("Ramos","F90_BRIDE_MOTHER_MIDDLE"),("de Guzman","F90_BRIDE_MOTHER_LAST"),("Filipino","F90_BRIDE_MOTHER_CITIZENSHIP")]),
+        ("Accountable Form No. 54 Form No. 10\nMunicipality of Tarlac City\nNo. 2017-ML-066\nMARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS\nML Date of Registration: 12/18/2017\nThis is to certify that Marco dela Paz Valdez aged 32 years\nand resident of Brgy. San Vicente, Tarlac City\nmay legally contract marriage\nwith Marcia Castillo de Guzman aged 27 years\nand resident of Brgy. San Nicolas, Tarlac City\nArticles 65 Republic Act No. 386\nissued this 18th day of December, 2017\nMARRIAGE LICENSE VALID UNTIL 04/16/2018",
+         [("2017-ML-066","F90_REGISTRY_NO"),("12/18/2017","F90_DATE_OF_REGISTRATION"),("Marco","F90_GROOM_FIRST"),("dela Paz","F90_GROOM_MIDDLE"),("Valdez","F90_GROOM_LAST"),("32","F90_GROOM_AGE"),("Brgy. San Vicente, Tarlac City","F90_GROOM_RESIDENCE"),("Marcia","F90_BRIDE_FIRST"),("Castillo","F90_BRIDE_MIDDLE"),("de Guzman","F90_BRIDE_LAST"),("27","F90_BRIDE_AGE"),("Brgy. San Nicolas, Tarlac City","F90_BRIDE_RESIDENCE"),("18th day of December, 2017","F90_DATE_OF_ISSUANCE")]),
     ]
     for t, pairs in formats_90:
         examples.append((t, {"entities": make_entities(t, pairs)}))
@@ -692,23 +990,22 @@ if __name__ == "__main__":
     print("  PREPARING CIVIL REGISTRY NER TRAINING DATA")
     print("=" * 60)
     print("\n  NER role: extract FIELD VALUES from documents")
-    print("  MNB role: classify GROOM vs BRIDE (separate model)\n")
+    print("  Form 90 source: Accountable Form No. 54 (Marriage License Receipt)\n")
 
     f102  = form102_examples()
     f103  = form103_examples()
     f97   = form97_examples()
-    f90   = form90_bc_examples()
+    f90   = form90_examples()
     boost = weak_label_booster_examples()
 
-    print(f"  Form 102 -> 1A  (Birth Certificate):       {len(f102):>3} examples")
-    print(f"  Form 103 -> 2A  (Death Certificate):       {len(f103):>3} examples")
-    print(f"  Form 97  -> 3A  (Marriage Certificate):    {len(f97):>3} examples")
-    print(f"  Form 90        (Birth Cert for F90 NER):   {len(f90):>3} examples")
-    print(f"                  (10 male + 10 female)")
-    print(f"  Weak label boosters (DATE_OF_REG / DOB):   {len(boost):>3} examples")
-    print(f"  {'─'*48}")
+    print(f"  Form 102 -> 1A  (Birth Certificate):           {len(f102):>3} examples")
+    print(f"  Form 103 -> 2A  (Death Certificate):           {len(f103):>3} examples")
+    print(f"  Form 97  -> 3A  (Marriage Certificate):        {len(f97):>3} examples")
+    print(f"  Form 90  -> 54  (Marriage License Receipt):    {len(f90):>3} examples")
+    print(f"  Weak label boosters (DATE_OF_REG / ISSUANCE):  {len(boost):>3} examples")
+    print(f"  {'─'*52}")
     total = len(f102) + len(f103) + len(f97) + len(f90) + len(boost)
-    print(f"  Total:                                     {total:>3} examples")
+    print(f"  Total:                                         {total:>3} examples")
 
     # ── STRATIFIED SPLIT ──────────────────────────────────
     # Take 20% from EACH form type separately.

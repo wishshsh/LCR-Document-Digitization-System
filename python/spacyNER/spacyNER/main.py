@@ -9,6 +9,7 @@
 # For real scanned forms:
 #   from spacyNER.ocr import scan_form
 #   text = scan_form("path/to/form_102.jpg")
+#   text = scan_form("path/to/form_90_receipt.jpg")
 # ============================================================
 
 from spacyNER.extractor import CivilRegistryNER
@@ -143,6 +144,55 @@ WIFE:
 
 
 # ──────────────────────────────────────────────────────────
+# SAMPLE OCR TEXT — Form 90 / Accountable Form No. 54
+#                   (Marriage License and Fee Receipt of Two Pesos)
+# ──────────────────────────────────────────────────────────
+# Source: The issued Marriage License and Fee Receipt document
+#         (Accountable Form No. 54 / Form No. 10) itself —
+#         NOT birth certificates.
+#
+# MNB classifies this as "form90" using keywords:
+#   "Accountable Form No. 54", "Form No. 10",
+#   "Marriage License and Fee Receipt of Two Pesos",
+#   "may legally contract marriage", "license fee"
+#
+# Required output fields for Form 54:
+#   name_of_groom       age_of_groom       residence_of_groom
+#   name_of_bride       age_of_bride       residence_of_bride
+#   date_of_issuance
+#
+# Groom = first named person ("certify that [NAME] aged [AGE]
+#          resident of [RESIDENCE] may legally contract marriage")
+# Bride = second named person ("with [NAME] aged [AGE]
+#          resident of [RESIDENCE]")
+
+FORM_90_OCR = """
+Accountable Form No. 54  Form No. 10
+Republic of the Philippines
+City or Municipality of Mandaluyong City
+Province of Metro Manila
+No. 5975035
+
+MARRIAGE LICENSE AND FEE RECEIPT OF TWO PESOS
+
+This is to certify that Erastus Noel T. Delizo aged 42 years and 10 months,
+and resident of No. 17 Tehran St., BF Homes International Las Pinas City,
+may legally contract marriage
+with Maria Fatima A. Villena aged 30 years,
+and resident of 709-A Coronado St., Brgy. Hulo Mandaluyong City,
+having paid the license fee of P2.00 prescribed under
+Articles 65 of Republic Act No. 386.
+
+In witness whereof, I have signed and issued this license, this 17th day
+of October, 2008.
+
+MARRIAGE LICENSE VALID UNTIL FEB 13 2009
+
+Local Civil Registrar of Mandaluyong City
+"""
+
+
+# ──────────────────────────────────────────────────────────
 # HELPER: Print results in a clean table
 # ──────────────────────────────────────────────────────────
 
@@ -205,6 +255,24 @@ print(f"     Wife Name            → {form_3a.wife.name!r}")
 print(f"     Wife Father Name     → {form_3a.wife.name_of_father!r}")
 print(f"     Wife Mother Name     → {form_3a.wife.name_of_mother!r}")
 
+# Form 54 — Marriage License and Fee Receipt
+# Source: Accountable Form No. 54 / Form No. 10
+# Single document — groom and bride are both on the same receipt.
+form_54 = filler.fill_form_90(FORM_90_OCR)
+print_form(
+    "FORM 54 — Marriage License and Fee Receipt",
+    "Form 90 / Accountable Form No. 54 / Form No. 10",
+    form_54
+)
+print("\n  ✏️  NAME ASSEMBLY RESULT:")
+print(f"     Name of Groom      → {form_54.name_of_groom!r}")
+print(f"     Age of Groom       → {form_54.age_of_groom!r}")
+print(f"     Residence of Groom → {form_54.residence_of_groom!r}")
+print(f"     Name of Bride      → {form_54.name_of_bride!r}")
+print(f"     Age of Bride       → {form_54.age_of_bride!r}")
+print(f"     Residence of Bride → {form_54.residence_of_bride!r}")
+print(f"     Date of Issuance   → {form_54.date_of_issuance!r}")
+
 
 print("\n" + "=" * 65)
 print("  ✅ Pipeline complete!")
@@ -213,6 +281,8 @@ print()
 print("  Assembly rule used:  First + Middle + Last")
 print("  Form 97 note:        Form displays Last-Middle-First,")
 print("                       but output is always First Middle Last")
+print("  Form 90/54 note:     Single receipt document — groom and")
+print("                       bride extracted from one OCR text.")
 print()
 print("  NEXT STEPS:")
 print("  1. Add annotated examples → training/prepare_data.py")

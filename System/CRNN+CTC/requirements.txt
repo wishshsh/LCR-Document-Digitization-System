@@ -1,0 +1,61 @@
+# Core Deep Learning
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Image Processing
+opencv-python>=4.8.0
+Pillow>=10.0.0
+albumentations>=1.3.0
+pdf2image>=1.17.0
+pytesseract>=0.3.13
+
+# Data Processing
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Metrics
+editdistance>=0.6.2
+
+# Progress Bars
+tqdm>=4.65.0
+
+# Web Framework (for deployment)
+flask>=3.0.0
+flask-cors>=4.0.0
+fastapi>=0.104.0
+uvicorn>=0.24.0
+python-multipart>=0.0.6
+
+# Database
+pymysql>=1.1.0
+sqlalchemy>=2.0.0
+
+# NLP for Named Entity Recognition
+spacy>=3.7.0
+# Download model: python -m spacy download en_core_web_sm
+
+# Document Classification
+scikit-learn>=1.3.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Configuration
+pyyaml>=6.0
+
+# Utilities
+python-dotenv>=1.0.0
+requests>=2.31.0
+
+# Document Processing
+python-docx>=1.1.0
+
+# Optional: For production deployment
+gunicorn>=21.2.0
+celery>=5.3.0
+redis>=5.0.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0

@@ -1,0 +1,14 @@
+datasets/
+checkpoints/
+logs/
+test_images/
+data/
+__pycache__/
+*.png
+*.jpg
+*.jpeg
+*.npy
+*.h5
+*.pkl
+*.pyc
+iam-handwriting-word-database/
